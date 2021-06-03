@@ -7,7 +7,7 @@
     "test": "test",
     "dev": "webpack-dev-server --open",
     "prod": "webpack --production",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix"
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix; stylelint '**/*.css'"
   },
   "keywords": [
     "malawi",
@@ -36,6 +36,8 @@
     "html-webpack-plugin": "^3.2.0",
     "prettier": "^2.3.0",
     "style-loader": "^1.0.0",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0",
     "ts-loader": "^6.0.4",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7",
