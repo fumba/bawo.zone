@@ -4,10 +4,10 @@
   "description": "African Mancala Game",
   "main": "main.ts",
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "dev": "webpack-dev-server --open",
     "prod": "webpack --production",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix; stylelint '**/*.css'"
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix; stylelint '**/*.css' --fix"
   },
   "keywords": [
     "malawi",
@@ -19,12 +19,13 @@
   "author": "Fumba Chibaka",
   "license": "MIT",
   "dependencies": {
-    "melonjs": "^7.1.1",
-    "typescript": "^3.6.2"
+    "melonjs": "^8.0.1",
+    "typescript": "^4.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "babel-loader": "^8.0.6",
@@ -34,10 +35,13 @@
     "eslint-plugin-prettier": "^3.4.0",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^27.0.3",
+    "jest-canvas-mock": "^2.3.1",
     "prettier": "^2.3.0",
     "style-loader": "^1.0.0",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
+    "ts-jest": "^27.0.2",
     "ts-loader": "^6.0.4",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7",
