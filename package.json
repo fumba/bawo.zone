@@ -6,7 +6,8 @@
   "scripts": {
     "test": "test",
     "dev": "webpack-dev-server --open",
-    "prod": "webpack --production"
+    "prod": "webpack --production",
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix"
   },
   "keywords": [
     "malawi",
@@ -24,14 +25,30 @@
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "prettier": "^2.3.0",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.0.4",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7",
     "webpack-dev-server": "^3.8.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
   }
 }

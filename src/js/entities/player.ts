@@ -1,8 +1,7 @@
 import me from '../me';
 
 class PlayerEntity extends me.Entity {
-
-    constructor(x: Number, y: Number, settings: any) {
+    constructor(x: number, y: number, settings: any) {
         super(x, y, settings);
 
         console.log('show player');

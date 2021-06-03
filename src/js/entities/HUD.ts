@@ -5,7 +5,7 @@ import me from '../me';
  * a basic HUD item to display score
  */
 class ScoreItem extends me.Renderable {
-    constructor(x: Number, y: Number) {
+    constructor(x: number, y: number) {
         super(x, y, 10, 10);
 
         console.log('show HUD');
@@ -26,11 +26,9 @@ class ScoreItem extends me.Renderable {
     draw(context: any) {
         // draw it baby !
     }
-
 }
 
 class HUD extends me.Container {
-
     constructor() {
         super();
         // persistent across level change
@@ -40,7 +38,7 @@ class HUD extends me.Container {
         this.floating = true;
 
         // give a name
-        this.name = "HUD";
+        this.name = 'HUD';
 
         // add our child score object at the top left corner
         this.addChild(new ScoreItem(5, 5));
