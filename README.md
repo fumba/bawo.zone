@@ -1,2 +1,3 @@
-# bawo.zone
-african malawi mancala game
+# www.bawo.zone
+
+`yarn run dev`
