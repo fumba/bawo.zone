@@ -1,6 +1,6 @@
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
- * <a href="https://github.com/fumba/bawogame">https://github.com/fumba/bawogame</a>
+ * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -24,9 +24,12 @@
  * {@link AppConstants} keeps track of both values used by the backend logic and
  * the game GUI.
  * </p>
- *
- * @since 1.0
  **/
-class AppConstants {}
+class AppConstants {
+  /**
+   * Maximum number of seeds that can be used to play the bawo game.
+   */
+  public static readonly MAX_SEED_COUNT: number = 64;
+}
 
 export default AppConstants;

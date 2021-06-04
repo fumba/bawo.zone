@@ -1,6 +1,6 @@
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
- * <a href="https://github.com/fumba/bawogame">https://github.com/fumba/bawogame</a>
+ * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,16 +19,21 @@
  */
 
 import PlayerSide from "./PlayerSide";
+import AppConstants from "./AppConstants";
 /**
  * <p>
  * {@link Player} represents a bawo game player
  * </p>
- *
- * @since 1.0
  **/
 class Player {
   //player can take up either TOP or BOTTOM side of the board
   public side: PlayerSide;
+
+  //number of seeds that the player is holding
+  public numSeedsInHand: number;
+
+  // keeps track if the player captured on the previous move
+  public capturedOnPrevMove: boolean;
 
   /**
    * constructor
@@ -36,6 +41,76 @@ class Player {
    */
   constructor(side: PlayerSide) {
     this.side = side;
+    this.numSeedsInHand = 0;
+    this.capturedOnPrevMove = false;
+  }
+
+  /**
+   * Adds seeds to players hand
+   * @param numSeeds Number of seeds to be added to players hand
+   */
+  public addSeeds(numSeeds: number): void {
+    this.validateNumSeeds(numSeeds);
+    this.validateFinalSeedCount(numSeeds);
+    this.numSeedsInHand += numSeeds;
+  }
+
+  /**
+   * Removes seeds from players hand
+   * @param numSeeds Number of seeds to be removed from players hand
+   */
+  public removeSeeds(numSeeds: number): void {
+    this.validateNumSeeds(numSeeds);
+    this.validateFinalSeedCount(-numSeeds); //minus because we are removing seeds
+    this.numSeedsInHand -= numSeeds;
+  }
+
+  /**
+   * Checks to see if the current player is positioned on the top side of the
+   * board.
+   *
+   * @return true if the player is on the top side.
+   */
+  public isOnTopSide(): boolean {
+    return this.side == PlayerSide.Top;
+  }
+
+  /**
+   * Checks if the number of seeds to be added or removed from players hand is valid
+   * @param numSeeds Number of seeds to be added or removed from players hand
+   */
+  private validateNumSeeds(numSeeds: number): void {
+    let message: string = null;
+    if (numSeeds < 0) {
+      message =
+        "Attempted to add or remove negative number seeds | input : " +
+        numSeeds;
+    } else if (numSeeds == 0) {
+      message = "Attempted to add or remove no seeds";
+    }
+    if (message) {
+      throw new Error(message);
+    }
+  }
+
+  /**
+   * Checks if the the total number of seeds in players hand is valid
+   * @param numSeeds Number of seeds in players hand after adding or removing
+   */
+  private validateFinalSeedCount(numSeeds: number): void {
+    let message: string = null;
+    if (this.numSeedsInHand + numSeeds < 0) {
+      message =
+        "Total number of seeds after operation is negative | input: " +
+        numSeeds;
+    } else if (this.numSeedsInHand + numSeeds > AppConstants.MAX_SEED_COUNT) {
+      message =
+        "Total number of seeds after operation is greater than 64 | input: " +
+        numSeeds;
+    }
+    if (message) {
+      throw new Error(message);
+    }
   }
 }
 
