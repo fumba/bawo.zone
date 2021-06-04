@@ -12,6 +12,7 @@ Make sure you have [Node.js](https://nodejs.org) installed. This project is test
 git clone https://github.com/fumba/bawo-zone.git
 cd bawo.zone
 yarn install
+
 yarn start - for standalone version
 yarn dev - for browser version
 ```
