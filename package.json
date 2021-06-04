@@ -20,7 +20,7 @@
     "publish": null
   },
   "scripts": {
-    "dev": "webpack serve --config=build/webpack.dev.config.js --mode='development'",
+    "dev": "webpack serve --config=build/webpack.dev.config.js --mode=development",
     "postinstall": "electron-builder install-app-deps",
     "test": "jest",
     "start": "node build/start.js",
