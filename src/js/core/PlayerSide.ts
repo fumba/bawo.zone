@@ -1,5 +1,5 @@
 /* bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
- * <a href="https://github.com/fumba/bawogame">https://github.com/fumba/bawogame</a>
+ * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -21,8 +21,6 @@
  * <p>
  * {@link PlayerSide} represent the sides that a player can be on the board
  * </p>
- *
- * @since 1.0
  **/
 
 enum PlayerSide {
