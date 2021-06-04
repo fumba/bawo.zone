@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "./app",
     "lib": ["esnext", "dom"],
     "sourceMap": true,
     "noImplicitAny": true,
@@ -12,6 +12,6 @@
     "node_modules"
   ],
   "files": [
-    "./src/js/main.ts"
+    "./src/js/app.ts"
   ]
 }
