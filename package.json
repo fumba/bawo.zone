@@ -22,7 +22,7 @@
   "scripts": {
     "dev": "webpack serve --config=build/webpack.dev.config.js --mode=development",
     "postinstall": "electron-builder install-app-deps",
-    "test": "jest",
+    "test": "jest --verbose",
     "start": "node build/start.js",
     "release": "yarn test && webpack --config=build/webpack.app.config.js --env=production && electron-builder",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --fix; stylelint '**/*.css' --fix"
