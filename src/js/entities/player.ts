@@ -1,13 +1,13 @@
 import me from "../me";
 
 class PlayerEntity extends me.Entity {
-  constructor(x: number, y: number, settings: any) {
+  constructor(x: number, y: number, settings: unknown) {
     super(x, y, settings);
 
     console.log("show player");
   }
 
-  update(dt: any) {
+  update(dt: unknown): boolean {
     // apply physics to the body (this moves the entity)
     this.body.update(dt);
 
@@ -18,7 +18,7 @@ class PlayerEntity extends me.Entity {
     return super.update(dt) || this.body.vel.x !== 0 || this.body.vel.y !== 0;
   }
 
-  onCollision(response: any, other: any) {
+  onCollision(response: unknown, other: unknown): boolean {
     // Make all other objects solid
     return true;
   }

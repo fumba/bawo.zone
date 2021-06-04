@@ -1,6 +1,6 @@
 class Game {
-  public data: any;
-  public resources: any;
+  public data: Record<string, unknown>;
+  public resources: Array<Record<string, unknown>>;
 
   constructor() {
     this.data = {

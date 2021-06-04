@@ -33,7 +33,7 @@ const setApplicationMenu = () => {
 
 // We can communicate with our window (the renderer process) via messages.
 const initIpc = () => {
-  ipcMain.on("need-app-path", (event, arg) => {
+  ipcMain.on("need-app-path", (event) => {
     event.reply("app-path", app.getAppPath());
   });
   ipcMain.on("open-external-link", (event, href) => {

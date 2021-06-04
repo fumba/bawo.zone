@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare let require: any;
 require("../css/main.css");
 import me from "./me";
