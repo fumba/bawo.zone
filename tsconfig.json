@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "outDir": "./app",
-    "lib": ["esnext", "dom"],
+    "lib": ["es2019", "dom"],
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "target": "ESNext",
+    "target": "es2019",
     "allowJs": true
   },
   "exclude": [

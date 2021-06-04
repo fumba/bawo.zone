@@ -4,14 +4,14 @@ class TitleScreen extends me.Stage {
   /**
    *  action to perform on state change
    */
-  onResetEvent() {
+  onResetEvent(): void {
     // TODO
   }
 
   /**
    *  action to perform when leaving this screen (state change)
    */
-  onDestroyEvent() {
+  onDestroyEvent(): void {
     // TODO
   }
 }

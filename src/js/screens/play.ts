@@ -3,7 +3,7 @@ import game from "../game";
 import HUD from "../entities/HUD";
 
 class PlayScreen extends me.Stage {
-  onResetEvent() {
+  onResetEvent(): void {
     //load a level
     me.levelDirector.loadLevel("background");
 
@@ -18,7 +18,7 @@ class PlayScreen extends me.Stage {
     me.game.world.addChild(this.HUD);
   }
 
-  onDestroyEvent() {
+  onDestroyEvent(): void {
     // remove the HUD from the game world
     me.game.world.removeChild(this.HUD);
   }

@@ -2,7 +2,7 @@ import game from "../game";
 import me from "../me";
 
 /**
- * a basic HUD item to display score
+ * a basic HUD (Heads Up Display) item to display score
  */
 class ScoreItem extends me.Renderable {
   constructor(x: number, y: number) {
@@ -23,7 +23,7 @@ class ScoreItem extends me.Renderable {
     return false;
   }
 
-  draw(context: any) {
+  draw(context: unknown) {
     // draw it baby !
   }
 }
