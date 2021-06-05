@@ -30,6 +30,25 @@ class AppConstants {
    * Maximum number of seeds that can be used to play the bawo game.
    */
   public static readonly MAX_SEED_COUNT: number = 64;
+
+  /**
+   * Number of holes that a bawo game {@link Player} gets. This represents two
+   * rows of holes - each row with 8 holes. These two rows are represented by
+   * {@link BawoCircularDoublyLinkedList} - a circular linked list with 16 holes
+   * (nodes).
+   */
+  public static readonly NUM_PLAYER_HOLES: number = 16;
+
+  /**
+   * Maximum Hole ID.
+   */
+  public static readonly MAX_HOLE_ID: number = 15;
+
+  /**
+   * Minimum Hole ID. Note that {@link DUMMY_HOLE_ID} is not a Hole that is used
+   * during gameplay.
+   */
+  public static readonly MIN_HOLE_ID: number = 0;
 }
 
 export default AppConstants;
