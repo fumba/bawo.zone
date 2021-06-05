@@ -32,7 +32,7 @@ import Hole from "./Hole";
 import Player from "./Player";
 import AppConstants from "./AppConstants";
 
-class BawoCircularDoublyLinkedList implements Iterable<Hole> {
+class PlayerBoardHoles implements Iterable<Hole> {
   // Hole 00
   private startHole: Hole;
   // Hole 15
@@ -41,27 +41,33 @@ class BawoCircularDoublyLinkedList implements Iterable<Hole> {
   private totalNumHoles: number;
   // Hole -1 - this is used as a dummy pointer to the first hole.
   private startHolePointer: Hole;
+  // Hole owner
+  private player: Player;
 
   /**
    * Constructor
    */
-  constructor() {
+  constructor(player: Player) {
     this.startHole = null;
     this.endHole = null;
     this.totalNumHoles = 0;
     this.startHolePointer = null;
+    this.player = player;
   }
 
-  [Symbol.iterator](): IterableIterator<Hole> {
-    return this;
-  }
-
-  next(): IteratorResult<Hole> {
-    if (this.startHole.nextHole != null) {
-      return { value: this.startHole.nextHole, done: false };
-    } else {
-      return { value: undefined, done: true };
-    }
+  [Symbol.iterator](): Iterator<Hole> {
+    let currentHole: Hole = this.startHolePointer;
+    const iterator = {
+      next() {
+        currentHole = currentHole.nextHole; //initially goes to first hole from dummy hole
+        if (currentHole != this.endHole) {
+          return { value: currentHole, done: false };
+        } else {
+          return { value: currentHole, done: true };
+        }
+      },
+    };
+    return iterator;
   }
 
   /**
@@ -71,10 +77,10 @@ class BawoCircularDoublyLinkedList implements Iterable<Hole> {
    * @param numSeeds Number of seeds to be placed in the hole.
    * @return Added Hole
    */
-  public insertAtEnd(player: Player, numSeeds: number): Hole {
+  public insertAtEnd(numSeeds: number): Hole {
     if (this.totalNumHoles < AppConstants.NUM_PLAYER_HOLES) {
       const newBoardHole: Hole = new Hole(
-        player,
+        this.player,
         this.totalNumHoles,
         numSeeds,
         null,
@@ -86,7 +92,13 @@ class BawoCircularDoublyLinkedList implements Iterable<Hole> {
         this.startHole = newBoardHole;
         this.endHole = this.startHole;
 
-        this.startHolePointer = new Hole(player, -1, 0, this.startHole, null);
+        this.startHolePointer = new Hole(
+          this.player,
+          -1,
+          0,
+          this.startHole,
+          null
+        );
       } else {
         newBoardHole.prevHole = this.endHole;
         this.endHole.nextHole = newBoardHole;
@@ -112,7 +124,7 @@ class BawoCircularDoublyLinkedList implements Iterable<Hole> {
   public getHoleWithID(holeId: number): Hole {
     this.validateHoleId(holeId);
     for (const hole of this) {
-      if (hole.id == holeId) {
+      if (hole.id === holeId) {
         return hole;
       }
     }
@@ -187,4 +199,4 @@ class BawoCircularDoublyLinkedList implements Iterable<Hole> {
   }
 }
 
-export default BawoCircularDoublyLinkedList;
+export default PlayerBoardHoles;
