@@ -4,7 +4,7 @@
   "description": "African Mancala game - Bawo, Bao, Omweso",
   "version": "1.0.0",
   "author": "Fumba Chibaka <fumba.me@gmail.com>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "homepage": "http://bawo.zone",
   "main": "app/main.js",
   "build": {
