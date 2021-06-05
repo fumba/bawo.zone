@@ -41,6 +41,10 @@ class Hole {
     // initialize move status as unauthorized
     this.moveStatus = MoveDirection.UnAuthorised;
   }
+
+  public toString(): string {
+    return `[${this.id}(${this.numSeeds})-${this.moveStatus}]`;
+  }
 }
 
 export default Hole;

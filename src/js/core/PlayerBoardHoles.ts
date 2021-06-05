@@ -55,6 +55,10 @@ class PlayerBoardHoles implements Iterable<Hole> {
     this.player = player;
   }
 
+  /**
+   * Iterator for all the holes assigned to the player
+   * @returns all the holes assigned to the player
+   */
   [Symbol.iterator](): Iterator<Hole> {
     let currentHole: Hole = this.startHolePointer;
     const iterator = {
@@ -167,6 +171,27 @@ class PlayerBoardHoles implements Iterable<Hole> {
       numSteps--;
     }
     return boardHole;
+  }
+
+  public toString(): string {
+    let output = "";
+    let startHole: Hole = this.getHoleWithID(0);
+    // 00 01 02 03 04 05 06 07(holeIdAtFirstRowEnd) |
+    // 15(holeIdAtSecondRowStart) 14 13 12 11 10 09 08 |
+    const holeIdAtFirstRowEnd = 7;
+    const holeIdAtSecondRowStart = 15;
+    for (let i = 0; i <= holeIdAtFirstRowEnd; i++) {
+      output = output.concat(startHole.toString()).concat("  ");
+      startHole = startHole.nextHole;
+    }
+    output = output.concat("\n");
+    startHole = this.getHoleWithID(holeIdAtSecondRowStart);
+    for (let i = 8; i > 0; i--) {
+      output = output.concat(startHole.toString()).concat("  ");
+      startHole = startHole.prevHole;
+    }
+    output = output.concat("\n");
+    return output;
   }
 
   /**
