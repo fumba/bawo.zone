@@ -16,3 +16,5 @@ yarn install
 yarn start - for standalone version
 yarn dev - for browser version
 ```
+
+Build with docker - https://www.electron.build/multi-platform-build#docker
