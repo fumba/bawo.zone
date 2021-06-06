@@ -1,6 +1,6 @@
 {
-  "name": "bawo.zone",
-  "productName": "African Mancala game - Malawi, Uganda, Tanzania",
+  "name": "bawo",
+  "productName": "bawo",
   "description": "African Mancala game - Bawo, Bao, Omweso",
   "version": "1.0.0",
   "author": "Fumba Chibaka <fumba.me@gmail.com>",
@@ -24,7 +24,7 @@
     "postinstall": "electron-builder install-app-deps",
     "test": "jest --verbose",
     "start": "node build/start.js",
-    "release": "yarn test && webpack --config=build/webpack.app.config.js --env=production && electron-builder",
+    "release": "yarn test -u && webpack --config=build/webpack.app.config.js --env=production && electron-builder",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --fix; stylelint '**/*.css' --fix"
   },
   "dependencies": {
