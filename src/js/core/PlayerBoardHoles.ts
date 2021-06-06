@@ -100,8 +100,8 @@ class PlayerBoardHoles implements Iterable<Hole> {
           this.player,
           -1,
           0,
-          this.startHole,
-          null
+          null,
+          this.startHole
         );
       } else {
         newBoardHole.prevHole = this.endHole;
@@ -111,6 +111,10 @@ class PlayerBoardHoles implements Iterable<Hole> {
         this.endHole = newBoardHole;
       }
       this.totalNumHoles++;
+
+      //add new hole to player hole collection
+      this.player.boardHoles = this;
+
       return newBoardHole;
     } else {
       throw new Error(
