@@ -20,6 +20,7 @@
 
 import PlayerSide from "./PlayerSide";
 import AppConstants from "./AppConstants";
+import PlayerBoardHoles from "./PlayerBoardHoles";
 /**
  * <p>
  * {@link Player} represents a bawo game player
@@ -34,6 +35,9 @@ class Player {
 
   // keeps track if the player captured on the previous move
   public capturedOnPrevMove: boolean;
+
+  // all the board holes belonging to player
+  public boardHoles: PlayerBoardHoles;
 
   /**
    * constructor
