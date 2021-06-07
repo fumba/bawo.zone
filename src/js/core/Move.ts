@@ -23,7 +23,7 @@ import MoveDirection from "./MoveDirection";
 class Move {
   public prevContinuedMovesCount: number;
   public hole: Hole;
-  public board: Board;
+  public readonly board: Board;
   public direction: MoveDirection;
   /**
    *
@@ -36,7 +36,7 @@ class Move {
     board: Board,
     hole: Hole,
     direction: MoveDirection,
-    prevContinuedMovesCount: number
+    prevContinuedMovesCount = 0
   ) {
     this.prevContinuedMovesCount = prevContinuedMovesCount;
     this.hole = hole;
@@ -54,17 +54,15 @@ class Move {
   }
   public isCapture(): boolean {
     const destinationHole: Hole = this.getDestinationHole();
-    const adjacentOpponentHole: Hole =
-      this.board.adjacentOpponentHole(destinationHole);
     // General Bawo capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
     // General Bawo capture rule 2: move should end on the front row of the players board side
     // General Bawo capture rule 3: Seed(s) must be present in the first row destination hole
-    // General Bawo capture Rule 4: Seed(s) must be present in the opponents opposing hole
+    // General Bawo capture rule 4: Seed(s) must be present in the opponents opposing hole
     if (
       this.hole.numSeeds > 1 &&
       destinationHole.isInFrontRow() &&
       !destinationHole.isEmpty() &&
-      !adjacentOpponentHole.isEmpty()
+      !this.board.adjacentOpponentHole(destinationHole).isEmpty()
     ) {
       return true;
     }
@@ -78,8 +76,32 @@ class Move {
     return false;
   }
 
+  /**
+   *
+   * Gets the hole on which the specified move will be planting the last seed in
+   * the players hand.
+   *
+   * @param move Move to be performed
+   * @return Hole on which the move ends
+   */
   private getDestinationHole(): Hole {
-    return null;
+    switch (this.direction) {
+      case MoveDirection.Clockwise:
+        return this.hole.player.boardHoles.stepClockwise(
+          this.hole,
+          this.hole.numSeeds
+        );
+      case MoveDirection.AntiClockwise:
+        return this.hole.player.boardHoles.stepAntiClockwise(
+          this.hole,
+          this.hole.numSeeds
+        );
+      default:
+        throw new Error(
+          "Only Clockwise and Anticlockwise moves are allowed. Input : " +
+            this.direction
+        );
+    }
   }
 }
 export default Move;
