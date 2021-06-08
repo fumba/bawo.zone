@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+import AppConstants from "../../src/js/core/AppConstants";
 import Board from "../../src/js/core/Board";
 
 describe("Board", () => {
@@ -63,5 +64,26 @@ describe("Board", () => {
     expect(
       board.adjacentOpponentHole(bottomPlayerHoles.getHoleWithID(7)).id
     ).toBe(8);
+  });
+
+  describe("#loadState", () => {
+    test("should load seed arrangement state correctly", () => {
+      const topPlayerSeedConfig = [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+      ];
+      const btmPlayerSeedConfig = [
+        1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 5, 6, 6, 7, 7,
+      ];
+      const board = Board.loadState(topPlayerSeedConfig, btmPlayerSeedConfig);
+      //check player seed placement
+      for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
+        expect(board.topPlayer.boardHoles.getHoleWithID(index).numSeeds).toBe(
+          topPlayerSeedConfig[index]
+        );
+        expect(
+          board.bottomPlayer.boardHoles.getHoleWithID(index).numSeeds
+        ).toBe(btmPlayerSeedConfig[index]);
+      }
+    });
   });
 });

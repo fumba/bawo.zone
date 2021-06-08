@@ -67,6 +67,37 @@ class Board {
     );
   }
 
+  //TODO
+  public static loadState(
+    topPlayerSeedArrangement: Array<number>,
+    btmPlayerSeedArrangement: Array<number>
+  ): Board {
+    const board: Board = new Board();
+    //update hole seed counts for top player
+    if (topPlayerSeedArrangement) {
+      //TODO validate length - 16
+      console.log(
+        `Updating seed configuration for bottom player to ${topPlayerSeedArrangement}`
+      );
+      for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
+        board.topPlayer.boardHoles.getHoleWithID(id).numSeeds =
+          topPlayerSeedArrangement[id];
+      }
+    }
+    //update hole seed counts for bottom player
+    if (btmPlayerSeedArrangement) {
+      //TODO validate length - 16
+      console.log(
+        `Updating seed configuration for bottom player to ${btmPlayerSeedArrangement}`
+      );
+      for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
+        board.bottomPlayer.boardHoles.getHoleWithID(id).numSeeds =
+          btmPlayerSeedArrangement[id];
+      }
+    }
+    return board;
+  }
+
   /**
    * Retrieves the opponent player for the current player.
    *

@@ -69,24 +69,16 @@ class MtajiModeRules extends Rules {
     }
 
     // Rule 2: Check if this move results in a capture
-    if (move.isCapture()) {
+    if (move.isValidCapture()) {
       return true;
     }
 
-    // Rules 3 and 4 only apply if the move plants seed token in any front
-    // row holes
+    // Rules 3 and 4 only apply if the move plants seed token in any front row holes
 
     // Rule 3: If there are no capture moves, any front row holes with
-    // seed
-    // tokens are valid moves.
-    if (move.isNonCaptureStartingOnFrontRow()) {
-      return true;
-    }
-
-    // Rule 4: If there are no valid front row non-capture moves, use
-    // the
-    // back row holes.
-    if (move.isNonCaptureStartingOnBackRow()) {
+    // seed tokens are valid moves.
+    // Rule 4: If there are no valid front row non-capture moves, use the back row holes.
+    if (move.isValidNonCapture()) {
       return true;
     }
     return false;
