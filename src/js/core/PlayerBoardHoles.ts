@@ -61,14 +61,15 @@ class PlayerBoardHoles implements Iterable<Hole> {
    */
   [Symbol.iterator](): Iterator<Hole> {
     let currentHole: Hole = this.startHolePointer;
+    let counter = 0;
     const iterator = {
       next() {
         currentHole = currentHole.nextHole; //initially goes to first hole from dummy hole
-        if (currentHole != this.endHole) {
-          return { value: currentHole, done: false };
-        } else {
-          return { value: currentHole, done: true };
-        }
+        counter++;
+        return {
+          value: currentHole,
+          done: counter > AppConstants.NUM_PLAYER_HOLES,
+        };
       },
     };
     return iterator;

@@ -32,6 +32,22 @@ describe("PlayerBoardHoles", () => {
     return a - n * Math.floor(a / n);
   };
 
+  describe("#[Symbol.iterator]", () => {
+    test("should iterate through all the holes", () => {
+      const holeIds = [];
+      const playerBoardHoles: PlayerBoardHoles = new PlayerBoardHoles(player);
+      for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
+        playerBoardHoles.insertAtEnd(numSeeds);
+      }
+      for (const hole of playerBoardHoles) {
+        holeIds.push(hole.id);
+      }
+      expect(holeIds).toStrictEqual([
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+      ]);
+    });
+  });
+
   describe("#getHoleWithId", () => {
     test("should not allow player access if all the holes are not initialised", () => {
       expect(() => new PlayerBoardHoles(player).getHoleWithID(0)).toThrow(

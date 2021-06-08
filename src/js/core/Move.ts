@@ -52,27 +52,64 @@ class Move {
   public isContinuing(): boolean {
     return this.prevContinuedMovesCount > 0;
   }
-  public isCapture(): boolean {
-    const destinationHole: Hole = this.getDestinationHole();
+
+  //TODO
+  public isValidCapture(): boolean {
     // General Bawo capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
     // General Bawo capture rule 2: move should end on the front row of the players board side
     // General Bawo capture rule 3: Seed(s) must be present in the first row destination hole
     // General Bawo capture rule 4: Seed(s) must be present in the opponents opposing hole
     if (
       this.hole.numSeeds > 1 &&
-      destinationHole.isInFrontRow() &&
-      !destinationHole.isEmpty() &&
-      !this.board.adjacentOpponentHole(destinationHole).isEmpty()
+      this.getDestinationHole().isInFrontRow() &&
+      !this.getDestinationHole().isEmpty() &&
+      !this.board.adjacentOpponentHole(this.getDestinationHole()).isEmpty()
     ) {
       return true;
     }
     return false;
   }
 
-  public isNonCaptureStartingOnFrontRow(): boolean {
+  //TODO
+  public isValidNonCapture(): boolean {
+    if (this.sowsSeedInFrontHole()) {
+      for (const hole of this.hole.player.boardHoles) {
+        const possibleDirections = [
+          MoveDirection.AntiClockwise,
+          MoveDirection.Clockwise,
+        ];
+        for (const direction of possibleDirections) {
+          const move: Move = new Move(this.board, hole, direction);
+          // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
+          if (this.hole != hole && move.isValidCapture()) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
     return false;
   }
-  public isNonCaptureStartingOnBackRow(): boolean {
+
+  /**
+   * Checks to see if the move results into seed tokens being put in any front row
+   * hole that is assigned to the player.
+   *
+   * @param move Move being executed.
+   * @return boolean
+   */
+  private sowsSeedInFrontHole(): boolean {
+    for (let i = 0; i < this.hole.numSeeds; i++) {
+      if (this.direction == MoveDirection.Clockwise) {
+        if (this.hole.nextHole.isInFrontRow()) {
+          return true;
+        }
+      } else if (this.direction == MoveDirection.AntiClockwise) {
+        if (this.hole.prevHole.isInFrontRow()) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 

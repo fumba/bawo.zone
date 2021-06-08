@@ -25,8 +25,8 @@ import MoveDirection from "../../src/js/core/MoveDirection";
 import PlayerBoardHoles from "../../src/js/core/PlayerBoardHoles";
 
 describe("Move", () => {
-  const board: Board = new Board();
-  const topPlayerHoles: PlayerBoardHoles = board.topPlayer.boardHoles;
+  let board: Board = new Board();
+  let topPlayerHoles: PlayerBoardHoles = board.topPlayer.boardHoles;
   const btmPlayerHoles: PlayerBoardHoles = board.bottomPlayer.boardHoles;
   const hole: Hole = topPlayerHoles.getHoleWithID(1);
   const direction: MoveDirection = MoveDirection.Clockwise;
@@ -50,7 +50,7 @@ describe("Move", () => {
     });
   });
 
-  describe("#isCapture", () => {
+  describe("#isValidCapture", () => {
     /* *  TOP PLAYER sitting position (facing down)
      *  00	01	02	03	04	05	06	07
      *  15	14	13	12	11	10	09	08
@@ -66,7 +66,7 @@ describe("Move", () => {
         MoveDirection.Clockwise
       );
       // top player hole 01 - clockwise does not capture
-      expect(move.isCapture()).toBe(false);
+      expect(move.isValidCapture()).toBe(false);
 
       move = new Move(
         board,
@@ -74,7 +74,7 @@ describe("Move", () => {
         MoveDirection.AntiClockwise
       );
       // top player hole 01 - anti-clockwise capture
-      expect(move.isCapture()).toBe(true);
+      expect(move.isValidCapture()).toBe(true);
 
       move = new Move(
         board,
@@ -82,7 +82,7 @@ describe("Move", () => {
         MoveDirection.Clockwise
       );
       // top player hole 04 - clockwise does not capture
-      expect(move.isCapture()).toBe(false);
+      expect(move.isValidCapture()).toBe(false);
 
       move = new Move(
         board,
@@ -90,7 +90,7 @@ describe("Move", () => {
         MoveDirection.AntiClockwise
       );
       // top player hole 04 - clockwise does not capture
-      expect(move.isCapture()).toBe(false);
+      expect(move.isValidCapture()).toBe(false);
 
       move = new Move(
         board,
@@ -99,7 +99,7 @@ describe("Move", () => {
       );
 
       // bottom player hole 01 - clockwise does not capture
-      expect(move.isCapture()).toBe(true);
+      expect(move.isValidCapture()).toBe(true);
 
       move = new Move(
         board,
@@ -107,7 +107,7 @@ describe("Move", () => {
         MoveDirection.AntiClockwise
       );
       // bottom player hole 01 - anti-clockwise capture
-      expect(move.isCapture()).toBe(false);
+      expect(move.isValidCapture()).toBe(false);
 
       move = new Move(
         board,
@@ -115,7 +115,7 @@ describe("Move", () => {
         MoveDirection.Clockwise
       );
       // bottom  player hole 04 - clockwise does not capture
-      expect(move.isCapture()).toBe(true);
+      expect(move.isValidCapture()).toBe(true);
 
       move = new Move(
         board,
@@ -123,7 +123,41 @@ describe("Move", () => {
         MoveDirection.AntiClockwise
       );
       // bottom player hole 04 - clockwise does not capture
-      expect(move.isCapture()).toBe(true);
+      expect(move.isValidCapture()).toBe(true);
+    });
+  });
+
+  describe("#isValidNonCapture", () => {
+    /* *  TOP PLAYER sitting position (facing down)
+     *  00	01	02	03	04	05	06	07
+     *  15	14	13	12	11	10	09	08
+     *
+     *  00	01	02	03	04	05	06	07
+     *  15	14	13	12	11	10	09	08
+     *   BOTTOM PLAYER sitting position (facing up)
+     * */
+    test("should correctly identify valid non-capture moves", () => {
+      board = Board.loadState(
+        [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
+        null
+      );
+      topPlayerHoles = board.topPlayer.boardHoles;
+
+      // hole_08 clockwise sows in front row
+      let move: Move = new Move(
+        board,
+        topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
+        MoveDirection.Clockwise
+      );
+      expect(move.isValidNonCapture()).toBe(true);
+
+      // hole_08 anti-clockwise sows in back row
+      move = new Move(
+        board,
+        topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
+        MoveDirection.AntiClockwise
+      );
+      expect(move.isValidNonCapture()).toBe(false);
     });
   });
 });
