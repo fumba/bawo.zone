@@ -5,6 +5,7 @@ import Rules from "./Rules";
 import MtajiModeRules from "./MtajiModeRules";
 import PlayerBoardHoles from "./PlayerBoardHoles";
 import AppConstants from "./AppConstants";
+import Logger from "../../helpers/Logger";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -76,8 +77,9 @@ class Board {
     //update hole seed counts for top player
     if (topPlayerSeedArrangement) {
       //TODO validate length - 16
-      console.log(
-        `Updating seed configuration for bottom player to ${topPlayerSeedArrangement}`
+      Logger.info(
+        `Updating seed configuration for bottom player to ${topPlayerSeedArrangement}`,
+        this.name
       );
       for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
         board.topPlayer.boardHoles.getHoleWithID(id).numSeeds =
@@ -87,8 +89,9 @@ class Board {
     //update hole seed counts for bottom player
     if (btmPlayerSeedArrangement) {
       //TODO validate length - 16
-      console.log(
-        `Updating seed configuration for bottom player to ${btmPlayerSeedArrangement}`
+      Logger.info(
+        `Updating seed configuration for bottom player to ${btmPlayerSeedArrangement}`,
+        this.name
       );
       for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
         board.bottomPlayer.boardHoles.getHoleWithID(id).numSeeds =
