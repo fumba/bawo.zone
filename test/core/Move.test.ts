@@ -25,8 +25,8 @@ import MoveDirection from "../../src/js/core/MoveDirection";
 import PlayerBoardHoles from "../../src/js/core/PlayerBoardHoles";
 
 describe("Move", () => {
-  let board: Board = new Board();
-  let topPlayerHoles: PlayerBoardHoles = board.topPlayer.boardHoles;
+  const board: Board = new Board();
+  const topPlayerHoles: PlayerBoardHoles = board.topPlayer.boardHoles;
   const btmPlayerHoles: PlayerBoardHoles = board.bottomPlayer.boardHoles;
   const hole: Hole = topPlayerHoles.getHoleWithID(1);
   const direction: MoveDirection = MoveDirection.Clockwise;
@@ -136,23 +136,30 @@ describe("Move", () => {
      *  15	14	13	12	11	10	09	08
      *   BOTTOM PLAYER sitting position (facing up)
      * */
-    test("should correctly identify valid non-capture moves", () => {
-      board = Board.loadState(
+
+    test("should accept moves that sow in the front row", () => {
+      const board = Board.loadState(
+        [0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0],
+        null
+      );
+      const topPlayerHoles = board.topPlayer.boardHoles;
+      // hole_08 clockwise sows in front row
+      const move: Move = new Move(
+        board,
+        topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 20 seeds
+        MoveDirection.AntiClockwise
+      );
+      expect(move.isValidNonCapture()).toBe(true);
+    });
+
+    test("should not accept moves that do not sow in the front row", () => {
+      const board = Board.loadState(
         [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
         null
       );
-      topPlayerHoles = board.topPlayer.boardHoles;
-
-      // hole_08 clockwise sows in front row
-      let move: Move = new Move(
-        board,
-        topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
-        MoveDirection.Clockwise
-      );
-      expect(move.isValidNonCapture()).toBe(true);
-
-      // hole_08 anti-clockwise sows in back row
-      move = new Move(
+      const topPlayerHoles = board.topPlayer.boardHoles;
+      // hole_08 anti-clockwise sows in back row only
+      const move = new Move(
         board,
         topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
         MoveDirection.AntiClockwise

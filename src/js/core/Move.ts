@@ -25,6 +25,11 @@ class Move {
   public hole: Hole;
   public readonly board: Board;
   public direction: MoveDirection;
+  private readonly possibleDirections = [
+    MoveDirection.AntiClockwise,
+    MoveDirection.Clockwise,
+  ];
+
   /**
    *
    * @param prevContinuedMovesCount the number of subsequent (continued) moves executed before current move
@@ -74,11 +79,7 @@ class Move {
   public isValidNonCapture(): boolean {
     if (this.sowsSeedInFrontHole()) {
       for (const hole of this.hole.player.boardHoles) {
-        const possibleDirections = [
-          MoveDirection.AntiClockwise,
-          MoveDirection.Clockwise,
-        ];
-        for (const direction of possibleDirections) {
+        for (const direction of this.possibleDirections) {
           const move: Move = new Move(this.board, hole, direction);
           // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
           if (this.hole != hole && move.isValidCapture()) {
@@ -99,15 +100,18 @@ class Move {
    * @return boolean
    */
   private sowsSeedInFrontHole(): boolean {
+    let hole: Hole = this.hole;
     for (let i = 0; i < this.hole.numSeeds; i++) {
       if (this.direction == MoveDirection.Clockwise) {
-        if (this.hole.nextHole.isInFrontRow()) {
+        if (hole.nextHole.isInFrontRow()) {
           return true;
         }
+        hole = hole.nextHole;
       } else if (this.direction == MoveDirection.AntiClockwise) {
-        if (this.hole.prevHole.isInFrontRow()) {
+        if (hole.prevHole.isInFrontRow()) {
           return true;
         }
+        hole = hole.prevHole;
       }
     }
     return false;
