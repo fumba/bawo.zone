@@ -137,7 +137,18 @@ describe("Move", () => {
      *   BOTTOM PLAYER sitting position (facing up)
      * */
 
-    test("should accept moves that sow in the front row", () => {
+    test("should not accept move if a capture move exists", () => {
+      const topPlayerHoles = board.topPlayer.boardHoles;
+      // hole_08 clockwise sows in front row
+      const move: Move = new Move(
+        board,
+        topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
+        MoveDirection.AntiClockwise
+      );
+      expect(move.isValidNonCapture()).toBe(false);
+    });
+
+    test("should accept move that sows in the front row", () => {
       const board = Board.loadState(
         [0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0],
         null
@@ -152,7 +163,7 @@ describe("Move", () => {
       expect(move.isValidNonCapture()).toBe(true);
     });
 
-    test("should not accept moves that do not sow in the front row", () => {
+    test("should not accept move that does not sow in the front row", () => {
       const board = Board.loadState(
         [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
         null

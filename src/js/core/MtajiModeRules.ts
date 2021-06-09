@@ -84,7 +84,7 @@ class MtajiModeRules extends Rules {
     return false;
   }
 
-  public computeStartingHoleAndDirAfterCapture(move: Move): Move {
+  public nextContinuingMoveAfterCapture(move: Move): Move {
     // Force Switch direction if steal is made on last 2 holes on the row
     // Maintain move direction for other steals
     if (move.hole.player.isOnTopSide()) {

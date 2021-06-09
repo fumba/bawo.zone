@@ -1,6 +1,7 @@
 import me from "../me";
 import game from "../game";
 import HUD from "../entities/HUD";
+import Logger from "../../helpers/Logger";
 
 class PlayScreen extends me.Stage {
   onResetEvent(): void {
