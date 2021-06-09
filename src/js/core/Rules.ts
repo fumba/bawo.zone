@@ -52,7 +52,7 @@ abstract class Rules {
    * @return move which the player should take next. The returned move should
    *         always be a continuing move.
    */
-  abstract computeStartingHoleAndDirAfterCapture(move: Move): Move;
+  abstract nextContinuingMoveAfterCapture(move: Move): Move;
 
   public validate(): boolean {
     const gamePlayers = Array.from(this.initialSeedForPlayerRows().keys());
