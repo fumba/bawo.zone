@@ -1,3 +1,4 @@
+import Logger from "../../helpers/Logger";
 import game from "../game";
 import me from "../me";
 
@@ -7,8 +8,7 @@ import me from "../me";
 class ScoreItem extends me.Renderable {
   constructor(x: number, y: number) {
     super(x, y, 10, 10);
-
-    console.log("show HUD");
+    Logger.info("Show HUD", ScoreItem.name);
     this.score = -1;
   }
 

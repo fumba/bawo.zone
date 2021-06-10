@@ -6,6 +6,7 @@ import PlayerEntity from "./entities/player";
 import PlayScreen from "./screens/play";
 import TitleScreen from "./screens/title";
 import game from "./game";
+import Logger from "../helpers/Logger";
 
 class Bootstrap {
   constructor() {
@@ -23,7 +24,7 @@ class Bootstrap {
 
     // add "#debug" to the URL to enable the debug Panel
     if (document.location.hash === "#debug") {
-      console.log("show debug");
+      Logger.info("show debug", Bootstrap.name);
       window.addEventListener("load", () => {
         me.plugin.register.defer(this, me.debug.Panel, "debug", me.input.KEY.V);
       });

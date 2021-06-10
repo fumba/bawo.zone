@@ -29,7 +29,9 @@ class Logger {
   private static showLog(): boolean {
     let check = true;
     if (typeof document != "undefined") {
-      check = document.location.hash === "#debug";
+      check =
+        document.location.hash === "#debug" ||
+        document.location.origin === "file://";
     }
     return check;
   }
