@@ -6,6 +6,8 @@ import MtajiModeRules from "./MtajiModeRules";
 import PlayerBoardHoles from "./PlayerBoardHoles";
 import AppConstants from "./AppConstants";
 import Logger from "../../helpers/Logger";
+import Move from "./Move";
+import MoveDirection from "./MoveDirection";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -27,6 +29,7 @@ import Logger from "../../helpers/Logger";
  * limitations under the License.
  */
 class Board {
+  private currentPlayer: Player;
   public readonly bottomPlayer: Player;
   public readonly topPlayer: Player;
   private readonly rules: Rules;
@@ -49,7 +52,12 @@ class Board {
         playerBoardHoles.insertAtEnd(playerInitSeedConfig[index]);
       }
     });
+
+    //set current player
+    this.currentPlayer = this.topPlayer;
+    this.updateMovesStatus();
   }
+
   /**
    * Extract the opposing enemy hole from the players front row.
    * This is hole from which the current player will be capturing seeds from.
@@ -65,6 +73,123 @@ class Board {
     }
     throw new Error(
       `Attempted to retrieve adjacent opponent hole from a hole that is not in the front row | input: ${hole.id}`
+    );
+  }
+
+  /**
+   * Update the move status for all the holes on the board.
+   *
+   * Move Status can be one of the following:
+   *
+   * CLOCKWISE
+   *
+   * ANTI_CLOCKWISE
+   *
+   * BOTH - Both clockwise and anti-clockwise moves are allowed.
+   *
+   * LOCKED - A valid move cannot be made from the hole.
+   *
+   * UNAUTHORISED - The hole does not belong to the current player.
+   */
+  private updateMovesStatus(): void {
+    for (const hole of this.topPlayer.boardHoles) {
+      this.updateMoveStatusForHole(hole);
+    }
+    for (const hole of this.bottomPlayer.boardHoles) {
+      this.updateMoveStatusForHole(hole);
+    }
+  }
+
+  /**
+   * Updates the move status for the specified hole.
+   *
+   * @param hole The Hole on will be performed on.
+   */
+  private updateMoveStatusForHole(hole: Hole): void {
+    // Update status only if the current player is authorized to make a move
+    // on the hole.
+    if (
+      hole.player == this.currentPlayer &&
+      this.currentPlayer.numSeedsInHand == 0
+    ) {
+      const clockwiseMove: Move = new Move(this, hole, MoveDirection.Clockwise);
+      const antiClockwiseMove: Move = new Move(
+        this,
+        hole,
+        MoveDirection.AntiClockwise
+      );
+      const isValidClockwiseMove: boolean = this.isValidMove(clockwiseMove);
+      const isValidAntiClockwiseMove: boolean =
+        this.isValidMove(antiClockwiseMove);
+      if (isValidClockwiseMove && isValidAntiClockwiseMove) {
+        hole.moveStatus = MoveDirection.Both;
+      } else if (isValidClockwiseMove) {
+        hole.moveStatus = MoveDirection.Clockwise;
+      } else if (isValidAntiClockwiseMove) {
+        hole.moveStatus = MoveDirection.AntiClockwise;
+      } else {
+        hole.moveStatus = MoveDirection.Locked;
+      }
+    } else {
+      // holes that do not belong to the current player are set as
+      // unauthorized.
+      hole.moveStatus = MoveDirection.UnAuthorised;
+    }
+  }
+
+  /**
+   * Check if a move valid. GameRules implementation is used to make this
+   * decision.
+   *
+   * @param move The move whose validity is to be checked.
+   * @return boolean {@code true} if the move is valid.
+   */
+  public isValidMove(move: Move): boolean {
+    //check move integrity
+    if (move == null) {
+      throw new Error("Move is null.");
+    }
+    // Check if the current player is allowed to make move.
+    if (this.currentPlayer == null) {
+      throw new Error("Current player is not specified.");
+    }
+    if (this.currentPlayer != move.hole.player) {
+      throw new Error(
+        "Player " +
+          this.currentPlayer +
+          " is not allowed to make a move on hole " +
+          move.hole.toString()
+      );
+    }
+    if (move.hole == null) {
+      throw new Error("Move is required to have a starting hole specified.");
+    }
+    if (move.direction == null) {
+      throw new Error("Move is required to have its direction specified.");
+    }
+
+    return this.rules.isValidMove(move);
+  }
+
+  public switchPlayers(): void {
+    if (
+      this.topPlayer.numSeedsInHand == 0 &&
+      this.bottomPlayer.numSeedsInHand == 0
+    ) {
+      this.currentPlayer = this.getOpponentPlayer(this.currentPlayer);
+    } else {
+      throw new Error(
+        "Cannot assign players while player(s) has(ve) seed(s) in hand: \n" +
+          this.topPlayer +
+          "\n" +
+          this.bottomPlayer
+      );
+    }
+    this.updateMovesStatus();
+    Logger.info(
+      "Players Switched. Current player info: \n" +
+        this.currentPlayer.toString(),
+      Board.name
     );
   }
 
@@ -101,6 +226,18 @@ class Board {
     return board;
   }
 
+  public toString(): string {
+    this.updateMovesStatus();
+    let buffer = "\n".concat(this.topPlayer.boardHoles.toString());
+    buffer = buffer.concat(this.bottomPlayer.boardHoles.toString());
+    return buffer.replace(/\n$/, ""); //remove newline at the end
+  }
+
+  public runSimulation(): void {
+    Logger.info(`initial board state : ${this}`, Board.name);
+    this.switchPlayers();
+    Logger.info(`state after switching players : ${this}`, Board.name);
+  }
   /**
    * Retrieves the opponent player for the current player.
    *
