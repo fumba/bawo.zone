@@ -20,6 +20,19 @@
 
 import AppConstants from "../../src/js/core/AppConstants";
 import Board from "../../src/js/core/Board";
+import Player from "../../src/js/core/Player";
+
+/**
+ * This is a helper method to check if the move status is correct for the
+ * specified player side.
+ */
+const checkMoveStatuses = (moveStatus: Array<string>, player: Player) => {
+  for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
+    expect(player.boardHoles.getHoleWithID(index).moveStatus.toString()).toBe(
+      moveStatus[index]
+    );
+  }
+};
 
 describe("Board", () => {
   const board = new Board();
@@ -29,7 +42,7 @@ describe("Board", () => {
   });
 
   test("should have bottom player", () => {
-    expect(board.bottomPlayer.side).toBe("btm");
+    expect(board.bottomPlayer.side).toBe("bottom");
   });
 
   test("should retrieve adjacent opponent holes", () => {
@@ -64,6 +77,91 @@ describe("Board", () => {
     expect(
       board.adjacentOpponentHole(bottomPlayerHoles.getHoleWithID(7)).id
     ).toBe(8);
+  });
+
+  describe("moves status", () => {
+    test("initial moves status should be correct", () => {
+      const topPlayerMoveStatus = [
+        "A",
+        "A",
+        "L",
+        "L",
+        "L",
+        "L",
+        "C",
+        "C",
+        "C",
+        "C",
+        "B",
+        "B",
+        "B",
+        "B",
+        "A",
+        "A",
+      ];
+      const btmPlayerMoveStatus = [
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+      ];
+      checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+      checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+    });
+
+    test("switching player should update moves status", () => {
+      board.switchPlayers();
+      const btmPlayerMoveStatus = [
+        "C",
+        "C",
+        "B",
+        "B",
+        "B",
+        "B",
+        "A",
+        "A",
+        "A",
+        "A",
+        "L",
+        "L",
+        "L",
+        "L",
+        "C",
+        "C",
+      ];
+      const topPlayerMoveStatus = [
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+        "X",
+      ];
+      checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+      checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+    });
   });
 
   describe("#loadState", () => {

@@ -33,7 +33,7 @@ class Hole {
   // The player who is assigned this hole
   public readonly player: Player;
   // Whether the player is allowed to make moves on this hole.
-  public readonly moveStatus: MoveDirection;
+  public moveStatus: MoveDirection;
 
   /**
    * Constructor
@@ -85,7 +85,15 @@ class Hole {
   }
 
   public toString(): string {
-    return `[${this.id}(${this.numSeeds})-${this.moveStatus}]`;
+    return `[${this.pad(this.id)}(${this.pad(this.numSeeds)})-${
+      this.moveStatus
+    }]`;
+  }
+
+  //TODO
+  private pad(num: number): string {
+    const str = num.toString();
+    return str.length < 2 ? "0".concat(str) : str;
   }
 }
 

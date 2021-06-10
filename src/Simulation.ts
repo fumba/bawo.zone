@@ -19,10 +19,14 @@
  */
 
 import Logger from "./helpers/Logger";
+import Board from "./js/core/Board";
 
 class Simulation {
   public execute(): void {
-    Logger.info("Running simulation", Simulation.name);
+    Logger.info("simulation start", Simulation.name);
+    const board: Board = new Board();
+    board.runSimulation();
+    Logger.info("simulated ended", Simulation.name);
   }
 }
 const simulation = new Simulation();

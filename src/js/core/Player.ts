@@ -79,6 +79,10 @@ class Player {
     return this.side == PlayerSide.Top;
   }
 
+  public toString(): string {
+    return `PLAYER[ side: ${this.side}, hand seeds: ${this.numSeedsInHand}, captured on prev move?: ${this.capturedOnPrevMove}]`;
+  }
+
   /**
    * Checks if the number of seeds to be added or removed from players hand is valid
    * @param numSeeds Number of seeds to be added or removed from players hand
