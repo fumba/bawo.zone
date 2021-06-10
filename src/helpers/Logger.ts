@@ -23,7 +23,7 @@ const fs = require("fs");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const util = require("util");
 
-const log = fs.createWriteStream("bawo.log", { flags: "a" });
+import { isEmpty } from "lodash";
 
 class Logger {
   private static showLog(): boolean {
@@ -39,7 +39,10 @@ class Logger {
     if (this.showLog()) {
       console.log(message);
     }
-    log.write(util.format(message) + "\n");
+    if (!isEmpty(fs)) {
+      const log = fs.createWriteStream("bawo.log", { flags: "a" });
+      log.write(util.format(message) + "\n");
+    }
   }
 }
 

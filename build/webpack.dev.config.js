@@ -3,6 +3,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const webpack = require('webpack');
 
 var babelLoader = {
   loader: "babel-loader",
@@ -27,6 +28,7 @@ module.exports = {
       crypto: require.resolve("crypto-browserify"),
       stream: require.resolve("stream-browserify"),
       os: require.resolve("os-browserify/browser"),
+      fs: false
     },
   },
   devServer: {
@@ -64,5 +66,8 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [{ from: "src/data", to: "data" }],
     }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
+    })
   ],
 };
