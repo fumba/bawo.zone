@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-import Logger from "./helpers/Logger";
-import Board from "./js/core/Board";
+import Logger from "../helpers/Logger";
+import Board from "./core/Board";
 
 class Simulation {
   public execute(): void {
