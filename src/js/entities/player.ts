@@ -1,10 +1,11 @@
+import Logger from "../../helpers/Logger";
 import me from "../me";
 
 class PlayerEntity extends me.Entity {
   constructor(x: number, y: number, settings: unknown) {
     super(x, y, settings);
 
-    console.log("show player");
+    Logger.info("show player", PlayerEntity.name);
   }
 
   update(dt: unknown): boolean {

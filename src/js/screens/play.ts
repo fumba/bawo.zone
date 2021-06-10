@@ -11,7 +11,7 @@ class PlayScreen extends me.Stage {
     // reset the score
     game.data.score = 0;
 
-    console.log("Show play screen");
+    Logger.info("Show play screen", PlayScreen.name);
 
     // Add our HUD to the game world, add it last so that this is on top of the rest.
     // Can also be forced by specifying a "Infinity" z value to the addChild function.
