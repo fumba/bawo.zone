@@ -18,29 +18,12 @@
  * limitations under the License.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const fs = require("fs");
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const util = require("util");
+import Logger from "./helpers/Logger";
 
-const log = fs.createWriteStream("bawo.log", { flags: "a" });
-
-class Logger {
-  private static showLog(): boolean {
-    let check = true;
-    if (typeof document != "undefined") {
-      check = document.location.hash === "#debug";
-    }
-    return check;
-  }
-
-  public static info(message: string, className: string): void {
-    message = `[INFO] ${className} - ${message}`;
-    if (this.showLog()) {
-      console.log(message);
-    }
-    log.write(util.format(message) + "\n");
+class Simulation {
+  public execute(): void {
+    Logger.info("Running simulation", Simulation.name);
   }
 }
-
-export default Logger;
+const simulation = new Simulation();
+simulation.execute();
