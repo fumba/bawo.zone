@@ -226,6 +226,31 @@ class Board {
     return board;
   }
 
+  /**
+   * Retrieves all the valid moves for a player.
+   *
+   * @param player
+   *                   The Player who is requesting the list of valid moves.
+   * @return A list of moves that are valid. These moves can be executed on
+   *         gameboard.
+   */
+  public getAllAvailableValidMoves(player: Player): Array<Move> {
+    this.updateMovesStatus();
+    const moves: Array<Move> = [];
+    for (const hole of player.boardHoles) {
+      if (
+        hole.moveStatus == MoveDirection.Clockwise ||
+        hole.moveStatus == MoveDirection.AntiClockwise
+      ) {
+        moves.push(new Move(this, hole, hole.moveStatus));
+      } else if (hole.moveStatus == MoveDirection.Both) {
+        moves.push(new Move(this, hole, MoveDirection.Clockwise));
+        moves.push(new Move(this, hole, MoveDirection.AntiClockwise));
+      }
+    }
+    return moves;
+  }
+
   public toString(): string {
     this.updateMovesStatus();
     let buffer = "\n".concat(this.topPlayer.boardHoles.toString());
