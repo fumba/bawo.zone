@@ -49,6 +49,13 @@ class AppConstants {
    * during gameplay.
    */
   public static readonly MIN_HOLE_ID: number = 0;
+
+  /**
+   * The amount of moves that a player is allowed to make during a game play. If
+   * they go beyond this count, they are regarded to be in infinite state and have
+   * lost the game.
+   */
+  public static readonly INFINITE_LOOP_THRESHOLD: number = 50;
 }
 
 export default AppConstants;

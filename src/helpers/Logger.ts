@@ -53,8 +53,8 @@ class Logger {
       console.log(chalk.blue(message));
     }
     if (!isEmpty(fs)) {
-      const log = fs.createWriteStream("bawo.log", { flags: "a" });
-      log.write(util.format(message) + "\n");
+      const fd = fs.openSync("bawo.log", "a");
+      fs.writeSync(fd, util.format(message) + "\n");
     }
   }
 }

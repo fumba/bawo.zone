@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+import AppConstants from "./AppConstants";
 import MoveDirection from "./MoveDirection";
 import Player from "./Player";
 
@@ -89,6 +90,44 @@ class Hole {
     return `[${this.pad(this.id)}(${this.pad(this.numSeeds)})-${
       this.moveStatus
     }]`;
+  }
+
+  /**
+   * Add seed tokens to the hole.
+   *
+   * @param  {number} numSeeds Number of seeds to be added to the hole.
+   * @returns {number} Total Number of seeds in the hole after adding the new seed tokens to
+   *         it.
+   */
+  public addSeeds(numSeeds: number): number {
+    this.validateNumSeeds(numSeeds);
+    if (this.numSeeds + numSeeds > AppConstants.MAX_SEED_COUNT) {
+      throw new Error(
+        `Overflow - The hole has ${this.numSeeds} seeds. | requested to add: ${numSeeds}`
+      );
+    }
+    return (this.numSeeds += numSeeds);
+  }
+
+  /**
+   * Removes all seeds from the hole clearing it to a count of 0.
+   *
+   * @returns {number} The number of seeds that were removed.
+   */
+  public removeAllSeeds(): number {
+    const numSeedsTemp = this.numSeeds;
+    this.numSeeds = 0;
+    return numSeedsTemp;
+  }
+
+  /**
+   *
+   * @param {number} numSeeds Number of seeds to add or remove
+   */
+  private validateNumSeeds(numSeeds: number): void {
+    if (numSeeds < 0 || numSeeds > AppConstants.MAX_SEED_COUNT) {
+      throw new Error("Invalid number of seeds | requested: " + numSeeds);
+    }
   }
 
   //TODO
