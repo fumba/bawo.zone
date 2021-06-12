@@ -4,6 +4,9 @@
 
 African mancala game - played as a standalone app and online on [bawo.zone](https://www.bawo.zone). Works on Windows, macOS and Linux.  
 
+# API Documentation
+[https://fumba.github.io/bawo.zone](https://fumba.github.io/bawo.zone/)
+
 # Quick start
 
 You will need `node` v14.17.0 to run this project. We strongly recommend using `nvm` to install the correct `node` version in your workspace - [install nvm](https://github.com/nvm-sh/nvm/blob/master/README.md). Once nvm is installed, the correct `node` version will be installed automatically on step #2 below:
