@@ -5,7 +5,7 @@
 African mancala game - played as a standalone app and online on [bawo.zone](https://www.bawo.zone). Works on Windows, macOS and Linux.  
 
 # API Documentation
-https://fumba.github.io/bawo.zone/
+[https://fumba.github.io/bawo.zone](https://fumba.github.io/bawo.zone/)
 
 # Quick start
 
