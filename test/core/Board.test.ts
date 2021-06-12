@@ -26,6 +26,9 @@ import Player from "../../src/js/core/Player";
 /**
  * This is a helper method to check if the move status is correct for the
  * specified player side.
+ *
+ * @param moveStatus
+ * @param player
  */
 const checkMoveStatuses = (moveStatus: Array<string>, player: Player) => {
   for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {

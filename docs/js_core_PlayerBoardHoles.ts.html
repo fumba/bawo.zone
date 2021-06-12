@@ -1,6 +1,97 @@
-/*
- * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
- * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> js/core/PlayerBoardHoles.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">bawo.zone</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>js/core/PlayerBoardHoles.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
+ * &lt;a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone&lt;/a>
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -32,7 +123,7 @@ import Hole from "./Hole";
 import Player from "./Player";
 import AppConstants from "./AppConstants";
 
-class PlayerBoardHoles implements Iterable<Hole> {
+class PlayerBoardHoles implements Iterable&lt;Hole> {
   // Hole 00
   private startHole: Hole;
   // Hole 15
@@ -62,7 +153,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
    *
    * @returns all the holes assigned to the player
    */
-  [Symbol.iterator](): Iterator<Hole> {
+  [Symbol.iterator](): Iterator&lt;Hole> {
     let currentHole: Hole = this.startHolePointer;
     let counter = 0;
     const iterator = {
@@ -86,7 +177,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
    * @returns Added Hole
    */
   public insertAtEnd(numSeeds: number): Hole {
-    if (this.totalNumHoles < AppConstants.NUM_PLAYER_HOLES) {
+    if (this.totalNumHoles &lt; AppConstants.NUM_PLAYER_HOLES) {
       const newBoardHole: Hole = new Hole(
         this.player,
         this.totalNumHoles,
@@ -151,7 +242,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
    */
   private validateHoleId(holeId: number): void {
     if (
-      holeId < AppConstants.MIN_HOLE_ID ||
+      holeId &lt; AppConstants.MIN_HOLE_ID ||
       holeId > AppConstants.MAX_HOLE_ID
     ) {
       throw new Error(
@@ -188,7 +279,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
     // 15(holeIdAtSecondRowStart) 14 13 12 11 10 09 08 |
     const holeIdAtFirstRowEnd = 7;
     const holeIdAtSecondRowStart = 15;
-    for (let i = 0; i <= holeIdAtFirstRowEnd; i++) {
+    for (let i = 0; i &lt;= holeIdAtFirstRowEnd; i++) {
       output = output.concat(startHole.toString()).concat("  ");
       startHole = startHole.nextHole;
     }
@@ -208,7 +299,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
    * @param numSteps Number of steps to be made.
    */
   private validateNumSteps(numSteps: number): void {
-    if (numSteps < 1 || numSteps > AppConstants.MAX_SEED_COUNT) {
+    if (numSteps &lt; 1 || numSteps > AppConstants.MAX_SEED_COUNT) {
       throw new Error(
         "Number of steps should be within range 0-64 | Requested : " + numSteps
       );
@@ -233,3 +324,32 @@ class PlayerBoardHoles implements Iterable<Hole> {
 }
 
 export default PlayerBoardHoles;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

@@ -21,7 +21,7 @@
  * <p>
  * {@link PlayerSide} represent the sides that a player can be on the board
  * </p>
- **/
+ */
 
 enum PlayerSide {
   Top = "top",

@@ -25,7 +25,7 @@ import PlayerBoardHoles from "./PlayerBoardHoles";
  * <p>
  * {@link Player} represents a bawo game player
  * </p>
- **/
+ */
 class Player {
   //player can take up either TOP or BOTTOM side of the board
   public side: PlayerSide;
@@ -41,6 +41,7 @@ class Player {
 
   /**
    * constructor
+   *
    * @param side the side on which the player is on the board
    */
   constructor(side: PlayerSide) {
@@ -51,6 +52,7 @@ class Player {
 
   /**
    * Adds seeds to players hand
+   *
    * @param numSeeds Number of seeds to be added to players hand
    */
   public addSeeds(numSeeds: number): void {
@@ -61,6 +63,7 @@ class Player {
 
   /**
    * Removes seeds from players hand
+   *
    * @param numSeeds Number of seeds to be removed from players hand
    */
   public removeSeeds(numSeeds: number): void {
@@ -73,7 +76,7 @@ class Player {
    * Checks to see if the current player is positioned on the top side of the
    * board.
    *
-   * @return true if the player is on the top side.
+   * @returns true if the player is on the top side.
    */
   public isOnTopSide(): boolean {
     return this.side == PlayerSide.Top;
@@ -85,6 +88,7 @@ class Player {
 
   /**
    * Checks if the number of seeds to be added or removed from players hand is valid
+   *
    * @param numSeeds Number of seeds to be added or removed from players hand
    */
   private validateNumSeeds(numSeeds: number): void {
@@ -103,6 +107,7 @@ class Player {
 
   /**
    * Checks if the the total number of seeds in players hand is valid
+   *
    * @param numSeeds Number of seeds in players hand after adding or removing
    */
   private validateFinalSeedCount(numSeeds: number): void {

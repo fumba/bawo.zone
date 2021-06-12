@@ -2,6 +2,6 @@ language: node_js
 node_js:
   - "node"
 script:
-  - eslint '*/**/*.{js,ts,tsx}'; stylelint '**/*.css'
+  - eslint 'src/**/*.{js,ts,tsx}'; stylelint 'src/**/*.css'
   - yarn test
 

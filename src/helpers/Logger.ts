@@ -1,4 +1,4 @@
-/*
+/**
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
  * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
  *
@@ -28,6 +28,10 @@ import * as chalk from "chalk";
 import { isEmpty } from "lodash";
 
 class Logger {
+  /**
+   *
+   * @returns {boolean} indicating whether or not logs should be printed
+   */
   private static showLog(): boolean {
     let check = true;
     if (typeof document != "undefined") {
@@ -38,6 +42,11 @@ class Logger {
     return check;
   }
 
+  /**
+   *
+   * @param {string} message message to be logged
+   * @param {string} className the name of the class logging the message
+   */
   public static info(message: string, className: string): void {
     message = `[INFO] ${className} - ${message}`;
     if (this.showLog()) {

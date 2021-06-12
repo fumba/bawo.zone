@@ -25,14 +25,14 @@ abstract class Rules {
   /**
    * Specifies if this particular game rule configurations allows for "nyumba".
    *
-   * @return true if the game has "nyumba".
+   * @returns true if the game has "nyumba".
    */
   abstract hasHomeHole(): boolean;
 
   /**
    * Specify the placement for the seeds on the board.
    *
-   * @return A dictionary with a PlayerSide and its corresponding hole
+   * @returns A dictionary with a PlayerSide and its corresponding hole
    *         configuration.
    */
   abstract initialSeedForPlayerRows(): Map<PlayerSide, Array<number>>;
@@ -41,7 +41,7 @@ abstract class Rules {
    * Check if the move made by the player is valid.
    *
    * @param move  The move to be validated.
-   * @return true if the move is valid.
+   * @returns true if the move is valid.
    */
   abstract isValidMove(move: Move): boolean;
 
@@ -49,7 +49,7 @@ abstract class Rules {
    * Computes the starting hole ID after a capture is made.
    *
    * @param move  The move to be be executed.
-   * @return move which the player should take next. The returned move should
+   * @returns move which the player should take next. The returned move should
    *         always be a continuing move.
    */
   abstract nextContinuingMoveAfterCapture(move: Move): Move;

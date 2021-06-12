@@ -66,7 +66,7 @@ class Hole {
    * Check if this hole is in the front row (Front rows are allowed to capture
    * seeds from enemy side).
    *
-   * @return true is the hole is in the front row for the owning player.
+   * @returns true is the hole is in the front row for the owning player.
    */
   public isInFrontRow(): boolean {
     if (this.player.isOnTopSide()) {
@@ -78,6 +78,7 @@ class Hole {
 
   /**
    *  Checks to see if the hole contains any seeds
+   *
    * @returns true if seeds are present
    */
   public isEmpty(): boolean {
