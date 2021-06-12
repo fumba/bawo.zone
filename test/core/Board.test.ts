@@ -20,6 +20,7 @@
 
 import AppConstants from "../../src/js/core/AppConstants";
 import Board from "../../src/js/core/Board";
+import Move from "../../src/js/core/Move";
 import Player from "../../src/js/core/Player";
 
 /**
@@ -162,6 +163,32 @@ describe("Board", () => {
       checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
       checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
     });
+  });
+
+  describe("#getAllAvailableValidMoves", () => {
+    let board: Board;
+    beforeEach(() => {
+      board = new Board();
+    });
+
+    test("should return all the moves that the current player can make.", () => {
+      const moves: Array<Move> = board.getAllAvailableValidMoves(
+        board.topPlayer
+      );
+      expect(moves.length).toBe(16);
+      for (const move of moves) {
+        expect(board.isValidMove(move)).toBe(true);
+      }
+    });
+
+    test("opponent should not have any valid moves until its their turn", () => {
+      const moves: Array<Move> = board.getAllAvailableValidMoves(
+        board.bottomPlayer
+      );
+      expect(moves.length).toBe(0);
+    });
+
+    //TODO: https://github.com/fumba/bawogame/blob/master/tests/src/zone/bawo/GameBoardTest.java#L707
   });
 
   describe("#loadState", () => {

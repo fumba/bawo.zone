@@ -23,6 +23,8 @@ const fs = require("fs");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const util = require("util");
 
+import * as chalk from "chalk";
+
 import { isEmpty } from "lodash";
 
 class Logger {
@@ -39,7 +41,7 @@ class Logger {
   public static info(message: string, className: string): void {
     message = `[INFO] ${className} - ${message}`;
     if (this.showLog()) {
-      console.log(message);
+      console.log(chalk.blue(message));
     }
     if (!isEmpty(fs)) {
       const log = fs.createWriteStream("bawo.log", { flags: "a" });

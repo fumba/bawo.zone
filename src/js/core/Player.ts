@@ -80,7 +80,7 @@ class Player {
   }
 
   public toString(): string {
-    return `PLAYER[ side: ${this.side}, hand seeds: ${this.numSeedsInHand}, captured on prev move?: ${this.capturedOnPrevMove}]`;
+    return `PLAYER[ side: ${this.side}, hand-seeds: ${this.numSeedsInHand}, captured-on-prev-move?: ${this.capturedOnPrevMove}]`;
   }
 
   /**
