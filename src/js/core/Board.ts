@@ -34,6 +34,13 @@ class Board {
   public readonly topPlayer: Player;
   private readonly rules: Rules;
 
+  /**
+   * The gameplay is in a continuous loop if the player continues to play beyond a
+   * threshold amount of moves.
+   * The game will end and the player with a higher score wins.
+   */
+  private isInContinousLoopStatus = false;
+
   constructor(rules?: Rules) {
     this.bottomPlayer = new Player(PlayerSide.Bottom);
     this.topPlayer = new Player(PlayerSide.Top);
@@ -62,8 +69,8 @@ class Board {
    * Extract the opposing enemy hole from the players front row.
    * This is hole from which the current player will be capturing seeds from.
    *
-   * @param hole Hole from which the opposing enemy hole is to be retrieved from.
-   * @returns Opposing enemy hole.
+   * @param {Hole} hole Hole from which the opposing enemy hole is to be retrieved from.
+   * @returns {Hole} Opposing enemy hole.
    */
   public adjacentOpponentHole(hole: Hole): Hole {
     if (hole.isInFrontRow()) {
@@ -103,7 +110,7 @@ class Board {
   /**
    * Updates the move status for the specified hole.
    *
-   * @param hole The Hole on will be performed on.
+   * @param {Hole} hole The Hole on will be performed on.
    */
   private updateMoveStatusForHole(hole: Hole): void {
     // Update status only if the current player is authorized to make a move
@@ -141,8 +148,8 @@ class Board {
    * Check if a move valid. GameRules implementation is used to make this
    * decision.
    *
-   * @param move The move whose validity is to be checked.
-   * @returns boolean {@code true} if the move is valid.
+   * @param {Move} move The move whose validity is to be checked.
+   * @returns {boolean} {@code true} if the move is valid.
    */
   public isValidMove(move: Move): boolean {
     //check move integrity
@@ -229,10 +236,8 @@ class Board {
   /**
    * Retrieves all the valid moves for a player.
    *
-   * @param player
-   *                   The Player who is requesting the list of valid moves.
-   * @returns A list of moves that are valid. These moves can be executed on
-   *         gameboard.
+   * @param {Player} player The Player who is requesting the list of valid moves.
+   * @returns {Array<Move>} A list of moves that are valid. These moves can be executed on the board.
    */
   public getAllAvailableValidMoves(player: Player): Array<Move> {
     this.updateMovesStatus();
@@ -251,6 +256,210 @@ class Board {
     return moves;
   }
 
+  /**
+   * Execute a move:
+   *
+   * The rules on how the move is to be performed are specified in the
+   * implementation of the GameRules interface.
+   *
+   * @param {Move} move The move to be executed.
+   * @returns {boolean} A boolean value representing whether or not the move was succesful.
+   */
+  public executeMove(move: Move): boolean {
+    Logger.info(`Recieved move : ${move.toString()}`, Board.name);
+    Logger.info(
+      "Board Status before executing move : \n" + this.toString(),
+      Board.name
+    );
+    if (move.prevContinuedMovesCount > AppConstants.INFINITE_LOOP_THRESHOLD) {
+      // The player has made more than the allowed amount of moves. They
+      // are now regarded to be in infinite move status. The game will end and the player with a
+      // higher score wins.
+
+      // place all the seeds back into the start hole for the move.
+      const numSeeds = this.currentPlayer.removeSeeds(
+        this.currentPlayer.numSeedsInHand
+      );
+      move.hole.addSeeds(numSeeds);
+
+      this.isInContinousLoopStatus = true;
+      // TODO update GUI state
+      return true;
+    }
+    if (!this.isValidMove(move)) {
+      Logger.info("Requested move is not valid...", Board.name);
+      return false;
+    }
+    // Only the current player is allowed to execute a move
+    if (this.currentPlayer != move.hole.player) {
+      throw new Error(
+        `Only the current player can execute this move on hole : ${move.hole.toString()}`
+      );
+    }
+    const numSeedsToSowPerStep = 1;
+    let currentHole: Hole = move.hole; //starting hole
+    let destinationHole: Hole;
+    // Continuing moves already have seeds in the player hands
+    // Initial moves need to get the seeds from the hole into the players hand
+    if (!move.isContinuing()) {
+      this.currentPlayer.addSeeds(currentHole.removeAllSeeds());
+    }
+
+    Logger.info(
+      `Player is ready to start sowing seeds: \n ${this.toString()}`,
+      Board.name
+    );
+    Logger.info(
+      `Current Player Status: \n ${this.currentPlayer.toString()}`,
+      Board.name
+    );
+    //TODO update GUI state
+    while (this.currentPlayer.numSeedsInHand > 0) {
+      // Find out which hole the player should move to next
+      if (this.currentPlayer.capturedOnPrevMove) {
+        // if a player captured on the previous move, plant a seed in
+        // the after-capture start hole before moving to other holes.
+        destinationHole = currentHole;
+        // reset previous capture flag
+        this.currentPlayer.capturedOnPrevMove = false;
+      } else {
+        destinationHole = this.computeDestinationHole(
+          move.direction,
+          currentHole,
+          numSeedsToSowPerStep
+        );
+      }
+      // Place 1 seed in the destination hole and move on to the next
+      // hole.
+      const numSeeds = this.currentPlayer.removeSeeds(numSeedsToSowPerStep);
+      destinationHole.addSeeds(numSeeds);
+      currentHole = destinationHole;
+
+      //TODO update GUI state
+      Logger.info(
+        "Board Status after sowing one seed: \n" + this.toString(),
+        Board.name
+      );
+      Logger.info(
+        `Current Player status  after sowing one seed: \n\t ${this.currentPlayer.toString()}`,
+        Board.name
+      );
+    }
+
+    Logger.info(
+      "Current player no longer has any  left seeds in hand",
+      Board.name
+    );
+    // Get the enemy's hole id at the end of the move if destination has
+    // move than 1 seed in total
+    if (currentHole.numSeeds > 1) {
+      let continuingMove: Move;
+      // Capture enemies seeds and continue playing (re-start from side)
+      // Only capture seeds if the initial move was mtaji (a capture move)
+      if (move.isMtaji && this.captureAllSeedsFromEnemy(currentHole)) {
+        const captureMove: Move = new Move(
+          this,
+          currentHole,
+          move.direction,
+          move.prevContinuedMovesCount
+        );
+        continuingMove = this.rules.nextContinuingMoveAfterCapture(captureMove);
+        // All moves at this point will be able to capture seeds...
+        continuingMove.isMtaji = move.isMtaji;
+        return this.executeMove(continuingMove);
+      } else {
+        // Take all seeds in hole and continue with current player without capturing any seeds
+        this.currentPlayer.addSeeds(currentHole.removeAllSeeds());
+        continuingMove = new Move(
+          this,
+          currentHole,
+          move.direction,
+          move.prevContinuedMovesCount + 1
+        );
+        if (move.isContinuing()) {
+          // get mtaji status from parent
+          continuingMove.isMtaji = move.isMtaji;
+        } else {
+          // this is an initial move that didnt capture...
+          // Do not allow any other moves to capture at this point...
+          continuingMove.isMtaji = false;
+        }
+        return this.executeMove(continuingMove);
+      }
+    }
+
+    // Switch player sides once a move is executed successfully.
+    this.switchPlayers();
+    Logger.info("Board Status After Move : \n" + this.toString(), Board.name);
+    Logger.info("Move is Completed!", Board.name);
+    //TODO Update GUI state
+    return true;
+  }
+
+  /**
+   * Finds the hole on which planting the given number of seed tokens one by one-
+   * will stop when executed.
+   *
+   * @param {MoveDirection} direction Direction of the move
+   * @param {Hole} hole The hole on which the move starts on
+   * @param {number} numberOfSteps Number of seeds to be planted in the move
+   * @returns {Hole} Hole on which the move ends on
+   */
+  private computeDestinationHole(
+    direction: MoveDirection,
+    hole: Hole,
+    numberOfSteps: number
+  ): Hole {
+    switch (direction) {
+      case MoveDirection.AntiClockwise:
+        return hole.player.boardHoles.stepAntiClockwise(hole, numberOfSteps);
+      case MoveDirection.Clockwise:
+        return hole.player.boardHoles.stepClockwise(hole, numberOfSteps);
+      default:
+        throw new Error(
+          `Only Clockwise and Anticlockwise moves are allowed. Recieved : ${direction}`
+        );
+    }
+  }
+
+  /**
+   * Capture all seeds from enemy if current player stopped on front row.
+   *
+   * @param {Hole} startHole The hole which will be capturing the enemy seeds.
+   * @returns {boolean} true if the capture was successful
+   */
+  private captureAllSeedsFromEnemy(startHole: Hole): boolean {
+    if (startHole.isInFrontRow()) {
+      const opponentHole = this.getOppossingEnemyHole(startHole);
+      const stolenSeedCount = opponentHole.removeAllSeeds();
+      if (stolenSeedCount > 0) {
+        Logger.info(
+          `******* HOLE (${startHole.id}) CAPTURED ${stolenSeedCount} SEEDS FROM (${opponentHole.id}) ********`,
+          Board.name
+        );
+        this.currentPlayer.addSeeds(stolenSeedCount);
+        this.currentPlayer.capturedOnPrevMove = true;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Extract the opposing enemy hole from the players front row.
+   *
+   * @param {Hole} hole Hole from which the opposing enemy hole is to be retrieved.
+   * @returns {Hole} Opposing enemy hole.
+   */
+  public getOppossingEnemyHole(hole: Hole): Hole {
+    if (hole.isInFrontRow()) {
+      const oppossingId = 15 - hole.id;
+      const opponentPlayer = this.getOpponentPlayer(hole.player);
+      return opponentPlayer.boardHoles.getHoleWithID(oppossingId);
+    }
+    throw new Error("Could not retrieve opposing enemy hole");
+  }
+
   public toString(): string {
     this.updateMovesStatus();
     let buffer = "\n".concat(this.topPlayer.boardHoles.toString());
@@ -260,17 +469,25 @@ class Board {
 
   public runSimulation(): void {
     Logger.info(`initial board state : ${this}`, Board.name);
-    this.switchPlayers();
-    Logger.info(`state after switching players : ${this}`, Board.name);
+    const moves: Array<Move> = this.getAllAvailableValidMoves(
+      this.currentPlayer
+    );
+    const move = moves[this.getRandomInt(moves.length)];
+    this.executeMove(move);
   }
   /**
    * Retrieves the opponent player for the current player.
    *
-   * @param player Player whose opponent is to be determined.
-   * @returns
+   * @param {Player} player Player whose opponent is to be determined.
+   * @returns {Player} opponent player
    */
   private getOpponentPlayer(player: Player): Player {
     return player.isOnTopSide() ? this.bottomPlayer : this.topPlayer;
+  }
+
+  //TODO
+  private getRandomInt(max: number): number {
+    return Math.floor(Math.random() * max);
   }
 }
 export default Board;
