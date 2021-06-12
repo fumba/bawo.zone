@@ -21,7 +21,7 @@
  * <p>
  * {@link PlayerSide} represent the sides that a player can be on the board
  * </p>
- **/
+ */
 
 /**
  * Move direction: Only clockwise and anti-clockwise moves are allowed when the
@@ -45,7 +45,7 @@
  * belong to the current player are marked as
  * {@link MoveDirection#Unathorised}.
  * </p>
- * */
+ */
 
 enum MoveDirection {
   AntiClockwise = "A",

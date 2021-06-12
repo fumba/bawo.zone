@@ -52,7 +52,7 @@ class Move {
    * Determines if a move is continuing. This happens when previous moves have
    * been executed before this move.
    *
-   * @return {@code true} if the move is continuing.
+   * @returns {@code true} if the move is continuing.
    */
   public isContinuing(): boolean {
     return this.prevContinuedMovesCount > 0;
@@ -97,7 +97,7 @@ class Move {
    * hole that is assigned to the player.
    *
    * @param move Move being executed.
-   * @return boolean
+   * @returns boolean
    */
   private sowsSeedInFrontHole(): boolean {
     let hole: Hole = this.hole;
@@ -123,7 +123,7 @@ class Move {
    * the players hand.
    *
    * @param move Move to be performed
-   * @return Hole on which the move ends
+   * @returns Hole on which the move ends
    */
   private getDestinationHole(): Hole {
     switch (this.direction) {

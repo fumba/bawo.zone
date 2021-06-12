@@ -24,7 +24,7 @@
  * {@link AppConstants} keeps track of both values used by the backend logic and
  * the game GUI.
  * </p>
- **/
+ */
 class AppConstants {
   /**
    * Maximum number of seeds that can be used to play the bawo game.

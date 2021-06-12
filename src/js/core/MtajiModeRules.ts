@@ -32,6 +32,7 @@ class MtajiModeRules extends Rules {
 
   /**
    * Mtaji mode does not use home-hole
+   *
    * @returns false - home is not used in mtaji mode
    */
   public hasHomeHole(): boolean {
@@ -61,6 +62,8 @@ class MtajiModeRules extends Rules {
 
   /**
    * Check if the player is attempting to make a valid move.
+   *
+   * @param move
    */
   public isValidMove(move: Move): boolean {
     // Rule 1: Continuing moves since they are determined by game rules

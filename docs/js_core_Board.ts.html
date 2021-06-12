@@ -1,4 +1,95 @@
-import Hole from "./Hole";
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> js/core/Board.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">bawo.zone</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>js/core/Board.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Hole from "./Hole";
 import Player from "./Player";
 import PlayerSide from "./PlayerSide";
 import Rules from "./Rules";
@@ -10,8 +101,8 @@ import Move from "./Move";
 import MoveDirection from "./MoveDirection";
 
 /*
- * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
- * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
+ * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
+ * &lt;a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone&lt;/a>
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -44,11 +135,11 @@ class Board {
 
     // initialise player board holes
     [this.topPlayer, this.bottomPlayer].forEach((player) => {
-      const playerInitSeedConfig: Array<number> = this.rules
+      const playerInitSeedConfig: Array&lt;number> = this.rules
         .initialSeedForPlayerRows()
         .get(player.side);
       const playerBoardHoles: PlayerBoardHoles = new PlayerBoardHoles(player);
-      for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
+      for (let index = 0; index &lt; AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(playerInitSeedConfig[index]);
       }
     });
@@ -109,7 +200,7 @@ class Board {
     // Update status only if the current player is authorized to make a move
     // on the hole.
     if (
-      hole.player == this.currentPlayer &&
+      hole.player == this.currentPlayer &amp;&amp;
       this.currentPlayer.numSeedsInHand == 0
     ) {
       const clockwiseMove: Move = new Move(this, hole, MoveDirection.Clockwise);
@@ -121,7 +212,7 @@ class Board {
       const isValidClockwiseMove: boolean = this.isValidMove(clockwiseMove);
       const isValidAntiClockwiseMove: boolean =
         this.isValidMove(antiClockwiseMove);
-      if (isValidClockwiseMove && isValidAntiClockwiseMove) {
+      if (isValidClockwiseMove &amp;&amp; isValidAntiClockwiseMove) {
         hole.moveStatus = MoveDirection.Both;
       } else if (isValidClockwiseMove) {
         hole.moveStatus = MoveDirection.Clockwise;
@@ -173,7 +264,7 @@ class Board {
 
   public switchPlayers(): void {
     if (
-      this.topPlayer.numSeedsInHand == 0 &&
+      this.topPlayer.numSeedsInHand == 0 &amp;&amp;
       this.bottomPlayer.numSeedsInHand == 0
     ) {
       this.currentPlayer = this.getOpponentPlayer(this.currentPlayer);
@@ -195,8 +286,8 @@ class Board {
 
   //TODO
   public static loadState(
-    topPlayerSeedArrangement: Array<number>,
-    btmPlayerSeedArrangement: Array<number>
+    topPlayerSeedArrangement: Array&lt;number>,
+    btmPlayerSeedArrangement: Array&lt;number>
   ): Board {
     const board: Board = new Board();
     //update hole seed counts for top player
@@ -206,7 +297,7 @@ class Board {
         `Updating seed configuration for bottom player to ${topPlayerSeedArrangement}`,
         this.name
       );
-      for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
+      for (let id = 0; id &lt; AppConstants.NUM_PLAYER_HOLES; id++) {
         board.topPlayer.boardHoles.getHoleWithID(id).numSeeds =
           topPlayerSeedArrangement[id];
       }
@@ -218,7 +309,7 @@ class Board {
         `Updating seed configuration for bottom player to ${btmPlayerSeedArrangement}`,
         this.name
       );
-      for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
+      for (let id = 0; id &lt; AppConstants.NUM_PLAYER_HOLES; id++) {
         board.bottomPlayer.boardHoles.getHoleWithID(id).numSeeds =
           btmPlayerSeedArrangement[id];
       }
@@ -234,9 +325,9 @@ class Board {
    * @returns A list of moves that are valid. These moves can be executed on
    *         gameboard.
    */
-  public getAllAvailableValidMoves(player: Player): Array<Move> {
+  public getAllAvailableValidMoves(player: Player): Array&lt;Move> {
     this.updateMovesStatus();
-    const moves: Array<Move> = [];
+    const moves: Array&lt;Move> = [];
     for (const hole of player.boardHoles) {
       if (
         hole.moveStatus == MoveDirection.Clockwise ||
@@ -274,3 +365,32 @@ class Board {
   }
 }
 export default Board;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

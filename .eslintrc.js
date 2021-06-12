@@ -6,13 +6,14 @@ module.exports = {
   extends: [
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
+    "plugin:jsdoc/recommended",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 12,
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "jsdoc"],
   rules: {},
-  ignorePatterns: ["/app/", "/dist", "/build"],
+  ignorePatterns: ["/app/", "/dist", "/build", "/out/"],
 };
