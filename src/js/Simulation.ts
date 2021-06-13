@@ -18,16 +18,19 @@
  * limitations under the License.
  */
 
+import { random } from "lodash";
 import Logger from "../helpers/Logger";
 import Board from "./core/Board";
 
 class Simulation {
-  public execute(): void {
+  public execute(randomise: boolean): void {
     Logger.info("simulation start", Simulation.name);
     const board: Board = new Board();
-    board.runSimulation();
+    board.runSimulation(randomise);
     Logger.info("simulated ended", Simulation.name);
   }
 }
+
+const randomise: boolean = JSON.parse(process.env.RANDOM_MOVES);
 const simulation = new Simulation();
-simulation.execute();
+simulation.execute(randomise);

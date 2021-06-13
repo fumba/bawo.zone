@@ -37,7 +37,7 @@ class Game {
     this.board = new Board();
 
     //TODO testing only
-    this.board.runSimulation();
+    this.board.runSimulation(false);
   }
 }
 
