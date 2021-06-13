@@ -37,7 +37,7 @@ class Board {
   /**
    * The gameplay is in a continuous loop if the player continues to play beyond a
    * threshold amount of moves.
-   * The game will end and the player with a higher score wins.
+   * The game will end and the player who got themselves into an infinite loop will lose.
    */
   private isInContinousLoopStatus = false;
 
@@ -273,8 +273,7 @@ class Board {
     );
     if (move.prevContinuedMovesCount > AppConstants.INFINITE_LOOP_THRESHOLD) {
       // The player has made more than the allowed amount of moves. They
-      // are now regarded to be in infinite move status. The game will end and the player with a
-      // higher score wins.
+      // are now regarded to be in infinite move status. The game will end and the player who got themselves into an infinite loop will loose.
 
       // place all the seeds back into the start hole for the move.
       const numSeeds = this.currentPlayer.removeSeeds(
@@ -467,14 +466,126 @@ class Board {
     return buffer.replace(/\n$/, ""); //remove newline at the end
   }
 
-  public runSimulation(): void {
-    Logger.info(`initial board state : ${this}`, Board.name);
+  public runSimulation(randomise: boolean): void {
     const moves: Array<Move> = this.getAllAvailableValidMoves(
       this.currentPlayer
     );
-    const move = moves[this.getRandomInt(moves.length)];
+    // either always pick first move or randomise
+    const move = moves[randomise ? this.getRandomInt(moves.length) : 0];
     this.executeMove(move);
+    if (!this.isGameOver()) {
+      // recursively run the simulation
+      this.runSimulation(randomise);
+    } else {
+      Logger.info(
+        `GAME OVER ::: Winner is : \n ${this.getWinningPlayer().toString()}`,
+        Board.name
+      );
+      Logger.info(
+        "GAME SCORE: \nTOP Player: " +
+          this.getScore().get(PlayerSide.Top) +
+          "\nBOTTOM Player: " +
+          this.getScore().get(PlayerSide.Bottom),
+        Board.name
+      );
+    }
   }
+
+  /**
+   * Checks if the game is over. The game is over if the current player is left
+   * with no valid moves (ie. all the moves are locked).
+   *
+   * When the gameplay gets in an infinite loop, the game is also considered be
+   * over. The player who gets themselves into the loop is considered to have lost
+   * the game in this case.
+   *
+   * @returns {boolean} true if the game is over.
+   */
+  public isGameOver(): boolean {
+    if (this.isInContinousLoopStatus) {
+      return true;
+    }
+    for (const hole of this.currentPlayer.boardHoles) {
+      if (hole.moveStatus == MoveDirection.UnAuthorised) {
+        throw new Error(
+          this.currentPlayer.toString() +
+            " has hole(s) with unathorized status: \n" +
+            this.currentPlayer.boardHoles.toString()
+        );
+      }
+      if (hole.moveStatus != MoveDirection.Locked) {
+        // found a valid move... game is not over yet!
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Gets the player who won the game. This only happens if the game is over.
+   * opposing player is determined as the winning player since the current player
+   * cannot make any moves in this case.
+   *
+   * @returns {Player} The winning Player.
+   */
+  public getWinningPlayer(): Player {
+    if (this.isGameOver()) {
+      return this.getOpponentPlayer(this.currentPlayer);
+    } else {
+      throw new Error(
+        "The game is still in play. There is no winning player yet."
+      );
+    }
+  }
+
+  /**
+   * Calculates the current game score. The score is calculated as the number
+   * seeds on the player side. If a player gets themselves into an infinite loop
+   * move, they have lost the game.
+   *
+   * @returns A Hash with the PlayerSide as the key and the number of seeds on that
+   *         side as the value.
+   */
+  public getScore(): Map<PlayerSide, number> {
+    if (
+      this.bottomPlayer.numSeedsInHand != 0 ||
+      this.topPlayer.numSeedsInHand != 0
+    ) {
+      throw new Error(
+        "Score cannot be determined while one of the players is holding seeds in hand."
+      );
+    }
+    const scoreMap = new Map<PlayerSide, number>();
+    let btmPlayerScore = 0;
+    let topPlayerScore = 0;
+    for (const hole of this.bottomPlayer.boardHoles) {
+      btmPlayerScore += hole.numSeeds;
+    }
+    scoreMap.set(PlayerSide.Bottom, btmPlayerScore);
+    for (const hole of this.topPlayer.boardHoles) {
+      topPlayerScore += hole.numSeeds;
+    }
+    scoreMap.set(PlayerSide.Top, topPlayerScore);
+
+    // if one of the players got into an infinite loop, they are punished by
+    // loosing all their seed scores to the opponent player.
+    if (this.isInContinousLoopStatus) {
+      const loosingPlayerSeedCount = scoreMap.get(this.currentPlayer.side);
+      const winningPlayerSeedCount = scoreMap.get(
+        this.getOpponentPlayer(this.currentPlayer).side
+      );
+      scoreMap.set(this.currentPlayer.side, 0);
+      scoreMap.set(
+        this.getOpponentPlayer(this.currentPlayer).side,
+        loosingPlayerSeedCount + winningPlayerSeedCount
+      );
+    }
+    if (topPlayerScore + btmPlayerScore != AppConstants.MAX_SEED_COUNT) {
+      throw new Error("Total score is not 64.");
+    }
+    return scoreMap;
+  }
+
   /**
    * Retrieves the opponent player for the current player.
    *
