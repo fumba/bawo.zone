@@ -156,11 +156,13 @@ class Player {
    * Removes seeds from players hand
    *
    * @param numSeeds Number of seeds to be removed from players hand
+   * @returns {number} Number of seeds removed from the player hand
    */
-  public removeSeeds(numSeeds: number): void {
+  public removeSeeds(numSeeds: number): number {
     this.validateNumSeeds(numSeeds);
     this.validateFinalSeedCount(-numSeeds); //minus because we are removing seeds
     this.numSeedsInHand -= numSeeds;
+    return numSeeds;
   }
 
   /**
