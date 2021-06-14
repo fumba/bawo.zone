@@ -120,6 +120,19 @@ class Move {
     MoveDirection.AntiClockwise,
     MoveDirection.Clockwise,
   ];
+  /**
+   * &lt;p>
+   * Mtaji moves result into a capture on the initial move. This switch is set to
+   * {@code false} for all subsequent continuing moves if the initial move did not
+   * result into a capture.
+   * &lt;/p>
+   * &lt;p>
+   * The default value for this switch is initially set to {@code true} with the
+   * assumption that every move that a {@link Player} initiates has the potential
+   * to result into a capture.
+   * &lt;/p>
+   */
+  public isMtaji: boolean;
 
   /**
    *
@@ -138,6 +151,7 @@ class Move {
     this.hole = hole;
     this.board = board;
     this.direction = direction;
+    this.isMtaji = true;
   }
   /**
    * Determines if a move is continuing. This happens when previous moves have
@@ -183,12 +197,23 @@ class Move {
     return false;
   }
 
+  public toString(): string {
+    let buffer = "";
+    buffer = buffer.concat("\nMOVE [ dir : " + this.direction);
+    buffer = buffer.concat(", owner :" + this.hole.player.side);
+    buffer = buffer.concat(", hole id :" + this.hole.id);
+    buffer = buffer.concat(", seed count:" + this.hole.numSeeds);
+    buffer = buffer.concat(", step count :" + this.prevContinuedMovesCount);
+    buffer = buffer.concat(", isMtaji:" + this.isMtaji + " \n");
+    buffer = buffer.concat("\n");
+    return buffer;
+  }
+
   /**
    * Checks to see if the move results into seed tokens being put in any front row
    * hole that is assigned to the player.
    *
-   * @param move Move being executed.
-   * @returns boolean
+   * @returns {boolean} true if move sows seed in any front row hole
    */
   private sowsSeedInFrontHole(): boolean {
     let hole: Hole = this.hole;

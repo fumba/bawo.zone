@@ -39,12 +39,12 @@ class Hole {
   /**
    * Constructor
    *
-   * @param player   The player to whom this hole is being assigned to
-   * @param id       Unique hole ID (Ranging 0-16) -1 is used for the dummy
+   * @param {Player} player   The player to whom this hole is being assigned to
+   * @param {number} id      Unique hole ID (Ranging 0-16) -1 is used for the dummy
    *                 pointer to the first hole.
-   * @param numSeeds Number of seeds to be initially added to the hole.
-   * @param prevHole The hole that is before this hole.
-   * @param nextHole The hole that comes up next in clockwise fashion
+   * @param {number} numSeeds Number of seeds to be initially added to the hole.
+   * @param {Hole} prevHole The hole that is before this hole.
+   * @param {Hole} nextHole The hole that comes up next in clockwise fashion
    */
   constructor(
     player: Player,
@@ -67,7 +67,7 @@ class Hole {
    * Check if this hole is in the front row (Front rows are allowed to capture
    * seeds from enemy side).
    *
-   * @returns true is the hole is in the front row for the owning player.
+   * @returns {boolean} true is the hole is in the front row for the owning player.
    */
   public isInFrontRow(): boolean {
     if (this.player.isOnTopSide()) {
@@ -80,7 +80,7 @@ class Hole {
   /**
    *  Checks to see if the hole contains any seeds
    *
-   * @returns true if seeds are present
+   * @returns {boolean} true if seeds are present
    */
   public isEmpty(): boolean {
     return this.numSeeds == 0;
