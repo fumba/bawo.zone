@@ -191,7 +191,15 @@ describe("Board", () => {
       expect(moves.length).toBe(0);
     });
 
-    //TODO: https://github.com/fumba/bawogame/blob/master/tests/src/zone/bawo/GameBoardTest.java#L707
+    test("should update move status when a move has been executed - player sides switched", () => {
+      let moves: Array<Move> = board.getAllAvailableValidMoves(board.topPlayer);
+      board.executeMove(moves[0]);
+      moves = board.getAllAvailableValidMoves(board.bottomPlayer);
+      expect(moves.length).toBe(9);
+
+      moves = board.getAllAvailableValidMoves(board.topPlayer);
+      expect(moves.length).toBe(0);
+    });
   });
 
   describe("#loadState", () => {
