@@ -19,6 +19,7 @@
  */
 
 import AppConstants from "./AppConstants";
+import Board from "./Board";
 import MoveDirection from "./MoveDirection";
 import Player from "./Player";
 
@@ -35,11 +36,14 @@ class Hole {
   public readonly player: Player;
   // Whether the player is allowed to make moves on this hole.
   public moveStatus: MoveDirection;
+  // the board on which the hole is placed
+  public readonly board: Board;
 
   /**
    * Constructor
    *
    * @param {Player} player   The player to whom this hole is being assigned to
+   * @param {Board} board The board on which the hole is placed
    * @param {number} id      Unique hole ID (Ranging 0-16) -1 is used for the dummy
    *                 pointer to the first hole.
    * @param {number} numSeeds Number of seeds to be initially added to the hole.
@@ -48,6 +52,7 @@ class Hole {
    */
   constructor(
     player: Player,
+    board: Board,
     id: number,
     numSeeds: number,
     prevHole: Hole,
@@ -58,6 +63,7 @@ class Hole {
     this.numSeeds = numSeeds;
     this.nextHole = nextHole;
     this.prevHole = prevHole;
+    this.board = board;
 
     // initialize move status as unauthorized
     this.moveStatus = MoveDirection.UnAuthorised;

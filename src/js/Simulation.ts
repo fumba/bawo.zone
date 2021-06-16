@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-import { random } from "lodash";
 import Logger from "../helpers/Logger";
 import Board from "./core/Board";
 

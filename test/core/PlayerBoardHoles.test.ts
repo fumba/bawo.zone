@@ -35,7 +35,10 @@ describe("PlayerBoardHoles", () => {
   describe("#[Symbol.iterator]", () => {
     test("should iterate through all the holes", () => {
       const holeIds = [];
-      const playerBoardHoles: PlayerBoardHoles = new PlayerBoardHoles(player);
+      const playerBoardHoles: PlayerBoardHoles = new PlayerBoardHoles(
+        player,
+        null
+      );
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(numSeeds);
       }
@@ -50,7 +53,7 @@ describe("PlayerBoardHoles", () => {
 
   describe("#getHoleWithId", () => {
     test("should not allow player access if all the holes are not initialised", () => {
-      expect(() => new PlayerBoardHoles(player).getHoleWithID(0)).toThrow(
+      expect(() => new PlayerBoardHoles(player, null).getHoleWithID(0)).toThrow(
         "All 16 holes belonging to the player must be added to the board before accessing them."
       );
     });
@@ -58,7 +61,7 @@ describe("PlayerBoardHoles", () => {
     describe("initialise player holes", () => {
       let playerBoardHoles: PlayerBoardHoles;
       beforeEach(() => {
-        playerBoardHoles = new PlayerBoardHoles(player);
+        playerBoardHoles = new PlayerBoardHoles(player, null);
         for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
           playerBoardHoles.insertAtEnd(numSeeds);
         }
@@ -84,7 +87,7 @@ describe("PlayerBoardHoles", () => {
   describe("#insertAtEnd", () => {
     test("should not insert more than 16 holes on player side", () => {
       expect(() => {
-        const playerBoardHoles = new PlayerBoardHoles(player);
+        const playerBoardHoles = new PlayerBoardHoles(player, null);
         for (
           let index = 0;
           index < AppConstants.NUM_PLAYER_HOLES + 1; // attempt to add one extra hole
@@ -99,7 +102,7 @@ describe("PlayerBoardHoles", () => {
   describe("#stepAntiClockwise", () => {
     let playerBoardHoles: PlayerBoardHoles;
     beforeEach(() => {
-      playerBoardHoles = new PlayerBoardHoles(player);
+      playerBoardHoles = new PlayerBoardHoles(player, null);
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(numSeeds);
       }
@@ -147,7 +150,7 @@ describe("PlayerBoardHoles", () => {
   describe("#stepClockwise", () => {
     let playerBoardHoles: PlayerBoardHoles;
     beforeEach(() => {
-      playerBoardHoles = new PlayerBoardHoles(player);
+      playerBoardHoles = new PlayerBoardHoles(player, null);
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(numSeeds);
       }
@@ -194,7 +197,7 @@ describe("PlayerBoardHoles", () => {
 
   describe("#toString", () => {
     test("should show string representation of player board holes", () => {
-      const playerBoardHoles = new PlayerBoardHoles(player);
+      const playerBoardHoles = new PlayerBoardHoles(player, null);
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(numSeeds);
       }

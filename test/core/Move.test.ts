@@ -31,15 +31,14 @@ describe("Move", () => {
   const hole: Hole = topPlayerHoles.getHoleWithID(1);
   const direction: MoveDirection = MoveDirection.Clockwise;
   test("should initialise values correctly", () => {
-    const move: Move = new Move(board, hole, direction);
+    const move: Move = new Move(hole, direction);
     expect(move.prevContinuedMovesCount).toBe(0);
-    expect(move.board).toBe(board);
     expect(move.hole).toBe(hole);
     expect(move.direction).toBe(direction);
   });
 
   describe("#isContinuing", () => {
-    const move: Move = new Move(board, hole, direction);
+    const move: Move = new Move(hole, direction);
     test("should correctly identify moves that are not continuing", () => {
       expect(move.isContinuing()).toBe(false);
     });
@@ -47,6 +46,224 @@ describe("Move", () => {
     test("should correctly identify moves that are continuing", () => {
       move.prevContinuedMovesCount = 1;
       expect(move.isContinuing()).toBe(true);
+    });
+  });
+
+  describe("#sowsSeedInFrontHole", () => {
+    describe("when top player is sowing seeds", () => {
+      /*
+       *    TOP PLAYER siitting position (facing down)
+       *    00	01	02	03	04	05	06	07
+       *    15	14	13	12	11	10	09	08
+       *
+       *    00	01	02	03	04	05	06	07
+       *    15	14	13	12	11	10	09	08
+       *    BOTTOM PLAYER sitting position (facing up)
+       * */
+      describe("direction- clockwise", () => {
+        const direction = MoveDirection.Clockwise;
+
+        test("should return correct value for multi-step moves that start from the back", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(6),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+
+        test("should return correct value for one-step moves that start from the back.", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(7),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+
+        test("should return correct value for non-qualifying moves that start from the back", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(0),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(false);
+        });
+
+        test("should return correct value for non-qualifying moves that start from the front", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(5),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(false);
+        });
+
+        test("should return correct value for qualifying moves that start from the front", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(11),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+      });
+
+      describe("direction- anticlockwise", () => {
+        const direction = MoveDirection.AntiClockwise;
+
+        /*
+         *    TOP PLAYER sitting position (facing down)
+         *    00	01	02	03	04	05	06	07
+         *    15	14	13	12	11	10	09	08
+         *
+         *    00	01	02	03	04	05	06	07
+         *    15	14	13	12	11	10	09	08
+         *    BOTTOM PLAYER sitting position (facing up)
+         * */
+        test("should return correct value for multi-step moves that start from the back", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(1),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+
+        test("should return correct value for one-step moves that start from the back.", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(0),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+
+        test("should return correct value for non-qualifying moves that start from the back", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(7),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(false);
+        });
+
+        test("should return correct value for non-qualifying moves that start from the front", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(8),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(false);
+        });
+
+        test("should return correct value for qualifying moves that start from the front", () => {
+          const move: Move = new Move(
+            topPlayerHoles.getHoleWithID(11),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+      });
+    });
+
+    describe("when bottom player is sowing seeds", () => {
+      /*
+       *    TOP PLAYER siitting position (facing down)
+       *    00	01	02	03	04	05	06	07
+       *    15	14	13	12	11	10	09	08
+       *
+       *    00	01	02	03	04	05	06	07
+       *    15	14	13	12	11	10	09	08
+       *    BOTTOM PLAYER sitting position (facing up)
+       * */
+      describe("direction- clockwise", () => {
+        const direction = MoveDirection.Clockwise;
+
+        test("should return correct value for multi-step moves that start from the back", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(14),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+
+        test("should return correct value for one-step moves that start from the back.", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(15),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+
+        test("should return correct value for non-qualifying moves that start from the back", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(12),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(false);
+        });
+
+        test("should return correct value for non-qualifying moves that start from the front", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(7),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(false);
+        });
+
+        test("should return correct value for qualifying moves that start from the front", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(0),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+      });
+
+      describe("direction- anticlockwise", () => {
+        const direction = MoveDirection.AntiClockwise;
+
+        /*
+         *    TOP PLAYER sitting position (facing down)
+         *    00	01	02	03	04	05	06	07
+         *    15	14	13	12	11	10	09	08
+         *
+         *    00	01	02	03	04	05	06	07
+         *    15	14	13	12	11	10	09	08
+         *    BOTTOM PLAYER sitting position (facing up)
+         * */
+        test("should return correct value for multi-step moves that start from the back", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(9),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+
+        test("should return correct value for one-step moves that start from the back.", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(8),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+
+        test("should return correct value for non-qualifying moves that start from the back", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(10),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(false);
+        });
+
+        test("should return correct value for non-qualifying moves that start from the front", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(0),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(false);
+        });
+
+        test("should return correct value for qualifying moves that start from the front", () => {
+          const move: Move = new Move(
+            btmPlayerHoles.getHoleWithID(4),
+            direction
+          );
+          expect(move.sowsSeedInFrontHole()).toBe(true);
+        });
+      });
     });
   });
 
@@ -61,7 +278,6 @@ describe("Move", () => {
      * */
     test("should correctly identify capture moves", () => {
       let move: Move = new Move(
-        board,
         topPlayerHoles.getHoleWithID(1),
         MoveDirection.Clockwise
       );
@@ -69,56 +285,40 @@ describe("Move", () => {
       expect(move.isValidCapture()).toBe(false);
 
       move = new Move(
-        board,
         topPlayerHoles.getHoleWithID(1),
         MoveDirection.AntiClockwise
       );
       // top player hole 01 - anti-clockwise capture
       expect(move.isValidCapture()).toBe(true);
 
-      move = new Move(
-        board,
-        topPlayerHoles.getHoleWithID(4),
-        MoveDirection.Clockwise
-      );
+      move = new Move(topPlayerHoles.getHoleWithID(4), MoveDirection.Clockwise);
       // top player hole 04 - clockwise does not capture
       expect(move.isValidCapture()).toBe(false);
 
       move = new Move(
-        board,
         topPlayerHoles.getHoleWithID(4),
         MoveDirection.AntiClockwise
       );
       // top player hole 04 - clockwise does not capture
       expect(move.isValidCapture()).toBe(false);
 
-      move = new Move(
-        board,
-        btmPlayerHoles.getHoleWithID(1),
-        MoveDirection.Clockwise
-      );
+      move = new Move(btmPlayerHoles.getHoleWithID(1), MoveDirection.Clockwise);
 
       // bottom player hole 01 - clockwise does not capture
       expect(move.isValidCapture()).toBe(true);
 
       move = new Move(
-        board,
         btmPlayerHoles.getHoleWithID(1),
         MoveDirection.AntiClockwise
       );
       // bottom player hole 01 - anti-clockwise capture
       expect(move.isValidCapture()).toBe(false);
 
-      move = new Move(
-        board,
-        btmPlayerHoles.getHoleWithID(4),
-        MoveDirection.Clockwise
-      );
+      move = new Move(btmPlayerHoles.getHoleWithID(4), MoveDirection.Clockwise);
       // bottom  player hole 04 - clockwise does not capture
       expect(move.isValidCapture()).toBe(true);
 
       move = new Move(
-        board,
         btmPlayerHoles.getHoleWithID(4),
         MoveDirection.AntiClockwise
       );
@@ -141,7 +341,6 @@ describe("Move", () => {
       const topPlayerHoles = board.topPlayer.boardHoles;
       // hole_08 clockwise sows in front row
       const move: Move = new Move(
-        board,
         topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
         MoveDirection.AntiClockwise
       );
@@ -156,7 +355,6 @@ describe("Move", () => {
       const topPlayerHoles = board.topPlayer.boardHoles;
       // hole_08 clockwise sows in front row
       const move: Move = new Move(
-        board,
         topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 20 seeds
         MoveDirection.AntiClockwise
       );
@@ -171,7 +369,6 @@ describe("Move", () => {
       const topPlayerHoles = board.topPlayer.boardHoles;
       // hole_08 anti-clockwise sows in back row only
       const move = new Move(
-        board,
         topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
         MoveDirection.AntiClockwise
       );

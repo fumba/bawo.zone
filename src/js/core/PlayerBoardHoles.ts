@@ -31,6 +31,7 @@
 import Hole from "./Hole";
 import Player from "./Player";
 import AppConstants from "./AppConstants";
+import Board from "./Board";
 
 class PlayerBoardHoles implements Iterable<Hole> {
   // Hole 00
@@ -43,18 +44,22 @@ class PlayerBoardHoles implements Iterable<Hole> {
   private startHolePointer: Hole;
   // Hole owner
   private player: Player;
+  // the board on which holes will be placed
+  public readonly board: Board;
 
   /**
    * Constructor
    *
-   * @param player
+   * @param {Player} player the player who owns the holes
+   * @param {Board} board the board on which the player is placed
    */
-  constructor(player: Player) {
+  constructor(player: Player, board: Board) {
     this.startHole = null;
     this.endHole = null;
     this.totalNumHoles = 0;
     this.startHolePointer = null;
     this.player = player;
+    this.board = board;
   }
 
   /**
@@ -89,6 +94,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
     if (this.totalNumHoles < AppConstants.NUM_PLAYER_HOLES) {
       const newBoardHole: Hole = new Hole(
         this.player,
+        this.board,
         this.totalNumHoles,
         numSeeds,
         null,
@@ -102,6 +108,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
 
         this.startHolePointer = new Hole(
           this.player,
+          this.board,
           -1,
           0,
           null,

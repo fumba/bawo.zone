@@ -19,6 +19,7 @@ class PlayerEntity extends me.Entity {
     return super.update(dt) || this.body.vel.x !== 0 || this.body.vel.y !== 0;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onCollision(response: unknown, other: unknown): boolean {
     // Make all other objects solid
     return true;

@@ -168,6 +168,43 @@ describe("Board", () => {
     });
   });
 
+  describe("#getOppossingEnemyHole", () => {
+    /*
+     *    TOP PLAYER sitting position (facing down)
+     *    00	01	02	03	04	05	06	07
+     *    15	14	13	12	11	10	09	08
+     *
+     *    00	01	02	03	04	05	06	07
+     *    15	14	13	12	11	10	09	08
+     *    BOTTOM PLAYER sitting position (facing up)
+     * */
+    test("should return correct id for opposing enemy holes", () => {
+      const topPlayerHoles = board.topPlayer.boardHoles;
+      expect(() => {
+        board.getOppossingEnemyHole(topPlayerHoles.getHoleWithID(0));
+      }).toThrowError("Could not retrieve opposing enemy hole");
+      expect(
+        board.getOppossingEnemyHole(topPlayerHoles.getHoleWithID(8)).id
+      ).toBe(7);
+      expect(
+        board.getOppossingEnemyHole(topPlayerHoles.getHoleWithID(11)).id
+      ).toBe(4);
+      expect(
+        board.getOppossingEnemyHole(topPlayerHoles.getHoleWithID(15)).id
+      ).toBe(0);
+      const bottomPlayerHoles = board.bottomPlayer.boardHoles;
+      expect(() => {
+        board.getOppossingEnemyHole(bottomPlayerHoles.getHoleWithID(15));
+      }).toThrowError("Could not retrieve opposing enemy hole");
+      expect(
+        board.getOppossingEnemyHole(bottomPlayerHoles.getHoleWithID(7)).id
+      ).toBe(8);
+      expect(
+        board.getOppossingEnemyHole(bottomPlayerHoles.getHoleWithID(4)).id
+      ).toBe(11);
+    });
+  });
+
   describe("#getAllAvailableValidMoves", () => {
     let board: Board;
     beforeEach(() => {
