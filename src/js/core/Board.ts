@@ -28,6 +28,30 @@ import MoveDirection from "./MoveDirection";
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ *  The <tt>GameBoard</tt> class represents the bawo/bao  game board.
+ *  <p>
+ *
+ *  The board is represented using 2 circular doubly linked lists each assigned to a player. Each list represents 2 rows with
+ *  hole Ids assigned as shown below;
+ *
+ *
+ *    TOP PLAYER sitting position (facing down)
+ *    00	01	02	03	04	05	06	07
+ *    15	14	13	12	11	10	09	08
+ *
+ *    00	01	02	03	04	05	06	07
+ *    15	14	13	12	11	10	09	08
+ *    BOTTOM PLAYER sitting position (facing up)
+ *
+ *    32 (optional hole - depends of game version)
+ *
+ *  Rules for Placement of seeds are specified in classes implementing  the interface <tt>GameRules</tt>.
+ *  <p>
+ *
+ *  @author  <a href="http://fumba.me">Fumba Chibaka</a>
+ */
 class Board {
   private currentPlayer: Player;
   public readonly bottomPlayer: Player;
@@ -54,7 +78,10 @@ class Board {
       const playerInitSeedConfig: Array<number> = this.rules
         .initialSeedForPlayerRows()
         .get(player.side);
-      const playerBoardHoles: PlayerBoardHoles = new PlayerBoardHoles(player);
+      const playerBoardHoles: PlayerBoardHoles = new PlayerBoardHoles(
+        player,
+        this
+      );
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(playerInitSeedConfig[index]);
       }
@@ -119,9 +146,8 @@ class Board {
       hole.player == this.currentPlayer &&
       this.currentPlayer.numSeedsInHand == 0
     ) {
-      const clockwiseMove: Move = new Move(this, hole, MoveDirection.Clockwise);
+      const clockwiseMove: Move = new Move(hole, MoveDirection.Clockwise);
       const antiClockwiseMove: Move = new Move(
-        this,
         hole,
         MoveDirection.AntiClockwise
       );
@@ -178,6 +204,11 @@ class Board {
     return this.rules.isValidMove(move);
   }
 
+  /**
+   * Switch Players.
+   *
+   * @throws Errow when an attempt is made to switch while one of the players has seeds in hands.
+   */
   public switchPlayers(): void {
     if (
       this.topPlayer.numSeedsInHand == 0 &&
@@ -247,10 +278,10 @@ class Board {
         hole.moveStatus == MoveDirection.Clockwise ||
         hole.moveStatus == MoveDirection.AntiClockwise
       ) {
-        moves.push(new Move(this, hole, hole.moveStatus));
+        moves.push(new Move(hole, hole.moveStatus));
       } else if (hole.moveStatus == MoveDirection.Both) {
-        moves.push(new Move(this, hole, MoveDirection.Clockwise));
-        moves.push(new Move(this, hole, MoveDirection.AntiClockwise));
+        moves.push(new Move(hole, MoveDirection.Clockwise));
+        moves.push(new Move(hole, MoveDirection.AntiClockwise));
       }
     }
     return moves;
@@ -357,7 +388,6 @@ class Board {
       // Only capture seeds if the initial move was mtaji (a capture move)
       if (move.isMtaji && this.captureAllSeedsFromEnemy(currentHole)) {
         const captureMove: Move = new Move(
-          this,
           currentHole,
           move.direction,
           move.prevContinuedMovesCount
@@ -370,7 +400,6 @@ class Board {
         // Take all seeds in hole and continue with current player without capturing any seeds
         this.currentPlayer.addSeeds(currentHole.removeAllSeeds());
         continuingMove = new Move(
-          this,
           currentHole,
           move.direction,
           move.prevContinuedMovesCount + 1

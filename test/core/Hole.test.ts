@@ -26,12 +26,12 @@ import PlayerSide from "../../src/js/core/PlayerSide";
 describe("Hole", () => {
   const player = new Player(PlayerSide.Bottom);
   // hole 3, hole 4, hole 5
-  const hole_03: Hole = new Hole(null, 3, 0, null, null);
-  const hole_05: Hole = new Hole(null, 5, 0, null, null);
+  const hole_03: Hole = new Hole(null, null, 3, 0, null, null);
+  const hole_05: Hole = new Hole(null, null, 5, 0, null, null);
 
   let hole_04: Hole;
   beforeEach(() => {
-    hole_04 = new Hole(player, 4, 33, hole_03, hole_05);
+    hole_04 = new Hole(player, null, 4, 33, hole_03, hole_05);
   });
 
   test("should assign hole id", () => {
@@ -60,15 +60,15 @@ describe("Hole", () => {
       const bottomPlayer: Player = new Player(PlayerSide.Bottom);
       let hole: Hole;
       for (let hole_id = 0; hole_id <= 7; hole_id++) {
-        hole = new Hole(topPlayer, hole_id, 0, null, null);
+        hole = new Hole(topPlayer, null, hole_id, 0, null, null);
         expect(hole.isInFrontRow()).toBe(false);
-        hole = new Hole(bottomPlayer, hole_id, 0, null, null);
+        hole = new Hole(bottomPlayer, null, hole_id, 0, null, null);
         expect(hole.isInFrontRow()).toBe(true);
       }
       for (let hole_id = 8; hole_id <= 15; hole_id++) {
-        hole = new Hole(topPlayer, hole_id, 0, null, null);
+        hole = new Hole(topPlayer, null, hole_id, 0, null, null);
         expect(hole.isInFrontRow()).toBe(true);
-        hole = new Hole(bottomPlayer, hole_id, 0, null, null);
+        hole = new Hole(bottomPlayer, null, hole_id, 0, null, null);
         expect(hole.isInFrontRow()).toBe(false);
       }
     });
@@ -76,12 +76,12 @@ describe("Hole", () => {
 
   describe("#isEmpty", () => {
     test("should be true when hole has no seeds", () => {
-      const hole = new Hole(player, 4, 0, hole_03, hole_05);
+      const hole = new Hole(player, null, 4, 0, hole_03, hole_05);
       expect(hole.isEmpty()).toBe(true);
     });
 
     test("should be false when hole has seeds", () => {
-      const hole = new Hole(player, 4, 33, hole_03, hole_05);
+      const hole = new Hole(player, null, 4, 33, hole_03, hole_05);
       expect(hole.isEmpty()).toBe(false);
     });
   });

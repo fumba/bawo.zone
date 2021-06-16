@@ -1,5 +1,4 @@
 import Hole from "./Hole";
-import Board from "./Board";
 import MoveDirection from "./MoveDirection";
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -23,7 +22,6 @@ import MoveDirection from "./MoveDirection";
 class Move {
   public prevContinuedMovesCount: number;
   public hole: Hole;
-  public readonly board: Board;
   public direction: MoveDirection;
   private readonly possibleDirections = [
     MoveDirection.AntiClockwise,
@@ -44,21 +42,19 @@ class Move {
   public isMtaji: boolean;
 
   /**
+   * constrtuctor
    *
-   * @param prevContinuedMovesCount the number of subsequent (continued) moves executed before current move
-   * @param hole the hole on which the moves starts on
-   * @param board the board on which the move is being performed
-   * @param direction move direction
+   * @param {Hole} hole the hole on which the moves starts on
+   * @param {MoveDirection} direction move direction
+   * @param {number} prevContinuedMovesCount the number of subsequent (continued) moves executed before current move
    */
   constructor(
-    board: Board,
     hole: Hole,
     direction: MoveDirection,
     prevContinuedMovesCount = 0
   ) {
     this.prevContinuedMovesCount = prevContinuedMovesCount;
     this.hole = hole;
-    this.board = board;
     this.direction = direction;
     this.isMtaji = true;
   }
@@ -82,7 +78,7 @@ class Move {
       this.hole.numSeeds > 1 &&
       this.getDestinationHole().isInFrontRow() &&
       !this.getDestinationHole().isEmpty() &&
-      !this.board.adjacentOpponentHole(this.getDestinationHole()).isEmpty()
+      !this.hole.board.adjacentOpponentHole(this.getDestinationHole()).isEmpty()
     ) {
       return true;
     }
@@ -94,7 +90,7 @@ class Move {
     if (this.sowsSeedInFrontHole()) {
       for (const hole of this.hole.player.boardHoles) {
         for (const direction of this.possibleDirections) {
-          const move: Move = new Move(this.board, hole, direction);
+          const move: Move = new Move(hole, direction);
           // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
           if (this.hole != hole && move.isValidCapture()) {
             return false;
@@ -124,7 +120,7 @@ class Move {
    *
    * @returns {boolean} true if move sows seed in any front row hole
    */
-  private sowsSeedInFrontHole(): boolean {
+  public sowsSeedInFrontHole(): boolean {
     let hole: Hole = this.hole;
     for (let i = 0; i < this.hole.numSeeds; i++) {
       if (this.direction == MoveDirection.Clockwise) {

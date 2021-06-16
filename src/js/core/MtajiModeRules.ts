@@ -63,7 +63,8 @@ class MtajiModeRules extends Rules {
   /**
    * Check if the player is attempting to make a valid move.
    *
-   * @param move
+   * @param {Move} move the move to be checked for validity
+   * @returns {boolean} true if the move is valid
    */
   public isValidMove(move: Move): boolean {
     // Rule 1: Continuing moves since they are determined by game rules
@@ -108,7 +109,6 @@ class MtajiModeRules extends Rules {
       capturingMove.prevContinuedMovesCount + 1;
     let direction = capturingMove.direction;
     let hole: Hole;
-    const board = capturingMove.board;
 
     const playerHoles = capturingMove.hole.player.boardHoles;
     if (direction == MoveDirection.Clockwise) {
@@ -128,7 +128,7 @@ class MtajiModeRules extends Rules {
         hole = playerHoles.getHoleWithID(clockwiseReversedResetHoleId);
       }
     }
-    return new Move(board, hole, direction, prevContinuedMovesCount);
+    return new Move(hole, direction, prevContinuedMovesCount);
   }
 }
 

@@ -57,7 +57,7 @@ describe("MtajiModeRules", () => {
     // top player holes that reset back to hole_08 after clockwise- capture
     [8, 9, 10, 11].forEach((id) => {
       const hole: Hole = board.topPlayer.boardHoles.getHoleWithID(id);
-      const move: Move = new Move(board, hole, MoveDirection.Clockwise);
+      const move: Move = new Move(hole, MoveDirection.Clockwise);
       const nextMoveAfterCapture: Move =
         rules.nextContinuingMoveAfterCapture(move);
       expect(nextMoveAfterCapture.hole.id).toBe(8);
@@ -69,7 +69,7 @@ describe("MtajiModeRules", () => {
     // top player holes that reset back to hole_08 after anticlockwise- capture
     [8, 9].forEach((id) => {
       const hole: Hole = board.topPlayer.boardHoles.getHoleWithID(id);
-      const move: Move = new Move(board, hole, MoveDirection.AntiClockwise);
+      const move: Move = new Move( hole, MoveDirection.AntiClockwise);
       const nextMoveAfterCapture: Move =
         rules.nextContinuingMoveAfterCapture(move);
       expect(nextMoveAfterCapture.hole.id).toBe(8);
@@ -81,7 +81,7 @@ describe("MtajiModeRules", () => {
     // top player holes that reset back to hole_15 after anticlockwise- capture
     [12, 13, 14, 15].forEach((id) => {
       const hole: Hole = board.topPlayer.boardHoles.getHoleWithID(id);
-      const move: Move = new Move(board, hole, MoveDirection.AntiClockwise);
+      const move: Move = new Move(hole, MoveDirection.AntiClockwise);
       const nextMoveAfterCapture: Move =
         rules.nextContinuingMoveAfterCapture(move);
       expect(nextMoveAfterCapture.hole.id).toBe(15);
@@ -93,7 +93,7 @@ describe("MtajiModeRules", () => {
     // top player holes that reset back to hole_15 after clockwise- capture
     [14, 15].forEach((id) => {
       const hole: Hole = board.topPlayer.boardHoles.getHoleWithID(id);
-      const move: Move = new Move(board, hole, MoveDirection.Clockwise);
+      const move: Move = new Move(hole, MoveDirection.Clockwise);
       const nextMoveAfterCapture: Move =
         rules.nextContinuingMoveAfterCapture(move);
       expect(nextMoveAfterCapture.hole.id).toBe(15);

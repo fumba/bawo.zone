@@ -23,6 +23,7 @@ class ScoreItem extends me.Renderable {
     return false;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   draw(context: unknown) {
     // draw it baby !
   }
