@@ -11,3 +11,4 @@ Thumbs.db
 /app/main.js
 /app/**/*.map
 /app/data
+/coverage
