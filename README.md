@@ -1,6 +1,7 @@
 # bawo.zone
 
 ![bawo travis ci](https://travis-ci.com/fumba/bawo.zone.svg?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/fumba/bawo.zone/badge.svg?branch=fc/add-coveralls)](https://coveralls.io/github/fumba/bawo.zone?branch=fc/add-coveralls)
 
 African mancala game - played as a standalone app and online on [bawo.zone](https://www.bawo.zone). Works on Windows, macOS and Linux.  
 
