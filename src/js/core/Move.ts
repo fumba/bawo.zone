@@ -44,11 +44,6 @@ class Move {
   /**
    * constrtuctor
    *
-<<<<<<< HEAD
-=======
-   *
-   * @param {board} board the board on which the move is being performed
->>>>>>> bb7b7c0 (added param types to ts move ts file)
    * @param {Hole} hole the hole on which the moves starts on
    * @param {MoveDirection} direction move direction
    * @param {number} prevContinuedMovesCount the number of subsequent (continued) moves executed before current move
