@@ -23,7 +23,7 @@ class Move {
   public prevContinuedMovesCount: number;
   public hole: Hole;
   public direction: MoveDirection;
-  private readonly possibleDirections = [
+  public readonly possibleDirections = [
     MoveDirection.AntiClockwise,
     MoveDirection.Clockwise,
   ];
@@ -66,47 +66,6 @@ class Move {
    */
   public isContinuing(): boolean {
     return this.prevContinuedMovesCount > 0;
-  }
-
-  //TODO move these to rules class
-  public isValidCapture(): boolean {
-    // General Bawo capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
-    // General Bawo capture rule 2: move should end on the front row of the players board side
-    // General Bawo capture rule 3: Seed(s) must be present in the first row destination hole
-    // General Bawo capture rule 4: Seed(s) must be present in the opponents opposing hole
-    if (
-      this.hole.numSeeds > 1 &&
-      this.getDestinationHole().isInFrontRow() &&
-      !this.getDestinationHole().isEmpty() &&
-      !this.hole.board.adjacentOpponentHole(this.getDestinationHole()).isEmpty()
-    ) {
-      return true;
-    }
-    return false;
-  }
-
-  //TODO move these to rules class
-  public isValidNonCapture(frontRow: boolean): boolean {
-    if (frontRow && !this.hole.isInFrontRow()) {
-      return false;
-    }
-    // moves cannot be made on holes with only
-    if (this.hole.numSeeds > 1 && this.sowsSeedInFrontHole()) {
-      for (const hole of this.hole.player.boardHoles) {
-        for (const direction of this.possibleDirections) {
-          const move: Move = new Move(hole, direction);
-          // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
-          if (
-            (this.hole != hole && move.isValidCapture()) ||
-            (!frontRow && move.isValidNonCapture(true))
-          ) {
-            return false;
-          }
-        }
-      }
-      return true;
-    }
-    return false;
   }
 
   public toString(): string {
@@ -153,7 +112,7 @@ class Move {
    * @param Move Move to be performed
    * @returns {Hole} Hole on which the move ends
    */
-  private getDestinationHole(): Hole {
+  public getDestinationHole(): Hole {
     switch (this.direction) {
       case MoveDirection.Clockwise:
         return this.hole.player.boardHoles.stepClockwise(

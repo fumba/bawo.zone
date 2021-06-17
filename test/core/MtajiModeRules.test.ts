@@ -23,11 +23,14 @@ import Hole from "../../src/js/core/Hole";
 import Move from "../../src/js/core/Move";
 import MoveDirection from "../../src/js/core/MoveDirection";
 import MtajiModeRules from "../../src/js/core/MtajiModeRules";
+import PlayerBoardHoles from "../../src/js/core/PlayerBoardHoles";
 import PlayerSide from "../../src/js/core/PlayerSide";
 
 describe("MtajiModeRules", () => {
   const rules: MtajiModeRules = new MtajiModeRules();
   const board: Board = new Board();
+  const topPlayerHoles: PlayerBoardHoles = board.topPlayer.boardHoles;
+  const btmPlayerHoles: PlayerBoardHoles = board.bottomPlayer.boardHoles;
 
   test("should not have home hole", () => {
     expect(new MtajiModeRules().hasHomeHole()).toBe(false);
@@ -100,6 +103,115 @@ describe("MtajiModeRules", () => {
       expect(nextMoveAfterCapture.direction).toBe(MoveDirection.AntiClockwise);
       expect(nextMoveAfterCapture.isContinuing()).toBe(true);
       expect(nextMoveAfterCapture.prevContinuedMovesCount).toBe(1);
+    });
+  });
+
+  describe("#isValidCapture", () => {
+    /* *  TOP PLAYER sitting position (facing down)
+     *  00	01	02	03	04	05	06	07
+     *  15	14	13	12	11	10	09	08
+     *
+     *  00	01	02	03	04	05	06	07
+     *  15	14	13	12	11	10	09	08
+     *   BOTTOM PLAYER sitting position (facing up)
+     * */
+    test("should correctly identify capture moves", () => {
+      let move: Move = new Move(
+        topPlayerHoles.getHoleWithID(1),
+        MoveDirection.Clockwise
+      );
+      // top player hole 01 - clockwise does not capture
+      expect(rules.isValidCapture(move)).toBe(false);
+
+      move = new Move(
+        topPlayerHoles.getHoleWithID(1),
+        MoveDirection.AntiClockwise
+      );
+      // top player hole 01 - anti-clockwise capture
+      expect(rules.isValidCapture(move)).toBe(true);
+
+      move = new Move(topPlayerHoles.getHoleWithID(4), MoveDirection.Clockwise);
+      // top player hole 04 - clockwise does not capture
+      expect(rules.isValidCapture(move)).toBe(false);
+
+      move = new Move(
+        topPlayerHoles.getHoleWithID(4),
+        MoveDirection.AntiClockwise
+      );
+      // top player hole 04 - clockwise does not capture
+      expect(rules.isValidCapture(move)).toBe(false);
+
+      move = new Move(btmPlayerHoles.getHoleWithID(1), MoveDirection.Clockwise);
+
+      // bottom player hole 01 - clockwise does not capture
+      expect(rules.isValidCapture(move)).toBe(true);
+
+      move = new Move(
+        btmPlayerHoles.getHoleWithID(1),
+        MoveDirection.AntiClockwise
+      );
+      // bottom player hole 01 - anti-clockwise capture
+      expect(rules.isValidCapture(move)).toBe(false);
+
+      move = new Move(btmPlayerHoles.getHoleWithID(4), MoveDirection.Clockwise);
+      // bottom  player hole 04 - clockwise does not capture
+      expect(rules.isValidCapture(move)).toBe(true);
+
+      move = new Move(
+        btmPlayerHoles.getHoleWithID(4),
+        MoveDirection.AntiClockwise
+      );
+      // bottom player hole 04 - clockwise does not capture
+      expect(rules.isValidCapture(move)).toBe(true);
+    });
+  });
+
+  describe("#isValidNonCapture", () => {
+    /* *  TOP PLAYER sitting position (facing down)
+     *  00	01	02	03	04	05	06	07
+     *  15	14	13	12	11	10	09	08
+     *
+     *  00	01	02	03	04	05	06	07
+     *  15	14	13	12	11	10	09	08
+     *   BOTTOM PLAYER sitting position (facing up)
+     * */
+
+    test("should not accept move if a capture move exists", () => {
+      const topPlayerHoles = board.topPlayer.boardHoles;
+      // hole_08 clockwise sows in front row
+      const move: Move = new Move(
+        topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
+        MoveDirection.AntiClockwise
+      );
+      expect(rules.isValidNonCapture(move, true)).toBe(false);
+    });
+
+    test("should accept move that sows in the front row", () => {
+      const board = Board.loadState(
+        [0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0],
+        null
+      );
+      const topPlayerHoles = board.topPlayer.boardHoles;
+      // hole_08 clockwise sows in front row
+      const move: Move = new Move(
+        topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 20 seeds
+        MoveDirection.AntiClockwise
+      );
+      expect(rules.isValidNonCapture(move, true)).toBe(true);
+    });
+
+    test("should not accept move that does not sow in the front row", () => {
+      const board = Board.loadState(
+        [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
+        null
+      );
+      const topPlayerHoles = board.topPlayer.boardHoles;
+      // hole_08 anti-clockwise sows in back row only
+      const move = new Move(
+        topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
+        MoveDirection.AntiClockwise
+      );
+      expect(rules.isValidNonCapture(move, true)).toBe(false);
     });
   });
 });
