@@ -127,11 +127,11 @@ class MtajiModeRules extends Rules {
     if (move.hole.numSeeds > 1 && move.sowsSeedInFrontHole()) {
       for (const hole of move.hole.player.boardHoles) {
         for (const direction of move.possibleDirections) {
-          const move: Move = new Move(hole, direction);
+          const testMove: Move = new Move(hole, direction);
           // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
           if (
-            (this.hole != hole && this.isValidCapture(move)) ||
-            (!frontRow && this.isValidNonCapture(move, true))
+            (move.hole != hole && this.isValidCapture(testMove)) ||
+            (!frontRow && this.isValidNonCapture(testMove, true))
           ) {
             return false;
           }
