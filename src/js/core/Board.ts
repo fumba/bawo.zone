@@ -110,6 +110,11 @@ class Board {
     );
   }
 
+  //TODO
+  public getCurrentPlayer(): Player {
+    return this.currentPlayer;
+  }
+
   /**
    * Update the move status for all the holes on the board.
    *
@@ -182,25 +187,20 @@ class Board {
     if (move == null) {
       throw new Error("Move is null.");
     }
-    // Check if the current player is allowed to make move.
-    if (this.currentPlayer == null) {
-      throw new Error("Current player is not specified.");
-    }
-    if (this.currentPlayer != move.hole.player) {
-      throw new Error(
-        "Player " +
-          this.currentPlayer +
-          " is not allowed to make a move on hole " +
-          move.hole.toString()
-      );
-    }
     if (move.hole == null) {
       throw new Error("Move is required to have a starting hole specified.");
     }
     if (move.direction == null) {
       throw new Error("Move is required to have its direction specified.");
     }
-
+    if (this.currentPlayer != move.hole.player) {
+      throw new Error(
+        "Player " +
+          this.currentPlayer.toString() +
+          " is not allowed to make a move on hole " +
+          move.hole.toString()
+      );
+    }
     return this.rules.isValidMove(move);
   }
 
@@ -298,6 +298,9 @@ class Board {
    */
   public executeMove(move: Move): boolean {
     Logger.info(`Recieved move : ${move.toString()}`, Board.name);
+    if (move.hole.player != this.currentPlayer) {
+      throw new Error("Player is not allowed to make any moves in this board");
+    }
     Logger.info(
       "Board Status before executing move : \n" + this.toString(),
       Board.name

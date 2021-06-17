@@ -68,7 +68,7 @@ class Move {
     return this.prevContinuedMovesCount > 0;
   }
 
-  //TODO
+  //TODO move these to rules class
   public isValidCapture(): boolean {
     // General Bawo capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
     // General Bawo capture rule 2: move should end on the front row of the players board side
@@ -85,14 +85,21 @@ class Move {
     return false;
   }
 
-  //TODO
-  public isValidNonCapture(): boolean {
-    if (this.sowsSeedInFrontHole()) {
+  //TODO move these to rules class
+  public isValidNonCapture(frontRow: boolean): boolean {
+    if (frontRow && !this.hole.isInFrontRow()) {
+      return false;
+    }
+    // moves cannot be made on holes with only
+    if (this.hole.numSeeds > 1 && this.sowsSeedInFrontHole()) {
       for (const hole of this.hole.player.boardHoles) {
         for (const direction of this.possibleDirections) {
           const move: Move = new Move(hole, direction);
           // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
-          if (this.hole != hole && move.isValidCapture()) {
+          if (
+            (this.hole != hole && move.isValidCapture()) ||
+            (!frontRow && move.isValidNonCapture(true))
+          ) {
             return false;
           }
         }

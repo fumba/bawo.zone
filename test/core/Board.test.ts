@@ -20,21 +20,37 @@
 
 import AppConstants from "../../src/js/core/AppConstants";
 import Board from "../../src/js/core/Board";
+import Hole from "../../src/js/core/Hole";
 import Move from "../../src/js/core/Move";
+import MoveDirection from "../../src/js/core/MoveDirection";
 import Player from "../../src/js/core/Player";
+import PlayerSide from "../../src/js/core/PlayerSide";
 
 /**
  * This is a helper method to check if the move status is correct for the
  * specified player side.
  *
- * @param moveStatus
- * @param player
+ * @param {Array<string>} moveStatus an array with expected move statuses
+ * @param {Player} player player making the move
  */
 const checkMoveStatuses = (moveStatus: Array<string>, player: Player) => {
   for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
     expect(player.boardHoles.getHoleWithID(index).moveStatus.toString()).toBe(
       moveStatus[index]
     );
+  }
+};
+
+/**
+ * This is a helper method to check if the seed configuration is correct for the
+ * specified player side.
+ *
+ * @param playerSeeds
+ * @param player
+ */
+const checkSeedConfiguration = (playerSeeds: Array<number>, player: Player) => {
+  for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
+    expect(player.boardHoles.getHoleWithID(id).numSeeds).toBe(playerSeeds[id]);
   }
 };
 
@@ -237,6 +253,588 @@ describe("Board", () => {
       moves = board.getAllAvailableValidMoves(board.topPlayer);
       expect(moves.length).toBe(0);
     });
+  });
+
+  describe("#isValidMove", () => {
+    test("should have a starting hole specified", () => {
+      expect(() => {
+        const move: Move = new Move(null, MoveDirection.Clockwise);
+        board.isValidMove(move);
+      }).toThrow("Move is required to have a starting hole specified.");
+    });
+
+    test("should not allow players to make moves on holes that do not belong to them", () => {
+      let move: Move;
+      const board = new Board();
+      // bottom player attempting to make moves on top holes
+      board.switchPlayers();
+      for (const hole of board.topPlayer.boardHoles) {
+        move = new Move(hole, MoveDirection.Clockwise);
+        expect(() => {
+          board.isValidMove(move);
+        }).toThrow(
+          "Player " +
+            board.bottomPlayer.toString() +
+            " is not allowed to make a move on hole " +
+            hole.toString()
+        );
+      }
+      // top player attempting to make moves on bottom holes
+      board.switchPlayers();
+      for (const hole of board.bottomPlayer.boardHoles) {
+        move = new Move(hole, MoveDirection.Clockwise);
+        expect(() => {
+          board.isValidMove(move);
+        }).toThrow(
+          "Player " +
+            board.topPlayer.toString() +
+            " is not allowed to make a move on hole " +
+            hole.toString()
+        );
+      }
+    });
+
+    test("move should not be null", () => {
+      expect(() => {
+        board.isValidMove(null);
+      }).toThrow("Move is null.");
+    });
+
+    test("should have direction specified.", () => {
+      expect(() => {
+        const move: Move = new Move(
+          board.topPlayer.boardHoles.getHoleWithID(1),
+          null
+        );
+        board.isValidMove(move);
+      }).toThrow("Move is required to have its direction specified.");
+    });
+
+    test("should return correct value for move validity status.", () => {
+      const board: Board = new Board();
+
+      // the indices of these arrays represent the id of the hole.
+      const topPlayerClockwiseMoveValidity: Array<boolean> = [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+      ];
+
+      // the indices of these arrays represent the id of the hole.
+      const topPlayerAntiClockwiseMoveValidity: Array<boolean> = [
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+      ];
+
+      // the indices of these arrays represent the id of the hole.
+      const bottomPlayerClockwiseMoveValidity: Array<boolean> = [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+      ];
+
+      // the indices of these arrays represent the id of the hole.
+      const bottomPlayerAntiClockwiseMoveValidity: Array<boolean> = [
+        false,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ];
+
+      let move;
+      for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
+        const hole: Hole = board.topPlayer.boardHoles.getHoleWithID(id);
+        move = new Move(hole, MoveDirection.Clockwise);
+        expect(board.isValidMove(move)).toBe(
+          topPlayerClockwiseMoveValidity[id]
+        );
+
+        move = new Move(hole, MoveDirection.AntiClockwise);
+        expect(board.isValidMove(move)).toBe(
+          topPlayerAntiClockwiseMoveValidity[id]
+        );
+      }
+
+      // Switch sides to bottom player
+      board.switchPlayers();
+      for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
+        const hole: Hole = board.bottomPlayer.boardHoles.getHoleWithID(id);
+        move = new Move(hole, MoveDirection.Clockwise);
+        expect(board.isValidMove(move)).toBe(
+          bottomPlayerClockwiseMoveValidity[id]
+        );
+
+        move = new Move(hole, MoveDirection.AntiClockwise);
+        expect(board.isValidMove(move)).toBe(
+          bottomPlayerAntiClockwiseMoveValidity[id]
+        );
+      }
+    });
+  });
+
+  test("#executeMove - Game play simuation", () => {
+    /** This is a simulation of an actual gameplay */
+
+    // The Top Player is the current player by default but in this simulation they wont be starting the game.
+    // This is done by switching players to the bottom player
+    const board = new Board();
+    expect(board.getCurrentPlayer().side).toBe(PlayerSide.Top);
+    // Confirm initial seed arrangement
+    let topPlayerSeedConfig = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+    let btmPlayerSeedConfig = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    // Confirm initial move statuses
+    let topPlayerMoveStatus = [
+      "A",
+      "A",
+      "L",
+      "L",
+      "L",
+      "L",
+      "C",
+      "C",
+      "C",
+      "C",
+      "B",
+      "B",
+      "B",
+      "B",
+      "A",
+      "A",
+    ];
+    const allBlockedStatus = [
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+      "X",
+    ];
+    let btmPlayerMoveStatus = allBlockedStatus;
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    // >> switch to Bottom player who will start the game...
+    board.switchPlayers();
+    expect(board.getCurrentPlayer().side).toBe(PlayerSide.Bottom);
+
+    const bottomPlayerHoles = board.bottomPlayer.boardHoles;
+    const topPlayerHoles = board.topPlayer.boardHoles;
+
+    // MOVE 1 - Bottom Player (Hole 7 anti-clockwise)
+    let move: Move;
+    move = new Move(
+      bottomPlayerHoles.getHoleWithID(7),
+      MoveDirection.AntiClockwise
+    );
+    expect(board.executeMove(move)).toBe(true);
+    // check how the move affected the board seed configuration
+    topPlayerSeedConfig = [2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 0, 0]; // 0's are holes that were captured by bottom player during this move
+    btmPlayerSeedConfig = [5, 1, 4, 4, 4, 0, 1, 3, 3, 3, 0, 3, 3, 0, 3, 3];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    // top player is now the current player
+    topPlayerMoveStatus = [
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "C",
+      "L",
+      "L",
+      "L",
+      "L",
+      "C",
+      "L",
+      "A",
+      "L",
+      "L",
+    ];
+    btmPlayerMoveStatus = allBlockedStatus; // Bottom player is not allowed to play
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    // MOVE 2 - Top Player (Hole 13 Anti-clockwise)
+    move = new Move(
+      topPlayerHoles.getHoleWithID(13),
+      MoveDirection.AntiClockwise
+    );
+    expect(board.executeMove(move)).toBe(true);
+    topPlayerSeedConfig = [4, 1, 0, 4, 1, 4, 0, 1, 6, 4, 0, 2, 3, 5, 1, 6];
+    btmPlayerSeedConfig = [0, 0, 4, 0, 0, 0, 0, 0, 3, 3, 0, 3, 3, 0, 3, 3];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    btmPlayerMoveStatus = [
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "C",
+    ];
+    topPlayerMoveStatus = allBlockedStatus; // Top player is not allowed to play again
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    // MOVE 3 - Bottom Player (Hole 15 Clockwise)
+    move = new Move(
+      bottomPlayerHoles.getHoleWithID(15),
+      MoveDirection.Clockwise
+    );
+    expect(board.executeMove(move)).toBe(true);
+    topPlayerSeedConfig = [4, 1, 0, 4, 1, 4, 0, 1, 6, 4, 0, 2, 3, 0, 1, 6];
+    btmPlayerSeedConfig = [2, 2, 6, 1, 1, 0, 0, 0, 3, 3, 0, 3, 3, 0, 3, 0];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    topPlayerMoveStatus = [
+      "A",
+      "L",
+      "L",
+      "A",
+      "L",
+      "L",
+      "L",
+      "L",
+      "C",
+      "L",
+      "L",
+      "L",
+      "C",
+      "L",
+      "L",
+      "L",
+    ];
+    btmPlayerMoveStatus = allBlockedStatus; // Bottom player is not allowed to play again
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    // MOVE 4 - Top Player (Hole 3 Anti-clockwise)
+    move = new Move(
+      topPlayerHoles.getHoleWithID(3),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+    topPlayerSeedConfig = [1, 4, 3, 2, 3, 1, 2, 3, 0, 6, 0, 5, 6, 3, 2, 1];
+    btmPlayerSeedConfig = [0, 0, 6, 1, 0, 0, 0, 0, 3, 3, 0, 3, 3, 0, 3, 0];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    btmPlayerMoveStatus = [
+      "L",
+      "L",
+      "B",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+    ];
+    topPlayerMoveStatus = allBlockedStatus; // Top player is not allowed to play again
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    // MOVE 5 - Bottom Player (Hole 2 Anti-clockwise)
+    move = new Move(
+      bottomPlayerHoles.getHoleWithID(2),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+    // topPlayerSeedConfig is unchanged since this is a non-capturing move
+    btmPlayerSeedConfig = [1, 1, 0, 1, 1, 1, 1, 1, 0, 4, 1, 4, 0, 1, 4, 1];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    topPlayerMoveStatus = [
+      "L",
+      "L",
+      "A",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "C",
+      "L",
+      "L",
+      "L",
+      "L",
+      "A",
+      "L",
+    ];
+    btmPlayerMoveStatus = allBlockedStatus; // Bottom player is not allowed to play again
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    // MOVE 6 - Top Player (Hole 14 Anti-clockwise)
+    move = new Move(
+      topPlayerHoles.getHoleWithID(14),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+    topPlayerSeedConfig = [1, 6, 0, 4, 1, 3, 4, 0, 2, 8, 2, 7, 1, 1, 4, 1];
+    btmPlayerSeedConfig = [0, 0, 0, 0, 1, 1, 1, 1, 0, 4, 1, 4, 0, 1, 4, 1];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    btmPlayerMoveStatus = [
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "A",
+      "L",
+      "A",
+      "L",
+      "L",
+      "L",
+      "L",
+    ];
+    topPlayerMoveStatus = allBlockedStatus; // Top player is not allowed to play again
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    // Important: Only outer row moves are available for the bottom player at this
+    // point...
+    move = new Move(
+      bottomPlayerHoles.getHoleWithID(9),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+    topPlayerSeedConfig = [1, 6, 0, 4, 1, 3, 4, 0, 2, 0, 0, 7, 1, 1, 4, 1];
+    btmPlayerSeedConfig = [1, 1, 1, 1, 2, 3, 4, 4, 1, 0, 1, 4, 0, 1, 4, 1];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    topPlayerMoveStatus = [
+      "L",
+      "A",
+      "L",
+      "A",
+      "L",
+      "C",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+    ];
+    btmPlayerMoveStatus = allBlockedStatus; // Bottom player is not allowed to play again
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    move = new Move(topPlayerHoles.getHoleWithID(5), MoveDirection.Clockwise);
+    board.executeMove(move);
+    topPlayerSeedConfig = [1, 9, 0, 1, 0, 3, 0, 4, 2, 1, 7, 5, 7, 0, 10, 1];
+    btmPlayerSeedConfig = [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 4, 0, 1, 4, 1];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    btmPlayerMoveStatus = [
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "A",
+      "L",
+      "L",
+      "C",
+      "L",
+    ];
+    topPlayerMoveStatus = allBlockedStatus; // Top player is not allowed to play again
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    move = new Move(
+      bottomPlayerHoles.getHoleWithID(14),
+      MoveDirection.Clockwise
+    );
+    board.executeMove(move);
+    // topPlayerSeedConfig doesnt change becuase move is non-capturing
+    btmPlayerSeedConfig = [1, 2, 1, 0, 0, 0, 0, 0, 1, 0, 1, 4, 0, 1, 0, 2];
+    checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+    // Important: Non-capturing moves at the front lines only... takata is not
+    // allowed
+    // the bottom
+    topPlayerMoveStatus = [
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "C",
+      "L",
+      "B",
+      "B",
+      "B",
+      "L",
+      "B",
+      "L",
+    ];
+    btmPlayerMoveStatus = allBlockedStatus; // Bottom player is not allowed to play again
+    checkMoveStatuses(topPlayerMoveStatus, board.topPlayer);
+    checkMoveStatuses(btmPlayerMoveStatus, board.bottomPlayer);
+
+    // MOVE 10 - Top Player (Hole 12 Clockwise)
+    // Important: Should not capture on previous moves.
+    move = new Move(topPlayerHoles.getHoleWithID(12), MoveDirection.Clockwise);
+    board.executeMove(move);
+    // Bottom row configuration should remain the same
+    checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
+
+    // MOVE 11 - Bottom Player (Hole 15 Clockwise)
+    move = new Move(
+      bottomPlayerHoles.getHoleWithID(15),
+      MoveDirection.Clockwise
+    );
+    board.executeMove(move);
+
+    // MOVE 12 - Top Player (Hole 7 Anti-Clockwise)
+    move = new Move(
+      topPlayerHoles.getHoleWithID(7),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+
+    // MOVE 13 - Bottom Player (Hole 11 Anti-Clockwise)
+    // Important: Should not capture on previous moves.
+    move = new Move(
+      bottomPlayerHoles.getHoleWithID(11),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+
+    // MOVE 14 - Top Player (Hole 13 Anti-Clockwise)
+    // Important: Should not capture on previous moves.
+    move = new Move(
+      topPlayerHoles.getHoleWithID(13),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+
+    // MOVE 15 - Bottom Player (Hole 8 Anti-Clockwise)
+    // Important: Should not capture on previous moves.
+    move = new Move(
+      bottomPlayerHoles.getHoleWithID(8),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+
+    // MOVE 16 - Top Player (Hole 8 Anti-Clockwise)
+    // Important: Should not capture on previous moves.
+    move = new Move(
+      topPlayerHoles.getHoleWithID(12),
+      MoveDirection.AntiClockwise
+    );
+    board.executeMove(move);
+
+    // Bottom player looses the game
+    expect(board.isGameOver()).toBe(true);
+    expect(board.getWinningPlayer()).toBe(board.topPlayer);
+
+    // Check score
+    const result: Map<PlayerSide, number> = board.getScore();
+    expect(result.get(PlayerSide.Top)).toBe(59);
+    expect(result.get(PlayerSide.Bottom)).toBe(5);
   });
 
   describe("#loadState", () => {

@@ -344,7 +344,7 @@ describe("Move", () => {
         topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
         MoveDirection.AntiClockwise
       );
-      expect(move.isValidNonCapture()).toBe(false);
+      expect(move.isValidNonCapture(true)).toBe(false);
     });
 
     test("should accept move that sows in the front row", () => {
@@ -358,7 +358,7 @@ describe("Move", () => {
         topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 20 seeds
         MoveDirection.AntiClockwise
       );
-      expect(move.isValidNonCapture()).toBe(true);
+      expect(move.isValidNonCapture(true)).toBe(true);
     });
 
     test("should not accept move that does not sow in the front row", () => {
@@ -372,7 +372,7 @@ describe("Move", () => {
         topPlayerHoles.getHoleWithID(8), // top_player_hole_08 has 2 seeds
         MoveDirection.AntiClockwise
       );
-      expect(move.isValidNonCapture()).toBe(false);
+      expect(move.isValidNonCapture(true)).toBe(false);
     });
   });
 });

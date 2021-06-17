@@ -25,7 +25,7 @@
   "scripts": {
     "dev": "webpack serve --config=build/webpack.dev.config.js --mode=development",
     "postinstall": "electron-builder install-app-deps",
-    "test": "jest --verbose --coverage && coveralls < coverage/lcov.info",
+    "test": "jest --verbose --coverage",
     "start": "node build/start.js",
     "release": "yarn test -u && webpack --config=build/webpack.app.config.js --env=production && electron-builder",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix; stylelint 'src/**/*.css' --fix",

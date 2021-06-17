@@ -82,7 +82,10 @@ class MtajiModeRules extends Rules {
     // Rule 3: If there are no capture moves, any front row holes with
     // seed tokens are valid moves.
     // Rule 4: If there are no valid front row non-capture moves, use the back row holes.
-    if (move.isValidNonCapture()) {
+    if (move.isValidNonCapture(true)) {
+      return true;
+    }
+    if (move.isValidNonCapture(false)) {
       return true;
     }
     return false;
