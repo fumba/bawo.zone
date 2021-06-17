@@ -28,7 +28,8 @@
     "test": "jest --verbose --coverage && coveralls < coverage/lcov.info",
     "start": "node build/start.js",
     "release": "yarn test -u && webpack --config=build/webpack.app.config.js --env=production && electron-builder",
-    "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix; stylelint 'src/**/*.css' --fix",
+    "lint": "eslint src/**/*.{js,ts,tsx} --fix;",
+    "style-lint": "stylelint src/*/.css --fix",
     "simulate": "RANDOM_MOVES=false yarn ts-node src/js/Simulation.ts",
     "simulate:random": "RANDOM_MOVES=true yarn ts-node src/js/Simulation.ts",
     "docs": "yarn jsdoc -c jsdoc.config.json"
