@@ -572,7 +572,7 @@ class Board {
    * seeds on the player side. If a player gets themselves into an infinite loop
    * move, they have lost the game.
    *
-   * @returns A Hash with the PlayerSide as the key and the number of seeds on that
+   * @returns {number} A Hash with the PlayerSide as the key and the number of seeds on that
    *         side as the value.
    */
   public getScore(): Map<PlayerSide, number> {

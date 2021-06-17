@@ -44,6 +44,10 @@ class Move {
   /**
    * constrtuctor
    *
+<<<<<<< HEAD
+=======
+   * @param {board} board the board on which the move is being performed
+>>>>>>> bb7b7c0 (added param types to ts move ts file)
    * @param {Hole} hole the hole on which the moves starts on
    * @param {MoveDirection} direction move direction
    * @param {number} prevContinuedMovesCount the number of subsequent (continued) moves executed before current move
@@ -62,7 +66,7 @@ class Move {
    * Determines if a move is continuing. This happens when previous moves have
    * been executed before this move.
    *
-   * @returns {@code true} if the move is continuing.
+   * @returns  {true} if the move is continuing.
    */
   public isContinuing(): boolean {
     return this.prevContinuedMovesCount > 0;
@@ -143,8 +147,8 @@ class Move {
    * Gets the hole on which the specified move will be planting the last seed in
    * the players hand.
    *
-   * @param move Move to be performed
-   * @returns Hole on which the move ends
+   * @param Move Move to be performed
+   * @returns {Hole} Hole on which the move ends
    */
   private getDestinationHole(): Hole {
     switch (this.direction) {
