@@ -73,7 +73,7 @@ class MtajiModeRules extends Rules {
     }
 
     // Rule 2: Check if this move results in a capture
-    if (move.isValidCapture()) {
+    if (this.isValidCapture(move)) {
       return true;
     }
 
@@ -82,10 +82,10 @@ class MtajiModeRules extends Rules {
     // Rule 3: If there are no capture moves, any front row holes with
     // seed tokens are valid moves.
     // Rule 4: If there are no valid front row non-capture moves, use the back row holes.
-    if (move.isValidNonCapture(true)) {
+    if (this.isValidNonCapture(move, true)) {
       return true;
     }
-    if (move.isValidNonCapture(false)) {
+    if (this.isValidNonCapture(move, false)) {
       return true;
     }
     return false;
@@ -99,6 +99,47 @@ class MtajiModeRules extends Rules {
     } else {
       return this.updateMoveDirectionAndHole(move, [6, 7], [0, 1], 0, 7);
     }
+  }
+
+  //TODO move these to rules class
+  public isValidCapture(move: Move): boolean {
+    // General Bawo capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
+    // General Bawo capture rule 2: move should end on the front row of the players board side
+    // General Bawo capture rule 3: Seed(s) must be present in the first row destination hole
+    // General Bawo capture rule 4: Seed(s) must be present in the opponents opposing hole
+    if (
+      move.hole.numSeeds > 1 &&
+      move.getDestinationHole().isInFrontRow() &&
+      !move.getDestinationHole().isEmpty() &&
+      !move.hole.board.adjacentOpponentHole(move.getDestinationHole()).isEmpty()
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  //TODO move these to rules class
+  public isValidNonCapture(move: Move, frontRow: boolean): boolean {
+    if (frontRow && !move.hole.isInFrontRow()) {
+      return false;
+    }
+    // moves cannot be made on holes with only
+    if (move.hole.numSeeds > 1 && move.sowsSeedInFrontHole()) {
+      for (const hole of move.hole.player.boardHoles) {
+        for (const direction of move.possibleDirections) {
+          const move: Move = new Move(hole, direction);
+          // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
+          if (
+            (this.hole != hole && this.isValidCapture(move)) ||
+            (!frontRow && this.isValidNonCapture(move, true))
+          ) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   private updateMoveDirectionAndHole(
