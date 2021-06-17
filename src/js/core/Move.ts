@@ -62,7 +62,7 @@ class Move {
    * Determines if a move is continuing. This happens when previous moves have
    * been executed before this move.
    *
-   * @returns {@code true} if the move is continuing.
+   * @returns  {true} if the move is continuing.
    */
   public isContinuing(): boolean {
     return this.prevContinuedMovesCount > 0;
@@ -150,8 +150,8 @@ class Move {
    * Gets the hole on which the specified move will be planting the last seed in
    * the players hand.
    *
-   * @param move Move to be performed
-   * @returns Hole on which the move ends
+   * @param Move Move to be performed
+   * @returns {Hole} Hole on which the move ends
    */
   private getDestinationHole(): Hole {
     switch (this.direction) {
