@@ -33,7 +33,7 @@ class MtajiModeRules extends Rules {
   /**
    * Mtaji mode does not use home-hole
    *
-   * @returns false - home is not used in mtaji mode
+   * @returns {false} false - home is not used in mtaji mode
    */
   public hasHomeHole(): boolean {
     return false;
@@ -45,7 +45,7 @@ class MtajiModeRules extends Rules {
    * hold IDs.
    * In this version of the game, 2 seeds are placed in each hole.
    *
-   * @returns  mtaji initial seed arrangement - 2 seeds in each hole
+   * @returns {Map} mtaji initial seed arrangement - 2 seeds in each hole
    */
   public initialSeedForPlayerRows(): Map<PlayerSide, Array<number>> {
     const boardSeedInitialArrangement: Array<number> = new Array(

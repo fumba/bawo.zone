@@ -42,7 +42,7 @@ class Player {
   /**
    * constructor
    *
-   * @param side the side on which the player is on the board
+   * @param {PlayerSide} side the side on which the player is on the board
    */
   constructor(side: PlayerSide) {
     this.side = side;
@@ -53,7 +53,7 @@ class Player {
   /**
    * Adds seeds to players hand
    *
-   * @param numSeeds Number of seeds to be added to players hand
+   * @param {number} numSeeds Number of seeds to be added to players hand
    */
   public addSeeds(numSeeds: number): void {
     this.validateNumSeeds(numSeeds);
@@ -64,7 +64,7 @@ class Player {
   /**
    * Removes seeds from players hand
    *
-   * @param numSeeds Number of seeds to be removed from players hand
+   * @param {number} numSeeds Number of seeds to be removed from players hand
    * @returns {number} Number of seeds removed from the player hand
    */
   public removeSeeds(numSeeds: number): number {
@@ -78,7 +78,7 @@ class Player {
    * Checks to see if the current player is positioned on the top side of the
    * board.
    *
-   * @returns true if the player is on the top side.
+   * @returns {boolean} true if the player is on the top side.
    */
   public isOnTopSide(): boolean {
     return this.side == PlayerSide.Top;
@@ -91,7 +91,7 @@ class Player {
   /**
    * Checks if the number of seeds to be added or removed from players hand is valid
    *
-   * @param numSeeds Number of seeds to be added or removed from players hand
+   * @param {number} numSeeds Number of seeds to be added or removed from players hand
    */
   private validateNumSeeds(numSeeds: number): void {
     let message: string = null;
@@ -110,7 +110,7 @@ class Player {
   /**
    * Checks if the the total number of seeds in players hand is valid
    *
-   * @param numSeeds Number of seeds in players hand after adding or removing
+   * @param {number} numSeeds Number of seeds in players hand after adding or removing
    */
   private validateFinalSeedCount(numSeeds: number): void {
     let message: string = null;
