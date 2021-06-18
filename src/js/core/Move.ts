@@ -109,7 +109,7 @@ class Move {
    * Gets the hole on which the specified move will be planting the last seed in
    * the players hand.
    *
-   * @param Move Move to be performed
+   *
    * @returns {Hole} Hole on which the move ends
    */
   public getDestinationHole(): Hole {

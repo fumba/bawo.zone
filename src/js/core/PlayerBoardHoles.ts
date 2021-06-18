@@ -65,7 +65,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
   /**
    * Iterator for all the holes assigned to the player
    *
-   * @returns all the holes assigned to the player
+   * @returns {Hole} all the holes assigned to the player
    */
   [Symbol.iterator](): Iterator<Hole> {
     let currentHole: Hole = this.startHolePointer;
@@ -86,9 +86,8 @@ class PlayerBoardHoles implements Iterable<Hole> {
   /**
    * Add new Holes at the end of the chain.
    *
-   * @param player   The player to whom the new hole will be assigned to.
-   * @param numSeeds Number of seeds to be placed in the hole.
-   * @returns Added Hole
+   * @param {number} numSeeds Number of seeds to be placed in the hole.
+   * @returns {Hole} Added Hole
    */
   public insertAtEnd(numSeeds: number): Hole {
     if (this.totalNumHoles < AppConstants.NUM_PLAYER_HOLES) {
@@ -137,8 +136,8 @@ class PlayerBoardHoles implements Iterable<Hole> {
   /**
    * Retrieves the Hole from the board using its given ID.
    *
-   * @param holeId ID to be used to retrieve hole
-   * @returns Retrieved hole
+   * @param {number} holeId ID to be used to retrieve hole
+   * @returns {Hole} Retrieved hole
    */
   public getHoleWithID(holeId: number): Hole {
     this.validateHoleId(holeId);
@@ -154,7 +153,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
    * Make sure that all the 16 holes have been added before attempting to retrieve
    * any.
    *
-   * @param holeId Hole id to be validated.
+   * @param {number} holeId Hole id to be validated.
    */
   private validateHoleId(holeId: number): void {
     if (
@@ -175,9 +174,9 @@ class PlayerBoardHoles implements Iterable<Hole> {
   /**
    * Step back anti-clockwise for the specified number of steps.
    *
-   * @param boardHole Starting Hole
-   * @param numSteps  Number of steps to move backwards.
-   * @returns Hole
+   * @param {Hole} boardHole Starting Hole
+   * @param {number} numSteps  Number of steps to move backwards.
+   * @returns {Hole} Hole
    */
   public stepAntiClockwise(boardHole: Hole, numSteps: number): Hole {
     this.validateNumSteps(numSteps);
@@ -212,7 +211,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
   /**
    * Allow positive integers less than 64 for numSteps.
    *
-   * @param numSteps Number of steps to be made.
+   * @param {number} numSteps Number of steps to be made.
    */
   private validateNumSteps(numSteps: number): void {
     if (numSteps < 1 || numSteps > AppConstants.MAX_SEED_COUNT) {
@@ -225,9 +224,9 @@ class PlayerBoardHoles implements Iterable<Hole> {
   /**
    * Step forward clockwise for the specified number of steps.
    *
-   * @param boardHole Starting Hole
-   * @param numSteps  Number of steps to move backwards.
-   * @returns The destination hole.
+   * @param {Hole} boardHole Starting Hole
+   * @param {number} numSteps  Number of steps to move backwards.
+   * @returns {Hole} The destination hole.
    */
   public stepClockwise(boardHole: Hole, numSteps: number): Hole {
     this.validateNumSteps(numSteps);
