@@ -23,9 +23,13 @@ class Resources {
     { name: "background", type: "image", src: "data/img/background.jpeg" },
     { name: "background", type: "tmx", src: "data/map/background.tmx" },
   ];
+  //seed
+  private static seedImage: Array<Record<string, unknown>> = [
+    { name: "seed", type: "image", src: "data/img/seed.png" },
+  ];
 
   public static assets: Array<Record<string, unknown>> =
-    Resources.backgroundImage;
+    Resources.backgroundImage.concat(Resources.seedImage);
 }
 
 export default Resources;

@@ -7,6 +7,7 @@ import PlayScreen from "./screens/play";
 import TitleScreen from "./screens/title";
 import game from "./Game";
 import Logger from "../helpers/Logger";
+import SeedUiEntity from "./entities/SeedUiEntity";
 
 class Bootstrap {
   constructor() {
@@ -49,6 +50,7 @@ class Bootstrap {
 
     // add our player entity in the entity pool
     me.pool.register("mainPlayer", PlayerEntity);
+    me.pool.register("seed-ui", SeedUiEntity);
 
     // Start the game.
     me.state.change(me.state.PLAY);

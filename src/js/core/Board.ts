@@ -8,6 +8,8 @@ import AppConstants from "./AppConstants";
 import Logger from "../../helpers/Logger";
 import Move from "./Move";
 import MoveDirection from "./MoveDirection";
+import SeedUiEntity from "../entities/SeedUiEntity";
+import Me from "../me";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -65,7 +67,7 @@ class Board {
    */
   private isInContinousLoopStatus = false;
 
-  constructor(rules?: Rules) {
+  constructor(me: typeof Me, rules?: Rules) {
     this.bottomPlayer = new Player(PlayerSide.Bottom);
     this.topPlayer = new Player(PlayerSide.Top);
     if (!rules) {
@@ -84,10 +86,16 @@ class Board {
       );
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(playerInitSeedConfig[index]);
+        if (me) {
+          const id = index;
+          me.game.world.addChild(
+            me.pool.pull("seed-ui", id, index * 55, index * 55)
+          );
+        }
       }
     });
 
-    //set current player
+    //set current playersssP
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
   }
@@ -236,7 +244,7 @@ class Board {
     topPlayerSeedArrangement: Array<number>,
     btmPlayerSeedArrangement: Array<number>
   ): Board {
-    const board: Board = new Board();
+    const board: Board = new Board(null);
     //update hole seed counts for top player
     if (topPlayerSeedArrangement) {
       //TODO validate length - 16
