@@ -67,7 +67,7 @@ class Board {
    */
   private isInContinousLoopStatus = false;
 
-  constructor(me: typeof Me, rules?: Rules) {
+  constructor(me?: typeof Me, rules?: Rules) {
     this.bottomPlayer = new Player(PlayerSide.Bottom);
     this.topPlayer = new Player(PlayerSide.Top);
     if (!rules) {
