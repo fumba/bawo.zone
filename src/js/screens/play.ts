@@ -2,14 +2,21 @@ import me from "../me";
 import game from "../Game";
 import HUD from "../entities/HUD";
 import Logger from "../../helpers/Logger";
+import Board from "../core/Board";
 
 class PlayScreen extends me.Stage {
+  private board: Board;
+
   onResetEvent(): void {
     //load a level
-    me.levelDirector.loadLevel("background");
+    //me.levelDirector.loadLevel("background");
 
     // reset the score
     game.data.score = 0;
+
+    this.board = new Board(me);
+    //TODO testing only
+    //this.board.runSimulation(false);
 
     Logger.info("Show play screen", PlayScreen.name);
 

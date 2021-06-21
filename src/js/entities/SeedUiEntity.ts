@@ -1,5 +1,7 @@
-import Board from "./core/Board";
-import Resources from "./Resources";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import Logger from "../../helpers/Logger";
+import me from "../me";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -21,16 +23,22 @@ import Resources from "./Resources";
  * limitations under the License.
  */
 
-class Game {
-  public data: Record<string, unknown>;
-  public readonly resources: Resources;
-
-  constructor() {
-    this.data = {
-      score: 0,
+class SeedUiEntity extends me.DraggableEntity {
+  constructor(id: number, x: number, y: number) {
+    const settings = {
+      image: me.loader.getImage("seed"),
+      height: 25,
+      width: 25,
+      id: id,
     };
-    this.resources = Resources.assets;
+    super(x, y, settings);
+    Logger.info("seed", SeedUiEntity.name);
+  }
+
+  dragStart(event: any): void {
+    console.log(this.id, event.gameX);
+    super.dragStart(event);
   }
 }
 
-export default new Game();
+export default SeedUiEntity;
