@@ -103,10 +103,10 @@ class MtajiModeRules extends Rules {
 
   //TODO move these to rules class
   public isValidCapture(move: Move): boolean {
-    // General Bawo capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
-    // General Bawo capture rule 2: move should end on the front row of the players board side
-    // General Bawo capture rule 3: Seed(s) must be present in the first row destination hole
-    // General Bawo capture rule 4: Seed(s) must be present in the opponents opposing hole
+    //  capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
+    //  capture rule 2: move should end on the front row of the players board side
+    //  capture rule 3: Seed(s) must be present in the first row destination hole
+    //  capture rule 4: Seed(s) must be present in the opponents opposing hole
     if (
       move.hole.numSeeds > 1 &&
       move.getDestinationHole().isInFrontRow() &&
@@ -128,7 +128,7 @@ class MtajiModeRules extends Rules {
       for (const hole of move.hole.player.boardHoles) {
         for (const direction of move.possibleDirections) {
           const testMove: Move = new Move(hole, direction);
-          // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
+          //  non-capture rule: A non-capture move can only be made if there are no existing capture moves
           if (
             (move.hole != hole && this.isValidCapture(testMove)) ||
             (!frontRow && this.isValidNonCapture(testMove, true))
