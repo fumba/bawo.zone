@@ -1,6 +1,3 @@
-import Board from "./core/Board";
-import Resources from "./Resources";
-
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
  * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
@@ -20,21 +17,15 @@ import Resources from "./Resources";
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+class Resources {
+  //game board background image
+  private static backgroundImage: Array<Record<string, unknown>> = [
+    { name: "background", type: "image", src: "data/img/background.jpeg" },
+    { name: "background", type: "tmx", src: "data/map/background.tmx" },
+  ];
 
-class Game {
-  public data: Record<string, unknown>;
-  public readonly board: Board;
-  public readonly resources: Resources;
-
-  constructor() {
-    this.data = {
-      score: 0,
-    };
-    this.resources = Resources.assets;
-    this.board = new Board();
-    //TODO testing only
-    this.board.runSimulation(false);
-  }
+  public static assets: Array<Record<string, unknown>> =
+    Resources.backgroundImage;
 }
 
-export default new Game();
+export default Resources;

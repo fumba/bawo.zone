@@ -5,7 +5,7 @@ import me from "./me";
 import PlayerEntity from "./entities/player";
 import PlayScreen from "./screens/play";
 import TitleScreen from "./screens/title";
-import game from "./game";
+import game from "./Game";
 import Logger from "../helpers/Logger";
 
 class Bootstrap {

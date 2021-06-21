@@ -1,5 +1,5 @@
 import Logger from "../../helpers/Logger";
-import game from "../game";
+import game from "../Game";
 import me from "../me";
 
 /**
