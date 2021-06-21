@@ -1,5 +1,5 @@
 import me from "../me";
-import game from "../game";
+import game from "../Game";
 import HUD from "../entities/HUD";
 import Logger from "../../helpers/Logger";
 
