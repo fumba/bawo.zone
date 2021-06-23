@@ -42,7 +42,6 @@ class HoleUI extends me.DroptargetEntity {
       id: id,
     };
     super(x, y, settings);
-    //Logger.info(`Hole ${this.id}`, HoleUI.name);
   }
 
   drop(draggableEntity: any): void {

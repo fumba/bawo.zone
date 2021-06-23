@@ -42,7 +42,6 @@ class SeedUI extends me.DraggableEntity {
       id: id,
     };
     super(x, y, settings);
-    //Logger.info("seed", SeedUI.name);
   }
 
   dragStart(event: any): void {
