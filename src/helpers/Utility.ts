@@ -18,5 +18,4 @@
  * limitations under the License.
  */
 
-class Utility {
-}
+class Utility {}

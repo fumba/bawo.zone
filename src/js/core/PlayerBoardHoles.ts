@@ -32,7 +32,6 @@ import Hole from "./Hole";
 import Player from "./Player";
 import AppConstants from "./AppConstants";
 import Board from "./Board";
-import Me from "../me";
 
 class PlayerBoardHoles implements Iterable<Hole> {
   // Hole 00

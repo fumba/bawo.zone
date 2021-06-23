@@ -22,7 +22,6 @@ import AppConstants from "./AppConstants";
 import Board from "./Board";
 import MoveDirection from "./MoveDirection";
 import Player from "./Player";
-import Me from "../me";
 
 import { isEmpty } from "lodash";
 
@@ -52,7 +51,6 @@ class Hole {
    * @param {number} numSeeds Number of seeds to be initially added to the hole.
    * @param {Hole} prevHole The hole that is before this hole.
    * @param {Hole} nextHole The hole that comes up next in clockwise fashion
-   * @param {Me} me melonjs graphics library
    */
   constructor(
     player: Player,
