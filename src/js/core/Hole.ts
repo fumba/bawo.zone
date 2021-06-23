@@ -167,7 +167,7 @@ class Hole {
     const uniqueHoleId = this.player.side.toString().concat(this.id.toString());
     const xOffSet = 80;
     const newRowOffset = this.id <= 7 ? 0 : 55;
-    const holeY = (this.player.isOnTopSide() ? 100 : 250) + newRowOffset;
+    const holeY = (this.player.isOnTopSide() ? 100 : 230) + newRowOffset;
 
     //render hole
     const holeX = (this.id % 8) * 55 + xOffSet;
