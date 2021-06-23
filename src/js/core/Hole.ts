@@ -22,6 +22,9 @@ import AppConstants from "./AppConstants";
 import Board from "./Board";
 import MoveDirection from "./MoveDirection";
 import Player from "./Player";
+import Me from "../me";
+
+import { isEmpty } from "lodash";
 
 class Hole {
   // Number of seeds in hole
@@ -49,6 +52,7 @@ class Hole {
    * @param {number} numSeeds Number of seeds to be initially added to the hole.
    * @param {Hole} prevHole The hole that is before this hole.
    * @param {Hole} nextHole The hole that comes up next in clockwise fashion
+   * @param {Me} me melonjs graphics library
    */
   constructor(
     player: Player,
@@ -67,6 +71,29 @@ class Hole {
 
     // initialize move status as unauthorized
     this.moveStatus = MoveDirection.UnAuthorised;
+
+    if (this.isGraphicsMode()) {
+      const uniqueHoleId = this.player.side
+        .toString()
+        .concat(this.id.toString());
+      for (let i = 0; i < this.numSeeds; i++) {
+        const newRowOffset = this.id > 7 ? 0 : 100;
+        const x = this.id * 55 + 10 * i;
+        const y = this.player.isOnTopSide() ? 100 : 300;
+        this.board.me.game.world.addChild(
+          this.board.me.pool.pull("seed-ui", uniqueHoleId, x, y + newRowOffset)
+        );
+      }
+    }
+  }
+
+  /**
+   * Checks to see if graphics should be rendered
+   *
+   * @returns {boolean} if graphics need to be rendered
+   */
+  private isGraphicsMode(): boolean {
+    return !isEmpty(this.board) && !isEmpty(this.board.me);
   }
 
   /**

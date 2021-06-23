@@ -15,7 +15,7 @@ var babelLoader = {
 
 module.exports = {
   entry: {
-    app: "./src/js/app.ts",
+    app: "./src/js/Bootstrap.ts",
   },
   output: {
     filename: "[name].js",
