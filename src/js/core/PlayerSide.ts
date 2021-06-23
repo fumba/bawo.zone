@@ -25,7 +25,7 @@
 
 enum PlayerSide {
   Top = "top",
-  Bottom = "bottom",
+  Bottom = "btm",
 }
 
 export default PlayerSide;

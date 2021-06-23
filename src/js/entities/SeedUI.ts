@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import Logger from "../../helpers/Logger";
+import AppConstants from "../core/AppConstants";
 import me from "../me";
 
 /*
@@ -41,7 +42,7 @@ class SeedUI extends me.DraggableEntity {
       id: id,
     };
     super(x, y, settings);
-    Logger.info("seed", SeedUI.name);
+    //Logger.info("seed", SeedUI.name);
   }
 
   update(dt: number): boolean {
@@ -56,7 +57,12 @@ class SeedUI extends me.DraggableEntity {
 
   dragEnd(event: any): void {
     super.dragEnd(event);
-    this.dragging = false;
+    const allSeeds = me.game.world.getChildByProp("id", this.id);
+    allSeeds.forEach((element: SeedUI, index: number) => {
+      element.pos.x += 10 * index; //TODO from Hole render method
+      element.pos.y += 10 * index; //TODO from Hole render method
+      element.dragging = false;
+    });
     Logger.info(`seed drag end - hole ${this.id}`, SeedUI.name);
   }
 

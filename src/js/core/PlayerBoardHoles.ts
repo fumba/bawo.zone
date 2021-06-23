@@ -108,7 +108,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
         this.startHolePointer = new Hole(
           this.player,
           this.board,
-          -1,
+          AppConstants.DUMMY_HOLE_ID,
           0,
           null,
           this.startHole

@@ -70,18 +70,8 @@ class Hole {
     // initialize move status as unauthorized
     this.moveStatus = MoveDirection.UnAuthorised;
 
-    if (this.isGraphicsMode()) {
-      const uniqueHoleId = this.player.side
-        .toString()
-        .concat(this.id.toString());
-      for (let i = 0; i < this.numSeeds; i++) {
-        const newRowOffset = this.id > 7 ? 0 : 100;
-        const x = this.id * 55 + 10 * i;
-        const y = this.player.isOnTopSide() ? 100 : 300;
-        this.board.me.game.world.addChild(
-          this.board.me.pool.pull("seed-ui", uniqueHoleId, x, y + newRowOffset)
-        );
-      }
+    if (this.isGraphicsMode() && this.id != AppConstants.DUMMY_HOLE_ID) {
+      this.renderHoleAndSeeds();
     }
   }
 
@@ -158,6 +148,48 @@ class Hole {
   private validateNumSeeds(numSeeds: number): void {
     if (numSeeds < 0 || numSeeds > AppConstants.MAX_SEED_COUNT) {
       throw new Error("Invalid number of seeds | requested: " + numSeeds);
+    }
+  }
+
+  /**
+   * Renders the hole and its contents (seeds)
+   */
+  private renderHoleAndSeeds(): void {
+    /*
+     *    TOP PLAYER sitting position (facing down)
+     *    00	01	02	03	04	05	06	07
+     *    15	14	13	12	11	10	09	08
+     *
+     *    00	01	02	03	04	05	06	07
+     *    15	14	13	12	11	10	09	08
+     *    BOTTOM PLAYER sitting position (facing up)
+     */
+    const uniqueHoleId = this.player.side.toString().concat(this.id.toString());
+    const xOffSet = 80;
+    const newRowOffset = this.id <= 7 ? 0 : 55;
+    const holeY = (this.player.isOnTopSide() ? 100 : 250) + newRowOffset;
+
+    //render hole
+    const holeX = (this.id % 8) * 55 + xOffSet;
+    const holeUI = this.board.me.pool.pull(
+      "hole-ui",
+      uniqueHoleId,
+      holeX,
+      holeY
+    );
+    this.board.me.game.world.addChild(holeUI);
+
+    for (let i = 0; i < this.numSeeds; i++) {
+      const seedX = holeX + 10 * i;
+      const seedY = holeY + 10 * i;
+      // render seeds that belong to hole
+      const seedUI = this.board.me.pool.pull(
+        "seed-ui",
+        "seed-".concat(uniqueHoleId),
+        seedX,
+        seedY
+      );
+      this.board.me.game.world.addChild(seedUI);
     }
   }
 
