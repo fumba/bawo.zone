@@ -58,11 +58,11 @@ describe("Board", () => {
   const board = new Board();
 
   test("should have top player", () => {
-    expect(board.topPlayer.side).toBe("top");
+    expect(board.topPlayer.side).toBe("T");
   });
 
   test("should have bottom player", () => {
-    expect(board.bottomPlayer.side).toBe("btm");
+    expect(board.bottomPlayer.side).toBe("B");
   });
 
   test("should retrieve adjacent opponent holes", () => {

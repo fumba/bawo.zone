@@ -31,11 +31,20 @@ class Resources {
   private static holeImage: Array<Record<string, unknown>> = [
     { name: "hole", type: "image", src: "data/img/hole.png" },
   ];
+  //seed-collection
+  private static seedCollection: Array<Record<string, unknown>> = [
+    {
+      name: "seed-collection",
+      type: "image",
+      src: "data/img/seed-collection.png",
+    },
+  ];
 
   public static assets: Array<Record<string, unknown>> =
     Resources.backgroundImage
       .concat(Resources.seedImage)
-      .concat(Resources.holeImage);
+      .concat(Resources.holeImage)
+      .concat(Resources.seedCollection);
 }
 
 export default Resources;
