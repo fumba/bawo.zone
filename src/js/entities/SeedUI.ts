@@ -41,8 +41,6 @@ class SeedUI extends me.DraggableEntity {
       id: id,
     };
     super(x, y, settings);
-    this.alwaysUpdate = true;
-    this.isDirty = true;
     Logger.info("seed", SeedUI.name);
   }
 
@@ -68,8 +66,10 @@ class SeedUI extends me.DraggableEntity {
       const currentSeedIndex = allSeeds.indexOf(this);
       allSeeds.splice(currentSeedIndex, 1);
       allSeeds.forEach((element: SeedUI) => {
-        element.pos.x = this.pos.x;
-        element.pos.y = this.pos.y;
+        if (element.dragging == false) {
+          element.pos.x = this.pos.x;
+          element.pos.y = this.pos.y;
+        }
       });
     }
     super.dragMove(event);
