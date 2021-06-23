@@ -1,4 +1,11 @@
-/* bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import Logger from "../../helpers/Logger";
+import me from "../me";
+import SeedUI from "./SeedUI";
+
+/*
+ * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
  * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -18,14 +25,28 @@
  */
 
 /**
- * <p>
- * {@link PlayerSide} represent the sides that a player can be on the board
- * </p>
+ * Bawo board seed
  */
+class HoleUI extends me.DroptargetEntity {
+  /**
+   *
+   * @param {number} id Unique id for hole
+   * @param {number} x  x coordinates of the hole object
+   * @param {number} y  y coordinates of the hole objec
+   */
+  constructor(id: number, x: number, y: number) {
+    const settings = {
+      image: me.loader.getImage("hole"),
+      height: 80,
+      width: 80,
+      id: id,
+    };
+    super(x, y, settings);
+  }
 
-enum PlayerSide {
-  Top = "top",
-  Bottom = "btm",
+  drop(draggableEntity: any): void {
+    Logger.info(`seed dropped:  ${draggableEntity.id}`, SeedUI.name);
+  }
 }
 
-export default PlayerSide;
+export default HoleUI;

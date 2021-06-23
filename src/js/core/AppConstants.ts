@@ -56,6 +56,11 @@ class AppConstants {
    * lost the game.
    */
   public static readonly INFINITE_LOOP_THRESHOLD: number = 50;
+
+  /**
+   * This id identifies the dummy hole (pointer). See PlayerBoardHoles
+   */
+  public static readonly DUMMY_HOLE_ID = -1;
 }
 
 export default AppConstants;

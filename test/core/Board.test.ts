@@ -62,7 +62,7 @@ describe("Board", () => {
   });
 
   test("should have bottom player", () => {
-    expect(board.bottomPlayer.side).toBe("bottom");
+    expect(board.bottomPlayer.side).toBe("btm");
   });
 
   test("should retrieve adjacent opponent holes", () => {

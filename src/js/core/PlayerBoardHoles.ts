@@ -32,7 +32,6 @@ import Hole from "./Hole";
 import Player from "./Player";
 import AppConstants from "./AppConstants";
 import Board from "./Board";
-import Me from "../me";
 
 class PlayerBoardHoles implements Iterable<Hole> {
   // Hole 00
@@ -109,7 +108,7 @@ class PlayerBoardHoles implements Iterable<Hole> {
         this.startHolePointer = new Hole(
           this.player,
           this.board,
-          -1,
+          AppConstants.DUMMY_HOLE_ID,
           0,
           null,
           this.startHole
