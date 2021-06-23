@@ -93,7 +93,7 @@ class Hole {
    * @returns {boolean} if graphics need to be rendered
    */
   private isGraphicsMode(): boolean {
-    return !isEmpty(this.board.me);
+    return !isEmpty(this.board) && !isEmpty(this.board.me);
   }
 
   /**
