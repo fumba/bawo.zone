@@ -165,17 +165,19 @@ class Hole {
      *    BOTTOM PLAYER sitting position (facing up)
      */
     const uniqueHoleId = this.player.side.toString().concat(this.id.toString());
-    const xOffSet = 80;
-    const newRowOffset = this.id <= 7 ? 0 : 55;
-    const holeY = (this.player.isOnTopSide() ? 100 : 230) + newRowOffset;
+    const xOffSet = 60;
+    const newRowOffset = this.id <= 7 ? 0 : 100;
+    const holeY = (this.player.isOnTopSide() ? 100 : 330) + newRowOffset;
+    const holeColor = this.player.isOnTopSide() ? "#355c32" : "#59030a";
 
     //render hole
-    const holeX = (this.id % 8) * 55 + xOffSet;
+    const holeX = (this.id % 8) * 90 + xOffSet;
     const holeUI = this.board.me.pool.pull(
       "hole-ui",
       uniqueHoleId,
       holeX,
-      holeY
+      holeY,
+      holeColor
     );
     this.board.me.game.world.addChild(holeUI);
 

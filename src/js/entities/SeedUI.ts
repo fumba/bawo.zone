@@ -45,10 +45,6 @@ class SeedUI extends me.DraggableEntity {
     //Logger.info("seed", SeedUI.name);
   }
 
-  update(dt: number): boolean {
-    return super.update(dt);
-  }
-
   dragStart(event: any): void {
     Logger.info(`seed drag start - hole ${this.id}`, SeedUI.name);
     this.dragging = true;
