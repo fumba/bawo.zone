@@ -8,7 +8,6 @@ import AppConstants from "./AppConstants";
 import Logger from "../../helpers/Logger";
 import Move from "./Move";
 import MoveDirection from "./MoveDirection";
-import SeedUiEntity from "../entities/SeedUiEntity";
 import Me from "../me";
 
 /*
@@ -59,6 +58,7 @@ class Board {
   public readonly bottomPlayer: Player;
   public readonly topPlayer: Player;
   private readonly rules: Rules;
+  public readonly me: typeof Me;
 
   /**
    * The gameplay is in a continuous loop if the player continues to play beyond a
@@ -67,13 +67,16 @@ class Board {
    */
   private isInContinousLoopStatus = false;
 
-  constructor(me?: typeof Me, rules?: Rules) {
+  /**
+   * @param {any} me melonjs instance
+   * @param {Rules} rules game rules - default is MtajiModeRules
+   */
+  constructor(me?: typeof Me, rules = new MtajiModeRules()) {
     this.bottomPlayer = new Player(PlayerSide.Bottom);
     this.topPlayer = new Player(PlayerSide.Top);
-    if (!rules) {
-      this.rules = new MtajiModeRules();
-    }
+    this.rules = rules;
     this.rules.validate();
+    this.me = me;
 
     // initialise player board holes
     [this.topPlayer, this.bottomPlayer].forEach((player) => {
@@ -86,12 +89,6 @@ class Board {
       );
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(playerInitSeedConfig[index]);
-        if (me) {
-          const id = index;
-          me.game.world.addChild(
-            me.pool.pull("seed-ui", id, index * 55, index * 55)
-          );
-        }
       }
     });
 

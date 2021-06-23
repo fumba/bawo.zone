@@ -3,18 +3,18 @@ declare let require: any;
 require("../css/main.css");
 import me from "./me";
 import PlayerEntity from "./entities/player";
-import PlayScreen from "./screens/play";
+import PlayScreen from "./screens/PlayScreen";
 import TitleScreen from "./screens/title";
 import game from "./Game";
 import Logger from "../helpers/Logger";
-import SeedUiEntity from "./entities/SeedUiEntity";
+import SeedUI from "./entities/SeedUI";
 
 class Bootstrap {
   constructor() {
     // Initialize the video.
     if (
       !me.video.init(800, 600, {
-        wrapper: "screen",
+        parent: "screen",
         scale: "flex-width",
         renderer: me.video.CANVAS,
       })
@@ -50,7 +50,7 @@ class Bootstrap {
 
     // add our player entity in the entity pool
     me.pool.register("mainPlayer", PlayerEntity);
-    me.pool.register("seed-ui", SeedUiEntity);
+    me.pool.register("seed-ui", SeedUI);
 
     // Start the game.
     me.state.change(me.state.PLAY);

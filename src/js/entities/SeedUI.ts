@@ -23,7 +23,16 @@ import me from "../me";
  * limitations under the License.
  */
 
-class SeedUiEntity extends me.DraggableEntity {
+/**
+ * Bawo board seed
+ */
+class SeedUI extends me.DraggableEntity {
+  /**
+   *
+   * @param {number} id Unique id for seed
+   * @param {number} x  x coordinates of the seed object
+   * @param {number} y  y coordinates of the seed object
+   */
   constructor(id: number, x: number, y: number) {
     const settings = {
       image: me.loader.getImage("seed"),
@@ -32,13 +41,39 @@ class SeedUiEntity extends me.DraggableEntity {
       id: id,
     };
     super(x, y, settings);
-    Logger.info("seed", SeedUiEntity.name);
+    this.alwaysUpdate = true;
+    this.isDirty = true;
+    Logger.info("seed", SeedUI.name);
+  }
+
+  update(dt: number): boolean {
+    return super.update(dt);
   }
 
   dragStart(event: any): void {
-    console.log(this.id, event.gameX);
+    Logger.info(`seed drag start - hole ${this.id}`, SeedUI.name);
+    this.dragging = true;
     super.dragStart(event);
+  }
+
+  dragEnd(event: any): void {
+    super.dragEnd(event);
+    this.dragging = false;
+    Logger.info(`seed drag end - hole ${this.id}`, SeedUI.name);
+  }
+
+  dragMove(event: any): void {
+    if (this.dragging == true) {
+      const allSeeds = me.game.world.getChildByProp("id", this.id);
+      const currentSeedIndex = allSeeds.indexOf(this);
+      allSeeds.splice(currentSeedIndex, 1);
+      allSeeds.forEach((element: SeedUI) => {
+        element.pos.x = this.pos.x;
+        element.pos.y = this.pos.y;
+      });
+    }
+    super.dragMove(event);
   }
 }
 
-export default SeedUiEntity;
+export default SeedUI;

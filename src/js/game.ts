@@ -1,4 +1,3 @@
-import Board from "./core/Board";
 import Resources from "./Resources";
 
 /*
