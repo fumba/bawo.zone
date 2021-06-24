@@ -6,7 +6,6 @@ import PlayerEntity from "./entities/player";
 import PlayScreen from "./screens/PlayScreen";
 import TitleScreen from "./screens/title";
 import game from "./Game";
-import Logger from "../helpers/Logger";
 import SeedUI from "./entities/SeedUI";
 import HoleUI from "./entities/HoleUI";
 import SeedCollectionUI from "./entities/SeedCollectionUI";
@@ -27,10 +26,14 @@ class Bootstrap {
 
     // add "#debug" to the URL to enable the debug Panel
     if (document.location.hash === "#debug") {
-      Logger.info("show debug", Bootstrap.name);
+      console.info("show debug");
       window.addEventListener("load", () => {
         me.plugin.register.defer(this, me.debug.Panel, "debug", me.input.KEY.V);
       });
+    } else {
+      // disable info-logs unless in debug mode
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      console.info = () => {};
     }
 
     // Initialize the audio.

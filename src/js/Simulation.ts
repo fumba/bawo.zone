@@ -17,16 +17,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import Logger from "../helpers/Logger";
 import Board from "./core/Board";
 
 class Simulation {
   public execute(randomise: boolean): void {
-    Logger.info("simulation start", Simulation.name);
+    console.info("simulation started");
     const board: Board = new Board();
     board.runSimulation(randomise);
-    Logger.info("simulated ended", Simulation.name);
+    console.info("simulation ended");
   }
 }
 

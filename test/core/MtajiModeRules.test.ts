@@ -25,6 +25,9 @@ import MoveDirection from "../../src/js/core/MoveDirection";
 import MtajiModeRules from "../../src/js/core/MtajiModeRules";
 import PlayerBoardHoles from "../../src/js/core/PlayerBoardHoles";
 import PlayerSide from "../../src/js/core/PlayerSide";
+import TestHelper from "../TestHelper";
+
+TestHelper.disableLogging();
 
 describe("MtajiModeRules", () => {
   const rules: MtajiModeRules = new MtajiModeRules();
@@ -72,7 +75,7 @@ describe("MtajiModeRules", () => {
     // top player holes that reset back to hole_08 after anticlockwise- capture
     [8, 9].forEach((id) => {
       const hole: Hole = board.topPlayer.boardHoles.getHoleWithID(id);
-      const move: Move = new Move( hole, MoveDirection.AntiClockwise);
+      const move: Move = new Move(hole, MoveDirection.AntiClockwise);
       const nextMoveAfterCapture: Move =
         rules.nextContinuingMoveAfterCapture(move);
       expect(nextMoveAfterCapture.hole.id).toBe(8);

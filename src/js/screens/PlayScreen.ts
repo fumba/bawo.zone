@@ -1,7 +1,6 @@
 import me from "../me";
 import game from "../Game";
 import HUD from "../entities/HUD";
-import Logger from "../../helpers/Logger";
 import Board from "../core/Board";
 
 class PlayScreen extends me.Stage {
@@ -19,7 +18,7 @@ class PlayScreen extends me.Stage {
     //TODO testing only
     //this.board.runSimulation(false);
 
-    Logger.info("Show play screen", PlayScreen.name);
+    console.info("Show play screen");
 
     // Add our HUD to the game world, add it last so that this is on top of the rest.
     // Can also be forced by specifying a "Infinity" z value to the addChild function.

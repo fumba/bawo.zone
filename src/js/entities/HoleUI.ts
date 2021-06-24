@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import Logger from "../../helpers/Logger";
 import Hole from "../core/Hole";
 import me from "../me";
 import SeedUI from "./SeedUI";
@@ -45,7 +44,7 @@ class HoleUI extends me.DroptargetEntity {
   }
 
   drop(draggableEntity: SeedUI): void {
-    Logger.info(`${draggableEntity.id} dropped into ${this.id}`, HoleUI.name);
+    console.info(`${draggableEntity.id} dropped into ${this.id}`);
   }
 }
 
