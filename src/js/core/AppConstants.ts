@@ -61,6 +61,21 @@ class AppConstants {
    * This id identifies the dummy hole (pointer). See PlayerBoardHoles
    */
   public static readonly DUMMY_HOLE_ID = -1;
+
+  /**
+   * Seed UI
+   */
+  public static readonly SEED_UI = "seed";
+
+  /**
+   * Hole UI
+   */
+  public static readonly HOLE_UI = "hole";
+
+  /**
+   * Seed Group UI
+   */
+  public static readonly SEED_GROUP_UI = "seed-group";
 }
 
 export default AppConstants;

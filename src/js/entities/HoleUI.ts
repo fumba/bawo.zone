@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import AppConstants from "../core/AppConstants";
 import Hole from "../core/Hole";
 import me from "../me";
-import SeedUI from "./SeedUI";
+import SeedGroupUI from "./SeedGroupUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -35,16 +36,24 @@ class HoleUI extends me.DroptargetEntity {
    */
   constructor(x: number, y: number, hole: Hole) {
     const settings = {
-      image: me.loader.getImage("hole"),
+      image: me.loader.getImage(AppConstants.HOLE_UI),
       height: 80,
       width: 80,
-      id: `hole-${hole.UID}`,
+      id: HoleUI.holeId(hole),
     };
     super(x, y, settings);
+    // overlaps are not valid drops
+    // draggable seed container UI (SeedGroupUI) has a smaller radius so all drops are expected
+    // to be contained within the hole radius.
+    this.setCheckMethod(this.CHECKMETHOD_CONTAINS);
   }
 
-  drop(draggableEntity: SeedUI): void {
+  drop(draggableEntity: SeedGroupUI): void {
     console.info(`${draggableEntity.id} dropped into ${this.id}`);
+  }
+
+  public static holeId(hole: Hole) {
+    return `${AppConstants.HOLE_UI}-${hole.UID}`;
   }
 }
 

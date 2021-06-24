@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import AppConstants from "../core/AppConstants";
 import Hole from "../core/Hole";
 import me from "../me";
 
@@ -35,12 +36,16 @@ class SeedUI extends me.Entity {
    */
   constructor(x: number, y: number, hole: Hole) {
     const settings = {
-      image: me.loader.getImage("seed"),
+      image: me.loader.getImage(AppConstants.SEED_UI),
       height: 25,
       width: 25,
-      id: `seed-${hole.UID}`,
+      id: SeedUI.seedGroupId(hole),
     };
     super(x, y, settings);
+  }
+
+  public static seedGroupId(hole: Hole) {
+    return `${AppConstants.SEED_UI}-${hole.UID}`;
   }
 }
 

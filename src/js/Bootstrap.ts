@@ -2,13 +2,13 @@
 declare let require: any;
 require("../css/main.css");
 import me from "./me";
-import PlayerEntity from "./entities/player";
 import PlayScreen from "./screens/PlayScreen";
 import TitleScreen from "./screens/title";
 import game from "./Game";
 import SeedUI from "./entities/SeedUI";
 import HoleUI from "./entities/HoleUI";
-import SeedCollectionUI from "./entities/SeedCollectionUI";
+import SeedGroupUI from "./entities/SeedGroupUI";
+import AppConstants from "./core/AppConstants";
 
 class Bootstrap {
   constructor() {
@@ -26,7 +26,7 @@ class Bootstrap {
 
     // add "#debug" to the URL to enable the debug Panel
     if (document.location.hash === "#debug") {
-      console.info("show debug");
+      console.info("DEBUG mode ON");
       window.addEventListener("load", () => {
         me.plugin.register.defer(this, me.debug.Panel, "debug", me.input.KEY.V);
       });
@@ -38,13 +38,10 @@ class Bootstrap {
 
     // Initialize the audio.
     me.audio.init("mp3,ogg");
-
     // Set a callback to run when loading is complete.
     me.loader.onload = this.loaded.bind(this);
-
     // Load the resources.
     me.loader.preload(game.resources);
-
     // Initialize melonJS and display a loading screen.
     me.state.change(me.state.LOADING);
   }
@@ -53,11 +50,10 @@ class Bootstrap {
     me.state.set(me.state.MENU, new TitleScreen());
     me.state.set(me.state.PLAY, new PlayScreen());
 
-    // add our player entity in the entity pool
-    me.pool.register("mainPlayer", PlayerEntity);
-    me.pool.register("seed-ui", SeedUI);
-    me.pool.register("hole-ui", HoleUI);
-    me.pool.register("seed-collection", SeedCollectionUI);
+    // Register game UI entities
+    me.pool.register(AppConstants.SEED_UI, SeedUI);
+    me.pool.register(AppConstants.HOLE_UI, HoleUI);
+    me.pool.register(AppConstants.SEED_GROUP_UI, SeedGroupUI);
 
     // Start the game.
     me.state.change(me.state.PLAY);

@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import AppConstants from "../core/AppConstants";
 import Board from "../core/Board";
 import Hole from "../core/Hole";
 import me from "../me";
+import HoleUI from "./HoleUI";
 import SeedUI from "./SeedUI";
 
 /*
@@ -28,11 +30,11 @@ import SeedUI from "./SeedUI";
 /**
  * Bawo board seed
  */
-class SeedCollectionUI extends me.DraggableEntity {
+class SeedGroupUI extends me.DraggableEntity {
   /**
    * The Hole in which seeds will be placed
    */
-  private hole: Hole;
+  private readonly hole: Hole;
 
   /**
    * the board on which the hole for this seed collection belongs to
@@ -48,10 +50,10 @@ class SeedCollectionUI extends me.DraggableEntity {
    */
   constructor(x: number, y: number, board: Board, hole: Hole) {
     const settings = {
-      image: me.loader.getImage("seed-collection"),
-      height: 80,
-      width: 80,
-      id: `seed-collection-${hole.UID}`,
+      image: me.loader.getImage(AppConstants.SEED_GROUP_UI),
+      height: 50,
+      width: 50,
+      id: `${AppConstants.SEED_GROUP_UI}-${hole.UID}`,
     };
     super(x, y, settings);
     this.hole = hole;
@@ -80,6 +82,12 @@ class SeedCollectionUI extends me.DraggableEntity {
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGEND);
+
+      //move back draggable seed group container to its initial position
+      const holePos = this.getUIHole().pos;
+      this.pos.x = holePos.x;
+      this.pos.y = holePos.y;
+      this.renderable.alpha = 0;
       return false;
     };
 
@@ -108,7 +116,7 @@ class SeedCollectionUI extends me.DraggableEntity {
 
   dragEnd(event: any): void {
     super.dragEnd(event);
-    this.getAllSeeds().forEach((element: SeedUI, index: number) => {
+    this.getAllUISeeds().forEach((element: SeedUI, index: number) => {
       element.pos.x += 10 * index; //TODO from Hole render method
       element.pos.y += 10 * index; //TODO from Hole render method
     });
@@ -116,7 +124,7 @@ class SeedCollectionUI extends me.DraggableEntity {
 
   dragMove(event: any): void {
     if (this.dragging == true) {
-      this.getAllSeeds().forEach((element: SeedUI) => {
+      this.getAllUISeeds().forEach((element: SeedUI) => {
         element.pos.x = this.pos.x;
         element.pos.y = this.pos.y;
       });
@@ -128,9 +136,13 @@ class SeedCollectionUI extends me.DraggableEntity {
     return this.board.getCurrentPlayer() == this.hole.player;
   }
 
-  private getAllSeeds(): Array<SeedUI> {
-    return me.game.world.getChildByProp("id", `seed-${this.hole.UID}`);
+  private getAllUISeeds(): Array<SeedUI> {
+    return me.game.world.getChildByProp("id", SeedUI.seedGroupId(this.hole));
+  }
+
+  private getUIHole(): HoleUI {
+    return me.game.world.getChildByProp("id", HoleUI.holeId(this.hole))[0];
   }
 }
 
-export default SeedCollectionUI;
+export default SeedGroupUI;
