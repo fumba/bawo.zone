@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import Logger from "../../helpers/Logger";
+import Hole from "../core/Hole";
 import me from "../me";
 import SeedUI from "./SeedUI";
 
@@ -29,23 +30,22 @@ import SeedUI from "./SeedUI";
  */
 class HoleUI extends me.DroptargetEntity {
   /**
-   *
-   * @param {number} id Unique id for hole
    * @param {number} x  x coordinates of the hole object
-   * @param {number} y  y coordinates of the hole objec
+   * @param {number} y  y coordinates of the hole object
+   * @param {Hole} hole the hole to which this UI entity corresponds to
    */
-  constructor(id: number, x: number, y: number) {
+  constructor(x: number, y: number, hole: Hole) {
     const settings = {
       image: me.loader.getImage("hole"),
       height: 80,
       width: 80,
-      id: id,
+      id: `hole-${hole.UID}`,
     };
     super(x, y, settings);
   }
 
-  drop(draggableEntity: any): void {
-    Logger.info(`seed dropped:  ${draggableEntity.id}`, SeedUI.name);
+  drop(draggableEntity: SeedUI): void {
+    Logger.info(`${draggableEntity.id} dropped into ${this.id}`, HoleUI.name);
   }
 }
 

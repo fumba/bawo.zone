@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import Logger from "../../helpers/Logger";
 import AppConstants from "../core/AppConstants";
+import Hole from "../core/Hole";
 import me from "../me";
 
 /*
@@ -27,53 +28,21 @@ import me from "../me";
 /**
  * Bawo board seed
  */
-class SeedUI extends me.DraggableEntity {
+class SeedUI extends me.Entity {
   /**
    *
-   * @param {number} id Unique id for seed
    * @param {number} x  x coordinates of the seed object
    * @param {number} y  y coordinates of the seed object
+   * @param {Hole} hole the hole in which this seed currently belongs
    */
-  constructor(id: number, x: number, y: number) {
+  constructor(x: number, y: number, hole: Hole) {
     const settings = {
       image: me.loader.getImage("seed"),
       height: 25,
       width: 25,
-      id: id,
+      id: `seed-${hole.UID}`,
     };
     super(x, y, settings);
-  }
-
-  dragStart(event: any): void {
-    Logger.info(`seed drag start - hole ${this.id}`, SeedUI.name);
-    this.dragging = true;
-    super.dragStart(event);
-  }
-
-  dragEnd(event: any): void {
-    super.dragEnd(event);
-    const allSeeds = me.game.world.getChildByProp("id", this.id);
-    allSeeds.forEach((element: SeedUI, index: number) => {
-      element.pos.x += 10 * index; //TODO from Hole render method
-      element.pos.y += 10 * index; //TODO from Hole render method
-      element.dragging = false;
-    });
-    Logger.info(`seed drag end - hole ${this.id}`, SeedUI.name);
-  }
-
-  dragMove(event: any): void {
-    if (this.dragging == true) {
-      const allSeeds = me.game.world.getChildByProp("id", this.id);
-      const currentSeedIndex = allSeeds.indexOf(this);
-      allSeeds.splice(currentSeedIndex, 1);
-      allSeeds.forEach((element: SeedUI) => {
-        if (element.dragging == false) {
-          element.pos.x = this.pos.x;
-          element.pos.y = this.pos.y;
-        }
-      });
-    }
-    super.dragMove(event);
   }
 }
 

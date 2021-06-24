@@ -9,6 +9,7 @@ import game from "./Game";
 import Logger from "../helpers/Logger";
 import SeedUI from "./entities/SeedUI";
 import HoleUI from "./entities/HoleUI";
+import SeedCollectionUI from "./entities/SeedCollectionUI";
 
 class Bootstrap {
   constructor() {
@@ -53,6 +54,7 @@ class Bootstrap {
     me.pool.register("mainPlayer", PlayerEntity);
     me.pool.register("seed-ui", SeedUI);
     me.pool.register("hole-ui", HoleUI);
+    me.pool.register("seed-collection", SeedCollectionUI);
 
     // Start the game.
     me.state.change(me.state.PLAY);

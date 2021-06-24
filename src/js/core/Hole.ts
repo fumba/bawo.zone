@@ -32,8 +32,10 @@ class Hole {
   public nextHole: Hole;
   // Previous hole
   public prevHole: Hole;
-  // Holes unique ID
+  // Hole ID (based on PlayerBoardHoles)
   public readonly id: number;
+  // Unique hole ID (with player side)
+  public readonly UID: string;
   // The player who is assigned this hole
   public readonly player: Player;
   // Whether the player is allowed to make moves on this hole.
@@ -62,6 +64,9 @@ class Hole {
   ) {
     this.player = player;
     this.id = id;
+    if (!isEmpty(this.player)) {
+      this.UID = `[${this.pad(this.id)}-${this.player.side}]`;
+    }
     this.numSeeds = numSeeds;
     this.nextHole = nextHole;
     this.prevHole = prevHole;
@@ -164,33 +169,30 @@ class Hole {
      *    15	14	13	12	11	10	09	08
      *    BOTTOM PLAYER sitting position (facing up)
      */
-    const uniqueHoleId = this.player.side.toString().concat(this.id.toString());
     const xOffSet = 60;
     const newRowOffset = this.id <= 7 ? 0 : 100;
-    const holeY = (this.player.isOnTopSide() ? 100 : 330) + newRowOffset;
-    const holeColor = this.player.isOnTopSide() ? "#355c32" : "#59030a";
-
-    //render hole
     const holeX = (this.id % 8) * 90 + xOffSet;
-    const holeUI = this.board.me.pool.pull(
-      "hole-ui",
-      uniqueHoleId,
+    const holeY = (this.player.isOnTopSide() ? 100 : 330) + newRowOffset;
+
+    // invisible draggable collection that contains seeds
+    const seedCollection = this.board.me.pool.pull(
+      "seed-collection",
       holeX,
       holeY,
-      holeColor
+      this.board,
+      this
     );
+    this.board.me.game.world.addChild(seedCollection);
+
+    //render hole
+    const holeUI = this.board.me.pool.pull("hole-ui", holeX, holeY, this);
     this.board.me.game.world.addChild(holeUI);
 
     for (let i = 0; i < this.numSeeds; i++) {
       const seedX = holeX + 10 * i;
       const seedY = holeY + 10 * i;
       // render seeds that belong to hole
-      const seedUI = this.board.me.pool.pull(
-        "seed-ui",
-        "seed-".concat(uniqueHoleId),
-        seedX,
-        seedY
-      );
+      const seedUI = this.board.me.pool.pull("seed-ui", seedX, seedY, this);
       this.board.me.game.world.addChild(seedUI);
     }
   }
