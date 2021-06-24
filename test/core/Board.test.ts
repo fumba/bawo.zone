@@ -25,6 +25,9 @@ import Move from "../../src/js/core/Move";
 import MoveDirection from "../../src/js/core/MoveDirection";
 import Player from "../../src/js/core/Player";
 import PlayerSide from "../../src/js/core/PlayerSide";
+import TestHelper from "../TestHelper";
+
+TestHelper.disableLogging();
 
 /**
  * This is a helper method to check if the move status is correct for the

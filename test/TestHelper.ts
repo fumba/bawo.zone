@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import Hole from "../core/Hole";
-import me from "../me";
-
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
  * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
@@ -23,25 +18,12 @@ import me from "../me";
  * limitations under the License.
  */
 
-/**
- * Bawo board seed
- */
-class SeedUI extends me.Entity {
-  /**
-   *
-   * @param {number} x  x coordinates of the seed object
-   * @param {number} y  y coordinates of the seed object
-   * @param {Hole} hole the hole in which this seed currently belongs
-   */
-  constructor(x: number, y: number, hole: Hole) {
-    const settings = {
-      image: me.loader.getImage("seed"),
-      height: 25,
-      width: 25,
-      id: `seed-${hole.UID}`,
-    };
-    super(x, y, settings);
+class TestHelper {
+  public static disableLogging(): void {
+    //disable console log when running tests
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    console.info = () => {};
   }
 }
 
-export default SeedUI;
+export default TestHelper;

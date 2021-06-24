@@ -5,7 +5,6 @@ import Rules from "./Rules";
 import MtajiModeRules from "./MtajiModeRules";
 import PlayerBoardHoles from "./PlayerBoardHoles";
 import AppConstants from "./AppConstants";
-import Logger from "../../helpers/Logger";
 import Move from "./Move";
 import MoveDirection from "./MoveDirection";
 import Me from "../me";
@@ -229,10 +228,9 @@ class Board {
       );
     }
     this.updateMovesStatus();
-    Logger.info(
+    console.info(
       "Players Switched. Current player info: \n" +
-        this.currentPlayer.toString(),
-      Board.name
+        this.currentPlayer.toString()
     );
   }
 
@@ -245,9 +243,8 @@ class Board {
     //update hole seed counts for top player
     if (topPlayerSeedArrangement) {
       //TODO validate length - 16
-      Logger.info(
-        `Updating seed configuration for bottom player to ${topPlayerSeedArrangement}`,
-        this.name
+      console.info(
+        `Updating seed configuration for bottom player to ${topPlayerSeedArrangement}`
       );
       for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
         board.topPlayer.boardHoles.getHoleWithID(id).numSeeds =
@@ -257,9 +254,8 @@ class Board {
     //update hole seed counts for bottom player
     if (btmPlayerSeedArrangement) {
       //TODO validate length - 16
-      Logger.info(
-        `Updating seed configuration for bottom player to ${btmPlayerSeedArrangement}`,
-        this.name
+      console.info(
+        `Updating seed configuration for bottom player to ${btmPlayerSeedArrangement}`
       );
       for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
         board.bottomPlayer.boardHoles.getHoleWithID(id).numSeeds =
@@ -302,14 +298,11 @@ class Board {
    * @returns {boolean} A boolean value representing whether or not the move was succesful.
    */
   public executeMove(move: Move): boolean {
-    Logger.info(`Recieved move : ${move.toString()}`, Board.name);
+    console.info(`Recieved move : ${move.toString()}`);
     if (move.hole.player != this.currentPlayer) {
       throw new Error("Player is not allowed to make any moves in this board");
     }
-    Logger.info(
-      "Board Status before executing move : \n" + this.toString(),
-      Board.name
-    );
+    console.info("Board Status before executing move : \n" + this.toString());
     if (move.prevContinuedMovesCount > AppConstants.INFINITE_LOOP_THRESHOLD) {
       // The player has made more than the allowed amount of moves. They
       // are now regarded to be in infinite move status. The game will end and the player who got themselves into an infinite loop will loose.
@@ -325,7 +318,7 @@ class Board {
       return true;
     }
     if (!this.isValidMove(move)) {
-      Logger.info("Requested move is not valid...", Board.name);
+      console.info("Requested move is not valid...");
       return false;
     }
     // Only the current player is allowed to execute a move
@@ -343,14 +336,10 @@ class Board {
       this.currentPlayer.addSeeds(currentHole.removeAllSeeds());
     }
 
-    Logger.info(
-      `Player is ready to start sowing seeds: \n ${this.toString()}`,
-      Board.name
+    console.info(
+      `Player is ready to start sowing seeds: \n ${this.toString()}`
     );
-    Logger.info(
-      `Current Player Status: \n ${this.currentPlayer.toString()}`,
-      Board.name
-    );
+    console.info(`Current Player Status: \n ${this.currentPlayer.toString()}`);
     //TODO update GUI state
     while (this.currentPlayer.numSeedsInHand > 0) {
       // Find out which hole the player should move to next
@@ -374,20 +363,13 @@ class Board {
       currentHole = destinationHole;
 
       //TODO update GUI state
-      Logger.info(
-        "Board Status after sowing one seed: \n" + this.toString(),
-        Board.name
-      );
-      Logger.info(
-        `Current Player status  after sowing one seed: \n\t ${this.currentPlayer.toString()}`,
-        Board.name
+      console.info("Board Status after sowing one seed: \n" + this.toString());
+      console.info(
+        `Current Player status  after sowing one seed: \n\t ${this.currentPlayer.toString()}`
       );
     }
 
-    Logger.info(
-      "Current player no longer has any  left seeds in hand",
-      Board.name
-    );
+    console.info("Current player no longer has any  left seeds in hand");
     // Get the enemy's hole id at the end of the move if destination has
     // move than 1 seed in total
     if (currentHole.numSeeds > 1) {
@@ -426,8 +408,8 @@ class Board {
 
     // Switch player sides once a move is executed successfully.
     this.switchPlayers();
-    Logger.info("Board Status After Move : \n" + this.toString(), Board.name);
-    Logger.info("Move is Completed!", Board.name);
+    console.info("Board Status After Move : \n" + this.toString());
+    console.info("Move is Completed!");
     //TODO Update GUI state
     return true;
   }
@@ -469,9 +451,8 @@ class Board {
       const opponentHole = this.getOppossingEnemyHole(startHole);
       const stolenSeedCount = opponentHole.removeAllSeeds();
       if (stolenSeedCount > 0) {
-        Logger.info(
-          `******* HOLE (${startHole.id}) CAPTURED ${stolenSeedCount} SEEDS FROM (${opponentHole.id}) ********`,
-          Board.name
+        console.info(
+          `******* HOLE (${startHole.id}) CAPTURED ${stolenSeedCount} SEEDS FROM (${opponentHole.id}) ********`
         );
         this.currentPlayer.addSeeds(stolenSeedCount);
         this.currentPlayer.capturedOnPrevMove = true;
@@ -514,16 +495,14 @@ class Board {
       // recursively run the simulation
       this.runSimulation(randomise);
     } else {
-      Logger.info(
-        `GAME OVER ::: Winner is : \n ${this.getWinningPlayer().toString()}`,
-        Board.name
+      console.info(
+        `GAME OVER ::: Winner is : \n ${this.getWinningPlayer().toString()}`
       );
-      Logger.info(
+      console.info(
         "GAME SCORE: \nTOP Player: " +
           this.getScore().get(PlayerSide.Top) +
           "\nBOTTOM Player: " +
-          this.getScore().get(PlayerSide.Bottom),
-        Board.name
+          this.getScore().get(PlayerSide.Bottom)
       );
     }
   }

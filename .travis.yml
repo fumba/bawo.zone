@@ -1,11 +1,10 @@
 language: node_js
 node_js:
   - 16.3.0
-script:
-  - eslint 'src/**/*.{js,ts,tsx}'; stylelint 'src/**/*.css'
 jobs:
   include:
-    - stage: Produce Coverage
-      node_js: 16.3.0
+    - stage: Produce Coverage Report
       script: jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+    - stage: Lint TS and CSS files
+      script: yarn lint
 
