@@ -19,8 +19,9 @@
  */
 
 class Utility {
-    public static padZero(num: number): string {
-     const str = num.toString();
-     return str.length < 2 ? "0".concat(str) : str;
-      }
+  public static padZero(num: number): string {
+    const str = num.toString();
+    return str.length < 2 ? "0".concat(str) : str;
+  }
 }
+export default Utility;
