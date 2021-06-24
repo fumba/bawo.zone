@@ -22,6 +22,7 @@ import AppConstants from "./AppConstants";
 import Board from "./Board";
 import MoveDirection from "./MoveDirection";
 import Player from "./Player";
+import Utility from "../../helpers/Utility";
 
 import { isEmpty } from "lodash";
 
@@ -65,7 +66,7 @@ class Hole {
     this.player = player;
     this.id = id;
     if (!isEmpty(this.player)) {
-      this.UID = `[${this.pad(this.id)}-${this.player.side}]`;
+      this.UID = `[${Utility.padZero(this.id)}-${this.player.side}]`;
     }
     this.numSeeds = numSeeds;
     this.nextHole = nextHole;
@@ -113,7 +114,7 @@ class Hole {
   }
 
   public toString(): string {
-    return `[${this.pad(this.id)}(${this.pad(this.numSeeds)})-${
+    return `[${Utility.padZero(this.id)}(${Utility.padZero(this.numSeeds)})-${
       this.moveStatus
     }]`;
   }
@@ -195,12 +196,6 @@ class Hole {
       const seedUI = this.board.me.pool.pull("seed-ui", seedX, seedY, this);
       this.board.me.game.world.addChild(seedUI);
     }
-  }
-
-  //TODO
-  private pad(num: number): string {
-    const str = num.toString();
-    return str.length < 2 ? "0".concat(str) : str;
   }
 }
 
