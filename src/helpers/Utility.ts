@@ -19,8 +19,7 @@
  */
 
 class Utility {
- 
-    private pad(num: number): string {
+    public static padZero(num: number): string {
      const str = num.toString();
      return str.length < 2 ? "0".concat(str) : str;
       }
