@@ -20,7 +20,7 @@ cache:
     - $HOME/.cache/electron
     - $HOME/.cache/electron-builder
 script:
-  - eslint 'src/**/*.{js,ts,tsx}'; stylelint 'src/**/*.css'
+  - yarn eslint 'src/**/*.{js,ts,tsx}'; stylelint 'src/**/*.css'
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       docker run --rm \
