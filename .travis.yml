@@ -1,11 +1,10 @@
 language: node_js
 node_js:
   - 16.3.0
-script:
-  - yarn lint
 jobs:
   include:
     - stage: Produce Coverage Report
-      node_js: 16.3.0
       script: jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+    - stage: Lint TS and CSS files
+      script: yarn lint
 
