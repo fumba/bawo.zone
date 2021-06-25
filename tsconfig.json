@@ -6,7 +6,8 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es2019",
-    "allowJs": true
+    "allowJs": true,
+    "esModuleInterop": true
   },
   "exclude": [
     "node_modules"

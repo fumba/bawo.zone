@@ -10,7 +10,7 @@ let electronStarted = false;
 const clearTerminal = () => {
   if (process.stdout.isTTY) {
     const blankLines = "\n".repeat(process.stdout.rows);
-    console.info(blankLines);
+    console.log(blankLines);
     readline.cursorTo(process.stdout, 0, 0);
     readline.clearScreenDown(process.stdout);
   }
@@ -18,7 +18,7 @@ const clearTerminal = () => {
 
 const watching = compiler.watch({}, (err, stats) => {
   if (err != null) {
-    console.info(err);
+    console.log(err);
   } else if (!electronStarted) {
     electronStarted = true;
     childProcess
@@ -30,6 +30,6 @@ const watching = compiler.watch({}, (err, stats) => {
 
   if (stats != null) {
     clearTerminal();
-    console.info(stats.toString({ colors: true }));
+    console.log(stats.toString({ colors: true }));
   }
 });
