@@ -67,7 +67,7 @@
     "prettier": "^2.3.1",
     "source-map-support": "^0.5.6",
     "stream-browserify": "^3.0.0",
-    "style-loader": "^2.0.0",
+    "style-loader": "^3.0.0",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "ts-jest": "^27.0.3",
