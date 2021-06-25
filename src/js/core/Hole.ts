@@ -25,6 +25,7 @@ import Player from "./Player";
 import Utility from "../../helpers/Utility";
 
 import { isEmpty } from "lodash";
+import HoleUI from "../entities/HoleUI";
 
 class Hole {
   // Number of seeds in hole
@@ -43,6 +44,8 @@ class Hole {
   public moveStatus: MoveDirection;
   // the board on which the hole is placed
   public readonly board: Board;
+  // Hole UI corresponding to this hole
+  public ui: HoleUI;
 
   /**
    * Constructor
@@ -175,16 +178,6 @@ class Hole {
     const holeX = (this.id % 8) * 90 + xOffSet;
     const holeY = (this.player.isOnTopSide() ? 100 : 330) + newRowOffset;
 
-    // invisible draggable collection that contains seeds
-    const seedCollection = this.board.me.pool.pull(
-      AppConstants.SEED_GROUP_UI,
-      holeX,
-      holeY,
-      this.board,
-      this
-    );
-    this.board.me.game.world.addChild(seedCollection);
-
     //render hole
     const holeUI = this.board.me.pool.pull(
       AppConstants.HOLE_UI,
@@ -193,16 +186,22 @@ class Hole {
       this
     );
     this.board.me.game.world.addChild(holeUI);
+    this.ui = holeUI;
+
+    // invisible draggable collection that contains seeds
+    const seedGroup = this.board.me.pool.pull(
+      AppConstants.SEED_GROUP_UI,
+      this.board,
+      this
+    );
+    this.board.me.game.world.addChild(seedGroup);
 
     for (let i = 0; i < this.numSeeds; i++) {
-      const seedX = holeX + 10 * i;
-      const seedY = holeY + 10 * i;
       // render seeds that belong to hole
       const seedUI = this.board.me.pool.pull(
         AppConstants.SEED_UI,
-        seedX,
-        seedY,
-        this
+        seedGroup,
+        this.UID
       );
       this.board.me.game.world.addChild(seedUI);
     }

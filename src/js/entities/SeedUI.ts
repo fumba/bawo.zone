@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import Utility from "../../helpers/Utility";
 import AppConstants from "../core/AppConstants";
-import Hole from "../core/Hole";
 import me from "../me";
+import SeedGroupUI from "./SeedGroupUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -29,23 +28,43 @@ import me from "../me";
  */
 class SeedUI extends me.Entity {
   /**
-   *
-   * @param {number} x  x coordinates of the seed object
-   * @param {number} y  y coordinates of the seed object
-   * @param {Hole} hole the hole in which this seed currently belongs
+   * the group to which this seed belongs to
    */
-  constructor(x: number, y: number, hole: Hole) {
+  public group: SeedGroupUI;
+
+  /**
+   * @param {SeedUI} seedGroup - group to which this seed belongs to
+   * @param {number} uid - unique hole uid
+   */
+  constructor(seedGroup: SeedGroupUI, uid: string) {
     const settings = {
       image: me.loader.getImage(AppConstants.SEED_UI),
-      height: 25,
-      width: 25,
-      id: SeedUI.seedGroupId(hole),
+      height: 20,
+      width: 20,
+      id: SeedUI.seedGroupId(uid),
     };
-    super(x, y, settings);
+    super(0, 0, settings);
+
+    this.group = seedGroup;
+    this.randomisePosition();
   }
 
-  public static seedGroupId(hole: Hole) {
-    return `${AppConstants.SEED_UI}-${hole.UID}`;
+  /**
+   * Randomises the position of the seed in the hole - seed group container
+   */
+  public randomisePosition(): void {
+    const randomSeedPoint = Utility.randomPointWithinCircle(
+      this.group.radius,
+      this.group.originalCenter.x,
+      this.group.originalCenter.y
+    );
+    this.pos.x = randomSeedPoint.x - this.height / 2;
+    this.pos.y = randomSeedPoint.y - this.width / 2;
+    this.renderable.rotate(Math.random() * Math.PI * 2); //random rotation
+  }
+
+  public static seedGroupId(uid: string): string {
+    return `${AppConstants.SEED_UI}-${uid}`;
   }
 }
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-import Utility from "../src/helpers/Utility";
+import Utility from "../../src/helpers/Utility";
 
 describe("#padZero", () => {
   test("should try to add zero to a number that is less than 9", () => {
@@ -40,11 +40,11 @@ describe("#randomPointWithinCircle", () => {
     for (let radius = 1; radius < 50; radius++) {
       const points = Utility.randomPointWithinCircle(radius, 0, 0);
       //check x coordinate
-      expect(points[0]).toBeLessThan(radius);
-      expect(points[0]).toBeGreaterThan(-radius);
+      expect(points.x).toBeLessThan(radius);
+      expect(points.x).toBeGreaterThan(-radius);
       //check y coordinate
-      expect(points[1]).toBeLessThan(radius);
-      expect(points[1]).toBeGreaterThan(-radius);
+      expect(points.y).toBeLessThan(radius);
+      expect(points.y).toBeGreaterThan(-radius);
     }
   });
 });
