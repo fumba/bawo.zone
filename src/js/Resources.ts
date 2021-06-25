@@ -1,3 +1,5 @@
+import AppConstants from "./core/AppConstants";
+
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
  * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
@@ -25,26 +27,27 @@ class Resources {
   ];
   //seed
   private static seedImage: Array<Record<string, unknown>> = [
-    { name: "seed", type: "image", src: "data/img/seed.png" },
+    { name: AppConstants.SEED_UI, type: "image", src: "data/img/seed.png" },
   ];
   //hole
   private static holeImage: Array<Record<string, unknown>> = [
-    { name: "hole", type: "image", src: "data/img/hole.png" },
+    { name: AppConstants.HOLE_UI, type: "image", src: "data/img/hole.png" },
   ];
   //seed-collection
   private static seedCollection: Array<Record<string, unknown>> = [
     {
-      name: "seed-collection",
+      name: AppConstants.SEED_GROUP_UI,
       type: "image",
       src: "data/img/seed-collection.png",
     },
   ];
 
-  public static assets: Array<Record<string, unknown>> =
-    Resources.backgroundImage
-      .concat(Resources.seedImage)
-      .concat(Resources.holeImage)
-      .concat(Resources.seedCollection);
+  public static assets: Array<Record<string, unknown>> = [
+    ...Resources.backgroundImage,
+    ...Resources.seedImage,
+    ...Resources.holeImage,
+    ...Resources.seedCollection,
+  ];
 }
 
 export default Resources;

@@ -177,7 +177,7 @@ class Hole {
 
     // invisible draggable collection that contains seeds
     const seedCollection = this.board.me.pool.pull(
-      "seed-collection",
+      AppConstants.SEED_GROUP_UI,
       holeX,
       holeY,
       this.board,
@@ -186,14 +186,24 @@ class Hole {
     this.board.me.game.world.addChild(seedCollection);
 
     //render hole
-    const holeUI = this.board.me.pool.pull("hole-ui", holeX, holeY, this);
+    const holeUI = this.board.me.pool.pull(
+      AppConstants.HOLE_UI,
+      holeX,
+      holeY,
+      this
+    );
     this.board.me.game.world.addChild(holeUI);
 
     for (let i = 0; i < this.numSeeds; i++) {
       const seedX = holeX + 10 * i;
       const seedY = holeY + 10 * i;
       // render seeds that belong to hole
-      const seedUI = this.board.me.pool.pull("seed-ui", seedX, seedY, this);
+      const seedUI = this.board.me.pool.pull(
+        AppConstants.SEED_UI,
+        seedX,
+        seedY,
+        this
+      );
       this.board.me.game.world.addChild(seedUI);
     }
   }
