@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> core/Board.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">bawo.zone</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>core/Board.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Hole from "./Hole";
+import Player from "./Player";
+import PlayerSide from "./PlayerSide";
+import Rules from "./Rules";
+import MtajiModeRules from "./MtajiModeRules";
+import PlayerBoardHoles from "./PlayerBoardHoles";
+import AppConstants from "./AppConstants";
+import Move from "./Move";
+import MoveDirection from "./MoveDirection";
+import Me from "../me";
+
+/*
+ * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
+ * &lt;a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone&lt;/a>
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ *  The &lt;tt>GameBoard&lt;/tt> class represents the bawo/bao  game board.
+ *  &lt;p>
+ *
+ *  The board is represented using 2 circular doubly linked lists each assigned to a player. Each list represents 2 rows with
+ *  hole Ids assigned as shown below;
+ *
+ *
+ *    TOP PLAYER sitting position (facing down)
+ *    00	01	02	03	04	05	06	07
+ *    15	14	13	12	11	10	09	08
+ *
+ *    00	01	02	03	04	05	06	07
+ *    15	14	13	12	11	10	09	08
+ *    BOTTOM PLAYER sitting position (facing up)
+ *
+ *    32 (optional hole - depends of game version)
+ *
+ *  Rules for Placement of seeds are specified in classes implementing  the interface &lt;tt>GameRules&lt;/tt>.
+ *  &lt;p>
+ *
+ *  @author  &lt;a href="http://fumba.me">Fumba Chibaka&lt;/a>
+ */
+class Board {
+  private currentPlayer: Player;
+  public readonly bottomPlayer: Player;
+  public readonly topPlayer: Player;
+  private readonly rules: Rules;
+  public readonly me: typeof Me;
+
+  /**
+   * The gameplay is in a continuous loop if the player continues to play beyond a
+   * threshold amount of moves.
+   * The game will end and the player who got themselves into an infinite loop will lose.
+   */
+  private isInContinousLoopStatus = false;
+
+  /**
+   * @param {any} me melonjs instance
+   * @param {Rules} rules game rules - default is MtajiModeRules
+   */
+  constructor(me?: typeof Me, rules = new MtajiModeRules()) {
+    this.bottomPlayer = new Player(PlayerSide.Bottom);
+    this.topPlayer = new Player(PlayerSide.Top);
+    this.rules = rules;
+    this.rules.validate();
+    this.me = me;
+
+    // initialise player board holes
+    [this.topPlayer, this.bottomPlayer].forEach((player) => {
+      const playerInitSeedConfig: Array&lt;number> = this.rules
+        .initialSeedForPlayerRows()
+        .get(player.side);
+      const playerBoardHoles: PlayerBoardHoles = new PlayerBoardHoles(
+        player,
+        this
+      );
+      for (let index = 0; index &lt; AppConstants.NUM_PLAYER_HOLES; index++) {
+        playerBoardHoles.insertAtEnd(playerInitSeedConfig[index]);
+      }
+    });
+
+    //set current playersssP
+    this.currentPlayer = this.topPlayer;
+    this.updateMovesStatus();
+  }
+
+  /**
+   * Extract the opposing enemy hole from the players front row.
+   * This is hole from which the current player will be capturing seeds from.
+   *
+   * @param {Hole} hole Hole from which the opposing enemy hole is to be retrieved from.
+   * @returns {Hole} Opposing enemy hole.
+   */
+  public adjacentOpponentHole(hole: Hole): Hole {
+    if (hole.isInFrontRow()) {
+      const oppossingId: number = 15 - hole.id;
+      const opponentPlayer: Player = this.getOpponentPlayer(hole.player);
+      return opponentPlayer.boardHoles.getHoleWithID(oppossingId);
+    }
+    throw new Error(
+      `Attempted to retrieve adjacent opponent hole from a hole that is not in the front row | input: ${hole.id}`
+    );
+  }
+
+  //TODO
+  public getCurrentPlayer(): Player {
+    return this.currentPlayer;
+  }
+
+  /**
+   * Update the move status for all the holes on the board.
+   *
+   * Move Status can be one of the following:
+   *
+   * CLOCKWISE
+   *
+   * ANTI_CLOCKWISE
+   *
+   * BOTH - Both clockwise and anti-clockwise moves are allowed.
+   *
+   * LOCKED - A valid move cannot be made from the hole.
+   *
+   * UNAUTHORISED - The hole does not belong to the current player.
+   */
+  private updateMovesStatus(): void {
+    for (const hole of this.topPlayer.boardHoles) {
+      this.updateMoveStatusForHole(hole);
+    }
+    for (const hole of this.bottomPlayer.boardHoles) {
+      this.updateMoveStatusForHole(hole);
+    }
+  }
+
+  /**
+   * Updates the move status for the specified hole.
+   *
+   * @param {Hole} hole The Hole on will be performed on.
+   */
+  private updateMoveStatusForHole(hole: Hole): void {
+    // Update status only if the current player is authorized to make a move
+    // on the hole.
+    if (
+      hole.player == this.currentPlayer &amp;&amp;
+      this.currentPlayer.numSeedsInHand == 0
+    ) {
+      const clockwiseMove: Move = new Move(hole, MoveDirection.Clockwise);
+      const antiClockwiseMove: Move = new Move(
+        hole,
+        MoveDirection.AntiClockwise
+      );
+      const isValidClockwiseMove: boolean = this.isValidMove(clockwiseMove);
+      const isValidAntiClockwiseMove: boolean =
+        this.isValidMove(antiClockwiseMove);
+      if (isValidClockwiseMove &amp;&amp; isValidAntiClockwiseMove) {
+        hole.moveStatus = MoveDirection.Both;
+      } else if (isValidClockwiseMove) {
+        hole.moveStatus = MoveDirection.Clockwise;
+      } else if (isValidAntiClockwiseMove) {
+        hole.moveStatus = MoveDirection.AntiClockwise;
+      } else {
+        hole.moveStatus = MoveDirection.Locked;
+      }
+    } else {
+      // holes that do not belong to the current player are set as
+      // unauthorized.
+      hole.moveStatus = MoveDirection.UnAuthorised;
+    }
+  }
+
+  /**
+   * Check if a move valid. GameRules implementation is used to make this
+   * decision.
+   *
+   * @param {Move} move The move whose validity is to be checked.
+   * @returns {boolean} {@code true} if the move is valid.
+   */
+  public isValidMove(move: Move): boolean {
+    //check move integrity
+    if (move == null) {
+      throw new Error("Move is null.");
+    }
+    if (move.hole == null) {
+      throw new Error("Move is required to have a starting hole specified.");
+    }
+    if (move.direction == null) {
+      throw new Error("Move is required to have its direction specified.");
+    }
+    if (this.currentPlayer != move.hole.player) {
+      throw new Error(
+        "Player " +
+          this.currentPlayer.toString() +
+          " is not allowed to make a move on hole " +
+          move.hole.toString()
+      );
+    }
+    return this.rules.isValidMove(move);
+  }
+
+  /**
+   * Switch Players.
+   *
+   * @throws Errow when an attempt is made to switch while one of the players has seeds in hands.
+   */
+  public switchPlayers(): void {
+    if (
+      this.topPlayer.numSeedsInHand == 0 &amp;&amp;
+      this.bottomPlayer.numSeedsInHand == 0
+    ) {
+      this.currentPlayer = this.getOpponentPlayer(this.currentPlayer);
+    } else {
+      throw new Error(
+        "Cannot assign players while player(s) has(ve) seed(s) in hand: \n" +
+          this.topPlayer +
+          "\n" +
+          this.bottomPlayer
+      );
+    }
+    this.updateMovesStatus();
+    console.info(
+      "Players Switched. Current player info: \n" +
+        this.currentPlayer.toString()
+    );
+  }
+
+  //TODO
+  public static loadState(
+    topPlayerSeedArrangement: Array&lt;number>,
+    btmPlayerSeedArrangement: Array&lt;number>
+  ): Board {
+    const board: Board = new Board(null);
+    //update hole seed counts for top player
+    if (topPlayerSeedArrangement) {
+      //TODO validate length - 16
+      console.info(
+        `Updating seed configuration for bottom player to ${topPlayerSeedArrangement}`
+      );
+      for (let id = 0; id &lt; AppConstants.NUM_PLAYER_HOLES; id++) {
+        board.topPlayer.boardHoles.getHoleWithID(id).numSeeds =
+          topPlayerSeedArrangement[id];
+      }
+    }
+    //update hole seed counts for bottom player
+    if (btmPlayerSeedArrangement) {
+      //TODO validate length - 16
+      console.info(
+        `Updating seed configuration for bottom player to ${btmPlayerSeedArrangement}`
+      );
+      for (let id = 0; id &lt; AppConstants.NUM_PLAYER_HOLES; id++) {
+        board.bottomPlayer.boardHoles.getHoleWithID(id).numSeeds =
+          btmPlayerSeedArrangement[id];
+      }
+    }
+    return board;
+  }
+
+  /**
+   * Retrieves all the valid moves for a player.
+   *
+   * @param {Player} player The Player who is requesting the list of valid moves.
+   * @returns {Array&lt;Move>} A list of moves that are valid. These moves can be executed on the board.
+   */
+  public getAllAvailableValidMoves(player: Player): Array&lt;Move> {
+    this.updateMovesStatus();
+    const moves: Array&lt;Move> = [];
+    for (const hole of player.boardHoles) {
+      if (
+        hole.moveStatus == MoveDirection.Clockwise ||
+        hole.moveStatus == MoveDirection.AntiClockwise
+      ) {
+        moves.push(new Move(hole, hole.moveStatus));
+      } else if (hole.moveStatus == MoveDirection.Both) {
+        moves.push(new Move(hole, MoveDirection.Clockwise));
+        moves.push(new Move(hole, MoveDirection.AntiClockwise));
+      }
+    }
+    return moves;
+  }
+
+  /**
+   * Execute a move:
+   *
+   * The rules on how the move is to be performed are specified in the
+   * implementation of the GameRules interface.
+   *
+   * @param {Move} move The move to be executed.
+   * @returns {boolean} A boolean value representing whether or not the move was succesful.
+   */
+  public executeMove(move: Move): boolean {
+    console.info(`Recieved move : ${move.toString()}`);
+    if (move.hole.player != this.currentPlayer) {
+      throw new Error("Player is not allowed to make any moves in this board");
+    }
+    console.info("Board Status before executing move : \n" + this.toString());
+    if (move.prevContinuedMovesCount > AppConstants.INFINITE_LOOP_THRESHOLD) {
+      // The player has made more than the allowed amount of moves. They
+      // are now regarded to be in infinite move status. The game will end and the player who got themselves into an infinite loop will loose.
+
+      // place all the seeds back into the start hole for the move.
+      const numSeeds = this.currentPlayer.removeSeeds(
+        this.currentPlayer.numSeedsInHand
+      );
+      move.hole.addSeeds(numSeeds);
+
+      this.isInContinousLoopStatus = true;
+      // TODO update GUI state
+      return true;
+    }
+    if (!this.isValidMove(move)) {
+      console.info("Requested move is not valid...");
+      return false;
+    }
+    // Only the current player is allowed to execute a move
+    if (this.currentPlayer != move.hole.player) {
+      throw new Error(
+        `Only the current player can execute this move on hole : ${move.hole.toString()}`
+      );
+    }
+    const numSeedsToSowPerStep = 1;
+    let currentHole: Hole = move.hole; //starting hole
+    let destinationHole: Hole;
+    // Continuing moves already have seeds in the player hands
+    // Initial moves need to get the seeds from the hole into the players hand
+    if (!move.isContinuing()) {
+      this.currentPlayer.addSeeds(currentHole.removeAllSeeds());
+    }
+
+    console.info(
+      `Player is ready to start sowing seeds: \n ${this.toString()}`
+    );
+    console.info(`Current Player Status: \n ${this.currentPlayer.toString()}`);
+    //TODO update GUI state
+    while (this.currentPlayer.numSeedsInHand > 0) {
+      // Find out which hole the player should move to next
+      if (this.currentPlayer.capturedOnPrevMove) {
+        // if a player captured on the previous move, plant a seed in
+        // the after-capture start hole before moving to other holes.
+        destinationHole = currentHole;
+        // reset previous capture flag
+        this.currentPlayer.capturedOnPrevMove = false;
+      } else {
+        destinationHole = this.computeDestinationHole(
+          move.direction,
+          currentHole,
+          numSeedsToSowPerStep
+        );
+      }
+      // Place 1 seed in the destination hole and move on to the next
+      // hole.
+      const numSeeds = this.currentPlayer.removeSeeds(numSeedsToSowPerStep);
+      destinationHole.addSeeds(numSeeds);
+      currentHole = destinationHole;
+
+      //TODO update GUI state
+      console.info("Board Status after sowing one seed: \n" + this.toString());
+      console.info(
+        `Current Player status  after sowing one seed: \n\t ${this.currentPlayer.toString()}`
+      );
+    }
+
+    console.info("Current player no longer has any  left seeds in hand");
+    // Get the enemy's hole id at the end of the move if destination has
+    // move than 1 seed in total
+    if (currentHole.numSeeds > 1) {
+      let continuingMove: Move;
+      // Capture enemies seeds and continue playing (re-start from side)
+      // Only capture seeds if the initial move was mtaji (a capture move)
+      if (move.isMtaji &amp;&amp; this.captureAllSeedsFromEnemy(currentHole)) {
+        const captureMove: Move = new Move(
+          currentHole,
+          move.direction,
+          move.prevContinuedMovesCount
+        );
+        continuingMove = this.rules.nextContinuingMoveAfterCapture(captureMove);
+        // All moves at this point will be able to capture seeds...
+        continuingMove.isMtaji = move.isMtaji;
+        return this.executeMove(continuingMove);
+      } else {
+        // Take all seeds in hole and continue with current player without capturing any seeds
+        this.currentPlayer.addSeeds(currentHole.removeAllSeeds());
+        continuingMove = new Move(
+          currentHole,
+          move.direction,
+          move.prevContinuedMovesCount + 1
+        );
+        if (move.isContinuing()) {
+          // get mtaji status from parent
+          continuingMove.isMtaji = move.isMtaji;
+        } else {
+          // this is an initial move that didnt capture...
+          // Do not allow any other moves to capture at this point...
+          continuingMove.isMtaji = false;
+        }
+        return this.executeMove(continuingMove);
+      }
+    }
+
+    // Switch player sides once a move is executed successfully.
+    this.switchPlayers();
+    console.info("Board Status After Move : \n" + this.toString());
+    console.info("Move is Completed!");
+    //TODO Update GUI state
+    return true;
+  }
+
+  /**
+   * Finds the hole on which planting the given number of seed tokens one by one-
+   * will stop when executed.
+   *
+   * @param {MoveDirection} direction Direction of the move
+   * @param {Hole} hole The hole on which the move starts on
+   * @param {number} numberOfSteps Number of seeds to be planted in the move
+   * @returns {Hole} Hole on which the move ends on
+   */
+  private computeDestinationHole(
+    direction: MoveDirection,
+    hole: Hole,
+    numberOfSteps: number
+  ): Hole {
+    switch (direction) {
+      case MoveDirection.AntiClockwise:
+        return hole.player.boardHoles.stepAntiClockwise(hole, numberOfSteps);
+      case MoveDirection.Clockwise:
+        return hole.player.boardHoles.stepClockwise(hole, numberOfSteps);
+      default:
+        throw new Error(
+          `Only Clockwise and Anticlockwise moves are allowed. Recieved : ${direction}`
+        );
+    }
+  }
+
+  /**
+   * Capture all seeds from enemy if current player stopped on front row.
+   *
+   * @param {Hole} startHole The hole which will be capturing the enemy seeds.
+   * @returns {boolean} true if the capture was successful
+   */
+  private captureAllSeedsFromEnemy(startHole: Hole): boolean {
+    if (startHole.isInFrontRow()) {
+      const opponentHole = this.getOppossingEnemyHole(startHole);
+      const stolenSeedCount = opponentHole.removeAllSeeds();
+      if (stolenSeedCount > 0) {
+        console.info(
+          `******* HOLE (${startHole.id}) CAPTURED ${stolenSeedCount} SEEDS FROM (${opponentHole.id}) ********`
+        );
+        this.currentPlayer.addSeeds(stolenSeedCount);
+        this.currentPlayer.capturedOnPrevMove = true;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Extract the opposing enemy hole from the players front row.
+   *
+   * @param {Hole} hole Hole from which the opposing enemy hole is to be retrieved.
+   * @returns {Hole} Opposing enemy hole.
+   */
+  public getOppossingEnemyHole(hole: Hole): Hole {
+    if (hole.isInFrontRow()) {
+      const oppossingId = 15 - hole.id;
+      const opponentPlayer = this.getOpponentPlayer(hole.player);
+      return opponentPlayer.boardHoles.getHoleWithID(oppossingId);
+    }
+    throw new Error("Could not retrieve opposing enemy hole");
+  }
+
+  public toString(): string {
+    this.updateMovesStatus();
+    let buffer = "\n".concat(this.topPlayer.boardHoles.toString());
+    buffer = buffer.concat(this.bottomPlayer.boardHoles.toString());
+    return buffer.replace(/\n$/, ""); //remove newline at the end
+  }
+
+  public runSimulation(randomise: boolean): void {
+    const moves: Array&lt;Move> = this.getAllAvailableValidMoves(
+      this.currentPlayer
+    );
+    // either always pick first move or randomise
+    const move = moves[randomise ? this.getRandomInt(moves.length) : 0];
+    this.executeMove(move);
+    if (!this.isGameOver()) {
+      // recursively run the simulation
+      this.runSimulation(randomise);
+    } else {
+      console.info(
+        `GAME OVER ::: Winner is : \n ${this.getWinningPlayer().toString()}`
+      );
+      console.info(
+        "GAME SCORE: \nTOP Player: " +
+          this.getScore().get(PlayerSide.Top) +
+          "\nBOTTOM Player: " +
+          this.getScore().get(PlayerSide.Bottom)
+      );
+    }
+  }
+
+  /**
+   * Checks if the game is over. The game is over if the current player is left
+   * with no valid moves (ie. all the moves are locked).
+   *
+   * When the gameplay gets in an infinite loop, the game is also considered be
+   * over. The player who gets themselves into the loop is considered to have lost
+   * the game in this case.
+   *
+   * @returns {boolean} true if the game is over.
+   */
+  public isGameOver(): boolean {
+    if (this.isInContinousLoopStatus) {
+      return true;
+    }
+    for (const hole of this.currentPlayer.boardHoles) {
+      if (hole.moveStatus == MoveDirection.UnAuthorised) {
+        throw new Error(
+          this.currentPlayer.toString() +
+            " has hole(s) with unathorized status: \n" +
+            this.currentPlayer.boardHoles.toString()
+        );
+      }
+      if (hole.moveStatus != MoveDirection.Locked) {
+        // found a valid move... game is not over yet!
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Gets the player who won the game. This only happens if the game is over.
+   * opposing player is determined as the winning player since the current player
+   * cannot make any moves in this case.
+   *
+   * @returns {Player} The winning Player.
+   */
+  public getWinningPlayer(): Player {
+    if (this.isGameOver()) {
+      return this.getOpponentPlayer(this.currentPlayer);
+    } else {
+      throw new Error(
+        "The game is still in play. There is no winning player yet."
+      );
+    }
+  }
+
+  /**
+   * Calculates the current game score. The score is calculated as the number
+   * seeds on the player side. If a player gets themselves into an infinite loop
+   * move, they have lost the game.
+   *
+   * @returns {number} A Hash with the PlayerSide as the key and the number of seeds on that
+   *         side as the value.
+   */
+  public getScore(): Map&lt;PlayerSide, number> {
+    if (
+      this.bottomPlayer.numSeedsInHand != 0 ||
+      this.topPlayer.numSeedsInHand != 0
+    ) {
+      throw new Error(
+        "Score cannot be determined while one of the players is holding seeds in hand."
+      );
+    }
+    const scoreMap = new Map&lt;PlayerSide, number>();
+    let btmPlayerScore = 0;
+    let topPlayerScore = 0;
+    for (const hole of this.bottomPlayer.boardHoles) {
+      btmPlayerScore += hole.numSeeds;
+    }
+    scoreMap.set(PlayerSide.Bottom, btmPlayerScore);
+    for (const hole of this.topPlayer.boardHoles) {
+      topPlayerScore += hole.numSeeds;
+    }
+    scoreMap.set(PlayerSide.Top, topPlayerScore);
+
+    // if one of the players got into an infinite loop, they are punished by
+    // loosing all their seed scores to the opponent player.
+    if (this.isInContinousLoopStatus) {
+      const loosingPlayerSeedCount = scoreMap.get(this.currentPlayer.side);
+      const winningPlayerSeedCount = scoreMap.get(
+        this.getOpponentPlayer(this.currentPlayer).side
+      );
+      scoreMap.set(this.currentPlayer.side, 0);
+      scoreMap.set(
+        this.getOpponentPlayer(this.currentPlayer).side,
+        loosingPlayerSeedCount + winningPlayerSeedCount
+      );
+    }
+    if (topPlayerScore + btmPlayerScore != AppConstants.MAX_SEED_COUNT) {
+      throw new Error("Total score is not 64.");
+    }
+    return scoreMap;
+  }
+
+  /**
+   * Retrieves the opponent player for the current player.
+   *
+   * @param {Player} player Player whose opponent is to be determined.
+   * @returns {Player} opponent player
+   */
+  private getOpponentPlayer(player: Player): Player {
+    return player.isOnTopSide() ? this.bottomPlayer : this.topPlayer;
+  }
+
+  //TODO
+  private getRandomInt(max: number): number {
+    return Math.floor(Math.random() * max);
+  }
+}
+export default Board;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

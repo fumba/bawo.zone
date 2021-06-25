@@ -1,0 +1,2580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Board</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">bawo.zone</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Class</p>
+                    <h1>Board</h1>
+                </header>
+                
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>Board<span class="signature">(me, rules)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">The <tt>GameBoard</tt> class represents the bawo/bao  game board. <p> The board is represented using 2 circular doubly linked lists each assigned to a player. Each list represents 2 rows with hole Ids assigned as shown below;   TOP PLAYER sitting position (facing down)   00	01	02	03	04	05	06	07   15	14	13	12	11	10	09	08   00	01	02	03	04	05	06	07   15	14	13	12	11	10	09	08   BOTTOM PLAYER sitting position (facing up)   32 (optional hole - depends of game version) Rules for Placement of seeds are specified in classes implementing  the interface <tt>GameRules</tt>. <p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class='vertical-section'>
+                <div class="members">
+                    <div class="member">
+                        <div class=name>
+                            <span class="tag">Constructor</span>
+                        </div>
+                        
+
+
+    
+    <h4 class="name" id="Board">
+        <a class="href-link" href="#Board">#</a>
+        
+        <span class="code-name">
+            
+                new Board<span class="signature">(me, rules)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>me</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">any</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">melonjs instance</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>rules</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Rules</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">game rules - default is MtajiModeRules</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>&lt;a href="http://fumba.me">Fumba Chibaka&lt;/a></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line51">line 51</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+<h4 class="name" id="isInContinousLoopStatus">
+    <a class="href-link" href="#isInContinousLoopStatus">#</a>
+    
+    <span class="code-name">
+        isInContinousLoopStatus
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The gameplay is in a continuous loop if the player continues to play beyond athreshold amount of moves.The game will end and the player who got themselves into an infinite loop will lose.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line62">line 62</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Methods</h1>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="adjacentOpponentHole">
+        <a class="href-link" href="#adjacentOpponentHole">#</a>
+        
+        <span class="code-name">
+            
+                adjacentOpponentHole<span class="signature">(hole)</span><span class="type-signature"> &rarr; {<a href="Hole.html">Hole</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Extract the opposing enemy hole from the players front row.This is hole from which the current player will be capturing seeds from.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>hole</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Hole from which the opposing enemy hole is to be retrieved from.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line89">line 89</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Opposing enemy hole.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="captureAllSeedsFromEnemy">
+        <a class="href-link" href="#captureAllSeedsFromEnemy">#</a>
+        
+        <span class="code-name">
+            
+                captureAllSeedsFromEnemy<span class="signature">(startHole)</span><span class="type-signature"> &rarr; {boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Capture all seeds from enemy if current player stopped on front row.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>startHole</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The hole which will be capturing the enemy seeds.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line374">line 374</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>true if the capture was successful</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="computeDestinationHole">
+        <a class="href-link" href="#computeDestinationHole">#</a>
+        
+        <span class="code-name">
+            
+                computeDestinationHole<span class="signature">(direction, hole, numberOfSteps)</span><span class="type-signature"> &rarr; {<a href="Hole.html">Hole</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Finds the hole on which planting the given number of seed tokens one by one-will stop when executed.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>direction</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#MoveDirection">MoveDirection</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Direction of the move</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>hole</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The hole on which the move starts on</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>numberOfSteps</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Number of seeds to be planted in the move</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line358">line 358</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Hole on which the move ends on</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="executeMove">
+        <a class="href-link" href="#executeMove">#</a>
+        
+        <span class="code-name">
+            
+                executeMove<span class="signature">(move)</span><span class="type-signature"> &rarr; {boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Execute a move:The rules on how the move is to be performed are specified in theimplementation of the GameRules interface.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>move</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Move.html">Move</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The move to be executed.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line256">line 256</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>A boolean value representing whether or not the move was succesful.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getAllAvailableValidMoves">
+        <a class="href-link" href="#getAllAvailableValidMoves">#</a>
+        
+        <span class="code-name">
+            
+                getAllAvailableValidMoves<span class="signature">(player)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="Move.html">Move</a>>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Retrieves all the valid moves for a player.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>player</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Player.html">Player</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The Player who is requesting the list of valid moves.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line232">line 232</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>A list of moves that are valid. These moves can be executed on the board.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Array.&lt;<a href="Move.html">Move</a>></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getOpponentPlayer">
+        <a class="href-link" href="#getOpponentPlayer">#</a>
+        
+        <span class="code-name">
+            
+                getOpponentPlayer<span class="signature">(player)</span><span class="type-signature"> &rarr; {<a href="Player.html">Player</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Retrieves the opponent player for the current player.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>player</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Player.html">Player</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Player whose opponent is to be determined.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line509">line 509</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>opponent player</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Player.html">Player</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getOppossingEnemyHole">
+        <a class="href-link" href="#getOppossingEnemyHole">#</a>
+        
+        <span class="code-name">
+            
+                getOppossingEnemyHole<span class="signature">(hole)</span><span class="type-signature"> &rarr; {<a href="Hole.html">Hole</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Extract the opposing enemy hole from the players front row.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>hole</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Hole from which the opposing enemy hole is to be retrieved.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line393">line 393</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Opposing enemy hole.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getScore">
+        <a class="href-link" href="#getScore">#</a>
+        
+        <span class="code-name">
+            
+                getScore<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Calculates the current game score. The score is calculated as the numberseeds on the player side. If a player gets themselves into an infinite loopmove, they have lost the game.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line474">line 474</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>A Hash with the PlayerSide as the key and the number of seeds on that        side as the value.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">number</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getWinningPlayer">
+        <a class="href-link" href="#getWinningPlayer">#</a>
+        
+        <span class="code-name">
+            
+                getWinningPlayer<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Player.html">Player</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Gets the player who won the game. This only happens if the game is over.opposing player is determined as the winning player since the current playercannot make any moves in this case.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line458">line 458</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The winning Player.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Player.html">Player</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isGameOver">
+        <a class="href-link" href="#isGameOver">#</a>
+        
+        <span class="code-name">
+            
+                isGameOver<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Checks if the game is over. The game is over if the current player is leftwith no valid moves (ie. all the moves are locked).When the gameplay gets in an infinite loop, the game is also considered beover. The player who gets themselves into the loop is considered to have lostthe game in this case.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line434">line 434</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>true if the game is over.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isValidMove">
+        <a class="href-link" href="#isValidMove">#</a>
+        
+        <span class="code-name">
+            
+                isValidMove<span class="signature">(move)</span><span class="type-signature"> &rarr; {boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Check if a move valid. GameRules implementation is used to make thisdecision.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>move</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Move.html">Move</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The move whose validity is to be checked.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line164">line 164</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>{@code true} if the move is valid.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="switchPlayers">
+        <a class="href-link" href="#switchPlayers">#</a>
+        
+        <span class="code-name">
+            
+                switchPlayers<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Switch Players.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line188">line 188</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Throws:</label></div>
+        <div class="column is-10">
+            
+                    
+<div class="columns">
+    
+        
+            <div class='param-desc column is-12'>Errow when an attempt is made to switch while one of the players has seeds in hands.</div>
+        
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="updateMovesStatus">
+        <a class="href-link" href="#updateMovesStatus">#</a>
+        
+        <span class="code-name">
+            
+                updateMovesStatus<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Update the move status for all the holes on the board.Move Status can be one of the following:CLOCKWISEANTI_CLOCKWISEBOTH - Both clockwise and anti-clockwise moves are allowed.LOCKED - A valid move cannot be made from the hole.UNAUTHORISED - The hole does not belong to the current player.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line116">line 116</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="updateMoveStatusForHole">
+        <a class="href-link" href="#updateMoveStatusForHole">#</a>
+        
+        <span class="code-name">
+            
+                updateMoveStatusForHole<span class="signature">(hole)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Updates the move status for the specified hole.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>hole</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The Hole on will be performed on.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Board.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Board.ts.html">core/Board.ts</a>, <a href="core_Board.ts.html#line129">line 129</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

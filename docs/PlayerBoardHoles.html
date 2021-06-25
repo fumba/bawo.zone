@@ -70,7 +70,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -89,7 +89,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>PlayerBoardHoles<span class="signature">(player)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>PlayerBoardHoles<span class="signature">(player, board)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -113,7 +113,7 @@
         
         <span class="code-name">
             
-                new PlayerBoardHoles<span class="signature">(player)</span><span class="type-signature"></span>
+                new PlayerBoardHoles<span class="signature">(player, board)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -165,13 +165,43 @@
 
   <td class="type">
   
+      
+<span class="param-type"><a href="Player.html">Player</a></span>
+
+
+  
   </td>
 
   
 
   
 
-  <td class="description last"></td>
+  <td class="description last">the player who owns the holes</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>board</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Board.html">Board</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">the board on which the player is placed</td>
 </tr>
 
 
@@ -217,9 +247,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_PlayerBoardHoles.ts.html" class="button">View Source</a>
+            <a href="core_PlayerBoardHoles.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_PlayerBoardHoles.ts.html">js/core/PlayerBoardHoles.ts</a>, <a href="js_core_PlayerBoardHoles.ts.html#line38">line 38</a>
+                <a href="core_PlayerBoardHoles.ts.html">core/PlayerBoardHoles.ts</a>, <a href="core_PlayerBoardHoles.ts.html#line39">line 39</a>
             </span>
         </p>
     
@@ -281,7 +311,7 @@
         
         <span class="code-name">
             
-                getHoleWithID<span class="signature">(holeId)</span><span class="type-signature"></span>
+                getHoleWithID<span class="signature">(holeId)</span><span class="type-signature"> &rarr; {<a href="Hole.html">Hole</a>}</span>
             
         </span>
     </h4>
@@ -332,6 +362,11 @@
   
 
   <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
   
   </td>
 
@@ -385,9 +420,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_PlayerBoardHoles.ts.html" class="button">View Source</a>
+            <a href="core_PlayerBoardHoles.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_PlayerBoardHoles.ts.html">js/core/PlayerBoardHoles.ts</a>, <a href="js_core_PlayerBoardHoles.ts.html#line104">line 104</a>
+                <a href="core_PlayerBoardHoles.ts.html">core/PlayerBoardHoles.ts</a>, <a href="core_PlayerBoardHoles.ts.html#line105">line 105</a>
             </span>
         </p>
     
@@ -421,6 +456,14 @@
     <div class='param-desc column is-7'>Retrieved hole</div>
     
     
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+    </div>
+    
 </div>
 
                 
@@ -441,7 +484,7 @@
         
         <span class="code-name">
             
-                insertAtEnd<span class="signature">(player, numSeeds)</span><span class="type-signature"></span>
+                insertAtEnd<span class="signature">(numSeeds)</span><span class="type-signature"> &rarr; {<a href="Hole.html">Hole</a>}</span>
             
         </span>
     </h4>
@@ -488,30 +531,15 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>player</code></td>
-  
-
-  <td class="type">
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">The player to whom the new hole will be assigned to.</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
       <td class="name"><code>numSeeds</code></td>
   
 
   <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
   
   </td>
 
@@ -565,9 +593,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_PlayerBoardHoles.ts.html" class="button">View Source</a>
+            <a href="core_PlayerBoardHoles.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_PlayerBoardHoles.ts.html">js/core/PlayerBoardHoles.ts</a>, <a href="js_core_PlayerBoardHoles.ts.html#line72">line 72</a>
+                <a href="core_PlayerBoardHoles.ts.html">core/PlayerBoardHoles.ts</a>, <a href="core_PlayerBoardHoles.ts.html#line73">line 73</a>
             </span>
         </p>
     
@@ -601,6 +629,14 @@
     <div class='param-desc column is-7'>Added Hole</div>
     
     
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+    </div>
+    
 </div>
 
                 
@@ -621,7 +657,7 @@
         
         <span class="code-name">
             
-                stepAntiClockwise<span class="signature">(boardHole, numSteps)</span><span class="type-signature"></span>
+                stepAntiClockwise<span class="signature">(boardHole, numSteps)</span><span class="type-signature"> &rarr; {<a href="Hole.html">Hole</a>}</span>
             
         </span>
     </h4>
@@ -673,6 +709,11 @@
 
   <td class="type">
   
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+  
   </td>
 
   
@@ -692,6 +733,11 @@
   
 
   <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
   
   </td>
 
@@ -745,9 +791,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_PlayerBoardHoles.ts.html" class="button">View Source</a>
+            <a href="core_PlayerBoardHoles.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_PlayerBoardHoles.ts.html">js/core/PlayerBoardHoles.ts</a>, <a href="js_core_PlayerBoardHoles.ts.html#line135">line 135</a>
+                <a href="core_PlayerBoardHoles.ts.html">core/PlayerBoardHoles.ts</a>, <a href="core_PlayerBoardHoles.ts.html#line136">line 136</a>
             </span>
         </p>
     
@@ -781,6 +827,14 @@
     <div class='param-desc column is-7'>Hole</div>
     
     
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+    </div>
+    
 </div>
 
                 
@@ -801,7 +855,7 @@
         
         <span class="code-name">
             
-                stepClockwise<span class="signature">(boardHole, numSteps)</span><span class="type-signature"></span>
+                stepClockwise<span class="signature">(boardHole, numSteps)</span><span class="type-signature"> &rarr; {<a href="Hole.html">Hole</a>}</span>
             
         </span>
     </h4>
@@ -853,6 +907,11 @@
 
   <td class="type">
   
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+  
   </td>
 
   
@@ -872,6 +931,11 @@
   
 
   <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
   
   </td>
 
@@ -925,9 +989,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_PlayerBoardHoles.ts.html" class="button">View Source</a>
+            <a href="core_PlayerBoardHoles.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_PlayerBoardHoles.ts.html">js/core/PlayerBoardHoles.ts</a>, <a href="js_core_PlayerBoardHoles.ts.html#line180">line 180</a>
+                <a href="core_PlayerBoardHoles.ts.html">core/PlayerBoardHoles.ts</a>, <a href="core_PlayerBoardHoles.ts.html#line181">line 181</a>
             </span>
         </p>
     
@@ -960,6 +1024,14 @@
     
     <div class='param-desc column is-7'>The destination hole.</div>
     
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+    </div>
     
 </div>
 
@@ -1033,6 +1105,11 @@
 
   <td class="type">
   
+      
+<span class="param-type">number</span>
+
+
+  
   </td>
 
   
@@ -1085,9 +1162,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_PlayerBoardHoles.ts.html" class="button">View Source</a>
+            <a href="core_PlayerBoardHoles.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_PlayerBoardHoles.ts.html">js/core/PlayerBoardHoles.ts</a>, <a href="js_core_PlayerBoardHoles.ts.html#line119">line 119</a>
+                <a href="core_PlayerBoardHoles.ts.html">core/PlayerBoardHoles.ts</a>, <a href="core_PlayerBoardHoles.ts.html#line120">line 120</a>
             </span>
         </p>
     
@@ -1176,6 +1253,11 @@
 
   <td class="type">
   
+      
+<span class="param-type">number</span>
+
+
+  
   </td>
 
   
@@ -1228,9 +1310,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_PlayerBoardHoles.ts.html" class="button">View Source</a>
+            <a href="core_PlayerBoardHoles.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_PlayerBoardHoles.ts.html">js/core/PlayerBoardHoles.ts</a>, <a href="js_core_PlayerBoardHoles.ts.html#line168">line 168</a>
+                <a href="core_PlayerBoardHoles.ts.html">core/PlayerBoardHoles.ts</a>, <a href="core_PlayerBoardHoles.ts.html#line169">line 169</a>
             </span>
         </p>
     

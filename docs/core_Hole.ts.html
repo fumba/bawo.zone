@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> core/Hole.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">bawo.zone</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>core/Hole.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
+ * &lt;a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone&lt;/a>
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import AppConstants from "./AppConstants";
+import Board from "./Board";
+import MoveDirection from "./MoveDirection";
+import Player from "./Player";
+import Utility from "../../helpers/Utility";
+
+import { isEmpty } from "lodash";
+
+class Hole {
+  // Number of seeds in hole
+  public numSeeds: number;
+  // The next hole
+  public nextHole: Hole;
+  // Previous hole
+  public prevHole: Hole;
+  // Hole ID (based on PlayerBoardHoles)
+  public readonly id: number;
+  // Unique hole ID (with player side)
+  public readonly UID: string;
+  // The player who is assigned this hole
+  public readonly player: Player;
+  // Whether the player is allowed to make moves on this hole.
+  public moveStatus: MoveDirection;
+  // the board on which the hole is placed
+  public readonly board: Board;
+
+  /**
+   * Constructor
+   *
+   * @param {Player} player   The player to whom this hole is being assigned to
+   * @param {Board} board The board on which the hole is placed
+   * @param {number} id      Unique hole ID (Ranging 0-16) -1 is used for the dummy
+   *                 pointer to the first hole.
+   * @param {number} numSeeds Number of seeds to be initially added to the hole.
+   * @param {Hole} prevHole The hole that is before this hole.
+   * @param {Hole} nextHole The hole that comes up next in clockwise fashion
+   */
+  constructor(
+    player: Player,
+    board: Board,
+    id: number,
+    numSeeds: number,
+    prevHole: Hole,
+    nextHole: Hole
+  ) {
+    this.player = player;
+    this.id = id;
+    if (!isEmpty(this.player)) {
+      this.UID = `[${Utility.padZero(this.id)}-${this.player.side}]`;
+    }
+    this.numSeeds = numSeeds;
+    this.nextHole = nextHole;
+    this.prevHole = prevHole;
+    this.board = board;
+
+    // initialize move status as unauthorized
+    this.moveStatus = MoveDirection.UnAuthorised;
+
+    if (this.isGraphicsMode() &amp;&amp; this.id != AppConstants.DUMMY_HOLE_ID) {
+      this.renderHoleAndSeeds();
+    }
+  }
+
+  /**
+   * Checks to see if graphics should be rendered
+   *
+   * @returns {boolean} if graphics need to be rendered
+   */
+  private isGraphicsMode(): boolean {
+    return !isEmpty(this.board) &amp;&amp; !isEmpty(this.board.me);
+  }
+
+  /**
+   * Check if this hole is in the front row (Front rows are allowed to capture
+   * seeds from enemy side).
+   *
+   * @returns {boolean} true is the hole is in the front row for the owning player.
+   */
+  public isInFrontRow(): boolean {
+    if (this.player.isOnTopSide()) {
+      return this.id >= 8;
+    } else {
+      return this.id &lt; 8;
+    }
+  }
+
+  /**
+   *  Checks to see if the hole contains any seeds
+   *
+   * @returns {boolean} true if seeds are present
+   */
+  public isEmpty(): boolean {
+    return this.numSeeds == 0;
+  }
+
+  public toString(): string {
+    return `[${Utility.padZero(this.id)}(${Utility.padZero(this.numSeeds)})-${
+      this.moveStatus
+    }]`;
+  }
+
+  /**
+   * Add seed tokens to the hole.
+   *
+   * @param  {number} numSeeds Number of seeds to be added to the hole.
+   * @returns {number} Total Number of seeds in the hole after adding the new seed tokens to
+   *         it.
+   */
+  public addSeeds(numSeeds: number): number {
+    this.validateNumSeeds(numSeeds);
+    if (this.numSeeds + numSeeds > AppConstants.MAX_SEED_COUNT) {
+      throw new Error(
+        `Overflow - The hole has ${this.numSeeds} seeds. | requested to add: ${numSeeds}`
+      );
+    }
+    return (this.numSeeds += numSeeds);
+  }
+
+  /**
+   * Removes all seeds from the hole clearing it to a count of 0.
+   *
+   * @returns {number} The number of seeds that were removed.
+   */
+  public removeAllSeeds(): number {
+    const numSeedsTemp = this.numSeeds;
+    this.numSeeds = 0;
+    return numSeedsTemp;
+  }
+
+  /**
+   *
+   * @param {number} numSeeds Number of seeds to add or remove
+   */
+  private validateNumSeeds(numSeeds: number): void {
+    if (numSeeds &lt; 0 || numSeeds > AppConstants.MAX_SEED_COUNT) {
+      throw new Error("Invalid number of seeds | requested: " + numSeeds);
+    }
+  }
+
+  /**
+   * Renders the hole and its contents (seeds)
+   */
+  private renderHoleAndSeeds(): void {
+    /*
+     *    TOP PLAYER sitting position (facing down)
+     *    00	01	02	03	04	05	06	07
+     *    15	14	13	12	11	10	09	08
+     *
+     *    00	01	02	03	04	05	06	07
+     *    15	14	13	12	11	10	09	08
+     *    BOTTOM PLAYER sitting position (facing up)
+     */
+    const xOffSet = 60;
+    const newRowOffset = this.id &lt;= 7 ? 0 : 100;
+    const holeX = (this.id % 8) * 90 + xOffSet;
+    const holeY = (this.player.isOnTopSide() ? 100 : 330) + newRowOffset;
+
+    // invisible draggable collection that contains seeds
+    const seedCollection = this.board.me.pool.pull(
+      AppConstants.SEED_GROUP_UI,
+      holeX,
+      holeY,
+      this.board,
+      this
+    );
+    this.board.me.game.world.addChild(seedCollection);
+
+    //render hole
+    const holeUI = this.board.me.pool.pull(
+      AppConstants.HOLE_UI,
+      holeX,
+      holeY,
+      this
+    );
+    this.board.me.game.world.addChild(holeUI);
+
+    for (let i = 0; i &lt; this.numSeeds; i++) {
+      const seedX = holeX + 10 * i;
+      const seedY = holeY + 10 * i;
+      // render seeds that belong to hole
+      const seedUI = this.board.me.pool.pull(
+        AppConstants.SEED_UI,
+        seedX,
+        seedY,
+        this
+      );
+      this.board.me.game.world.addChild(seedUI);
+    }
+  }
+}
+
+export default Hole;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>
