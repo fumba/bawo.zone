@@ -65,17 +65,22 @@ class AppConstants {
   /**
    * Seed UI
    */
-  public static readonly SEED_UI = "seed";
+  public static readonly SEED_UI = "seed-ui";
 
   /**
    * Hole UI
    */
-  public static readonly HOLE_UI = "hole";
+  public static readonly HOLE_UI = "hole-ui";
 
   /**
    * Seed Group UI
    */
-  public static readonly SEED_GROUP_UI = "seed-group";
+  public static readonly SEED_GROUP_UI = "seed-group-ui";
+
+  /**
+   * Player UI
+   */
+  public static readonly PLAYER_UI = "player-ui";
 }
 
 export default AppConstants;

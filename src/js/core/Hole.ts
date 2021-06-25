@@ -26,6 +26,8 @@ import Utility from "../../helpers/Utility";
 
 import { isEmpty } from "lodash";
 import HoleUI from "../entities/HoleUI";
+import SeedUI from "../entities/SeedUI";
+import SeedGroupUI from "../entities/SeedGroupUI";
 
 class Hole {
   // Number of seeds in hole
@@ -46,6 +48,8 @@ class Hole {
   public readonly board: Board;
   // Hole UI corresponding to this hole
   public ui: HoleUI;
+  // Seed Group UI corresponding to this hole
+  public seedGroupUI: SeedGroupUI;
 
   /**
    * Constructor
@@ -79,18 +83,13 @@ class Hole {
     // initialize move status as unauthorized
     this.moveStatus = MoveDirection.UnAuthorised;
 
-    if (this.isGraphicsMode() && this.id != AppConstants.DUMMY_HOLE_ID) {
+    if (
+      !isEmpty(this.board) &&
+      this.board.isGraphicsMode() &&
+      this.id != AppConstants.DUMMY_HOLE_ID
+    ) {
       this.renderHoleAndSeeds();
     }
-  }
-
-  /**
-   * Checks to see if graphics should be rendered
-   *
-   * @returns {boolean} if graphics need to be rendered
-   */
-  private isGraphicsMode(): boolean {
-    return !isEmpty(this.board) && !isEmpty(this.board.me);
   }
 
   /**
@@ -123,30 +122,25 @@ class Hole {
   }
 
   /**
-   * Add seed tokens to the hole.
+   * Moves all seeds from the hole into players hand - clearing it to a count of 0.
    *
-   * @param  {number} numSeeds Number of seeds to be added to the hole.
-   * @returns {number} Total Number of seeds in the hole after adding the new seed tokens to
-   *         it.
+   * @returns {number} The number of seeds that were moved from hole into players hand.
    */
-  public addSeeds(numSeeds: number): number {
-    this.validateNumSeeds(numSeeds);
-    if (this.numSeeds + numSeeds > AppConstants.MAX_SEED_COUNT) {
-      throw new Error(
-        `Overflow - The hole has ${this.numSeeds} seeds. | requested to add: ${numSeeds}`
-      );
-    }
-    return (this.numSeeds += numSeeds);
-  }
-
-  /**
-   * Removes all seeds from the hole clearing it to a count of 0.
-   *
-   * @returns {number} The number of seeds that were removed.
-   */
-  public removeAllSeeds(): number {
+  public moveSeedsIntoCurrentPlayerHand(): number {
     const numSeedsTemp = this.numSeeds;
     this.numSeeds = 0;
+
+    if (this.board.isGraphicsMode()) {
+      //remove all ui seeds from hole
+      this.seedGroupUI.getAllUISeeds().forEach((seedUI: SeedUI) => {
+        this.board.getCurrentPlayer().ui.addSeed(seedUI);
+        seedUI.group = null;
+        seedUI.id = null;
+      });
+    }
+    if (numSeedsTemp > 0) {
+      this.board.getCurrentPlayer().numSeedsInHand += numSeedsTemp;
+    }
     return numSeedsTemp;
   }
 
@@ -164,43 +158,21 @@ class Hole {
    * Renders the hole and its contents (seeds)
    */
   private renderHoleAndSeeds(): void {
-    /*
-     *    TOP PLAYER sitting position (facing down)
-     *    00	01	02	03	04	05	06	07
-     *    15	14	13	12	11	10	09	08
-     *
-     *    00	01	02	03	04	05	06	07
-     *    15	14	13	12	11	10	09	08
-     *    BOTTOM PLAYER sitting position (facing up)
-     */
-    const xOffSet = 60;
-    const newRowOffset = this.id <= 7 ? 0 : 100;
-    const holeX = (this.id % 8) * 90 + xOffSet;
-    const holeY = (this.player.isOnTopSide() ? 100 : 330) + newRowOffset;
-
     //render hole
-    const holeUI = this.board.me.pool.pull(
-      AppConstants.HOLE_UI,
-      holeX,
-      holeY,
-      this
-    );
+    const holeUI = this.board.me.pool.pull(AppConstants.HOLE_UI, this);
     this.board.me.game.world.addChild(holeUI);
     this.ui = holeUI;
 
     // invisible draggable collection that contains seeds
-    const seedGroup = this.board.me.pool.pull(
-      AppConstants.SEED_GROUP_UI,
-      this.board,
-      this
-    );
+    const seedGroup = this.board.me.pool.pull(AppConstants.SEED_GROUP_UI, this);
+    this.seedGroupUI = seedGroup;
     this.board.me.game.world.addChild(seedGroup);
 
     for (let i = 0; i < this.numSeeds; i++) {
       // render seeds that belong to hole
       const seedUI = this.board.me.pool.pull(
         AppConstants.SEED_UI,
-        seedGroup,
+        this.seedGroupUI,
         this.UID
       );
       this.board.me.game.world.addChild(seedUI);

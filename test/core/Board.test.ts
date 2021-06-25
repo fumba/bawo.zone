@@ -29,6 +29,8 @@ import TestHelper from "../TestHelper";
 
 TestHelper.disableLogging();
 
+const me = TestHelper.me;
+
 /**
  * This is a helper method to check if the move status is correct for the
  * specified player side.
@@ -48,8 +50,8 @@ const checkMoveStatuses = (moveStatus: Array<string>, player: Player) => {
  * This is a helper method to check if the seed configuration is correct for the
  * specified player side.
  *
- * @param playerSeeds
- * @param player
+ * @param {Array<number>} playerSeeds player seeds
+ * @param {Player} player player
  */
 const checkSeedConfiguration = (playerSeeds: Array<number>, player: Player) => {
   for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
@@ -258,6 +260,13 @@ describe("Board", () => {
     });
   });
 
+  describe("#switchPlayers", () => {
+    test("should not allow players to switch while someone has seeds in hands", () => {
+      board.bottomPlayer.numSeedsInHand = 5;
+      expect(() => board.switchPlayers()).toThrowError();
+    });
+  });
+
   describe("#isValidMove", () => {
     test("should have a starting hole specified", () => {
       expect(() => {
@@ -424,6 +433,140 @@ describe("Board", () => {
           bottomPlayerAntiClockwiseMoveValidity[id]
         );
       }
+    });
+  });
+
+  describe("#validateUIState", () => {
+    test("should make sure that there are always 64 seed UI entities on the canvas", () => {
+      me.game.world.getChildByType.mockReturnValue(["seed", "seed"]); //two seeds only on board
+      expect(() => new Board(me).validateUiState()).toThrowError(
+        "UI State has 2 seeds present. There should always be 64 seeds in play"
+      );
+    });
+  });
+
+  describe("#isGameOver", () => {
+    test("should be false when the game hasnt ended yet", () => {
+      expect(board.isGameOver()).toBe(false);
+    });
+
+    //game over true is indirectly tested in #executeMove - simulation and infinite move
+  });
+
+  describe("#getWinningPlayer", () => {
+    test("should throw error when invoked while the game hasnt ended yet", () => {
+      expect(() => board.getWinningPlayer()).toThrowError(
+        "The game is still in play. There is no winning player yet."
+      );
+    });
+
+    //determining winning player happy path is tested in #executeMove - simulation
+  });
+
+  describe("#getScore", () => {
+    test("should throw error when invoked while player has seeds in hand", () => {
+      const board = new Board();
+      board.topPlayer.numSeedsInHand = 3;
+      board.bottomPlayer.numSeedsInHand = 0;
+      expect(() => board.getScore()).toThrowError(
+        "Score cannot be determined while one of the players is holding seeds in hand."
+      );
+      board.topPlayer.numSeedsInHand = 0;
+      board.bottomPlayer.numSeedsInHand = 2;
+      expect(() => board.getScore()).toThrowError(
+        "Score cannot be determined while one of the players is holding seeds in hand."
+      );
+    });
+
+    test("should compute correct score when current player falls into infinite loop", () => {
+      const board = new Board();
+      const move = new Move(
+        board.topPlayer.boardHoles.getHoleWithID(1),
+        MoveDirection.Clockwise,
+        AppConstants.INFINITE_LOOP_THRESHOLD
+      );
+      board.executeMove(move);
+      const expectedScores = new Map<PlayerSide, number>();
+      expectedScores.set(PlayerSide.Bottom, 64);
+      expectedScores.set(PlayerSide.Top, 0);
+      expect(board.getScore()).toStrictEqual(expectedScores);
+    });
+
+    test("should compute correct score during normal gameplay", () => {
+      const board = new Board();
+      const expectedScores = new Map<PlayerSide, number>();
+      expectedScores.set(PlayerSide.Bottom, 32);
+      expectedScores.set(PlayerSide.Top, 32);
+      expect(board.getScore()).toStrictEqual(expectedScores);
+    });
+
+    test("should throw error if score total is not 64", () => {
+      const board = new Board();
+      board.topPlayer.boardHoles.getHoleWithID(12).numSeeds = 40; //add extra seeds to hole
+      expect(() => board.getScore()).toThrowError(
+        "Total score is not 64. Got : 102"
+      );
+    });
+  });
+
+  describe("#executeMove", () => {
+    test("should make sure that players only make moves on their own holes", () => {
+      const board = new Board();
+      const move = new Move(
+        board.bottomPlayer.boardHoles.getHoleWithID(1),
+        MoveDirection.Clockwise
+      );
+      expect(() => board.executeMove(move)).toThrowError(
+        "Player is unathorised to make move"
+      );
+    });
+
+    test("should detect when the game falls into a continous loop", () => {
+      const board = new Board();
+      const move = new Move(
+        board.topPlayer.boardHoles.getHoleWithID(1),
+        MoveDirection.Clockwise,
+        AppConstants.INFINITE_LOOP_THRESHOLD
+      );
+      board.executeMove(move);
+      expect(board.isGameOver()).toBe(true);
+      expect(board.topPlayer.numSeedsInHand).toBe(0);
+    });
+
+    test("should not allow invalid moves on the board", () => {
+      const board = new Board();
+      const move = new Move(
+        board.topPlayer.boardHoles.getHoleWithID(4),
+        MoveDirection.Clockwise
+      );
+      expect(board.executeMove(move)).toBe(false);
+    });
+
+    test("should only allow clockwise and anticlockwise moves", () => {
+      const board = new Board();
+      let move = new Move(
+        board.topPlayer.boardHoles.getHoleWithID(4),
+        MoveDirection.Both
+      );
+      expect(() => board.executeMove(move)).toThrowError(
+        "Only Clockwise and Anticlockwise moves are allowed. Input : B"
+      );
+
+      move = new Move(
+        board.topPlayer.boardHoles.getHoleWithID(4),
+        MoveDirection.Locked
+      );
+      expect(() => board.executeMove(move)).toThrowError(
+        "Only Clockwise and Anticlockwise moves are allowed. Input : L"
+      );
+
+      move = new Move(
+        board.topPlayer.boardHoles.getHoleWithID(4),
+        MoveDirection.UnAuthorised
+      );
+      expect(() => board.executeMove(move)).toThrowError(
+        "Only Clockwise and Anticlockwise moves are allowed. Input : X"
+      );
     });
   });
 

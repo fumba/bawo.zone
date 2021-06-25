@@ -8,6 +8,8 @@ import AppConstants from "./AppConstants";
 import Move from "./Move";
 import MoveDirection from "./MoveDirection";
 import Me from "../me";
+import { isEmpty } from "lodash";
+import SeedUI from "../entities/SeedUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -71,11 +73,11 @@ class Board {
    * @param {Rules} rules game rules - default is MtajiModeRules
    */
   constructor(me?: typeof Me, rules = new MtajiModeRules()) {
-    this.bottomPlayer = new Player(PlayerSide.Bottom);
-    this.topPlayer = new Player(PlayerSide.Top);
+    this.me = me;
+    this.bottomPlayer = new Player(PlayerSide.Bottom, this);
+    this.topPlayer = new Player(PlayerSide.Top, this);
     this.rules = rules;
     this.rules.validate();
-    this.me = me;
 
     // initialise player board holes
     [this.topPlayer, this.bottomPlayer].forEach((player) => {
@@ -94,6 +96,7 @@ class Board {
     //set current playersssP
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
+    this.validateUiState();
   }
 
   /**
@@ -114,7 +117,11 @@ class Board {
     );
   }
 
-  //TODO
+  /**
+   *  Retrieves the current player.
+   *
+   * @returns {Player} current player
+   */
   public getCurrentPlayer(): Player {
     return this.currentPlayer;
   }
@@ -299,8 +306,9 @@ class Board {
    */
   public executeMove(move: Move): boolean {
     console.info(`Recieved move : ${move.toString()}`);
+    this.validateUiState();
     if (move.hole.player != this.currentPlayer) {
-      throw new Error("Player is not allowed to make any moves in this board");
+      throw new Error("Player is unathorised to make move");
     }
     console.info("Board Status before executing move : \n" + this.toString());
     if (move.prevContinuedMovesCount > AppConstants.INFINITE_LOOP_THRESHOLD) {
@@ -308,32 +316,28 @@ class Board {
       // are now regarded to be in infinite move status. The game will end and the player who got themselves into an infinite loop will loose.
 
       // place all the seeds back into the start hole for the move.
-      const numSeeds = this.currentPlayer.removeSeeds(
-        this.currentPlayer.numSeedsInHand
+      this.currentPlayer.moveSeedsIntoBoardHole(
+        this.currentPlayer.numSeedsInHand,
+        move.hole
       );
-      move.hole.addSeeds(numSeeds);
 
       this.isInContinousLoopStatus = true;
       // TODO update GUI state
       return true;
     }
     if (!this.isValidMove(move)) {
-      console.info("Requested move is not valid...");
+      console.info("Requested move is not valid.");
       return false;
     }
-    // Only the current player is allowed to execute a move
-    if (this.currentPlayer != move.hole.player) {
-      throw new Error(
-        `Only the current player can execute this move on hole : ${move.hole.toString()}`
-      );
-    }
+
     const numSeedsToSowPerStep = 1;
     let currentHole: Hole = move.hole; //starting hole
     let destinationHole: Hole;
     // Continuing moves already have seeds in the player hands
     // Initial moves need to get the seeds from the hole into the players hand
     if (!move.isContinuing()) {
-      this.currentPlayer.addSeeds(currentHole.removeAllSeeds());
+      currentHole.moveSeedsIntoCurrentPlayerHand();
+      //TODO-GUI: add seeds to animated hand
     }
 
     console.info(
@@ -358,8 +362,10 @@ class Board {
       }
       // Place 1 seed in the destination hole and move on to the next
       // hole.
-      const numSeeds = this.currentPlayer.removeSeeds(numSeedsToSowPerStep);
-      destinationHole.addSeeds(numSeeds);
+      this.currentPlayer.moveSeedsIntoBoardHole(
+        numSeedsToSowPerStep,
+        destinationHole
+      ); //TODO-GUI: remove seed from hand
       currentHole = destinationHole;
 
       //TODO update GUI state
@@ -388,7 +394,7 @@ class Board {
         return this.executeMove(continuingMove);
       } else {
         // Take all seeds in hole and continue with current player without capturing any seeds
-        this.currentPlayer.addSeeds(currentHole.removeAllSeeds());
+        currentHole.moveSeedsIntoCurrentPlayerHand();
         continuingMove = new Move(
           currentHole,
           move.direction,
@@ -411,7 +417,34 @@ class Board {
     console.info("Board Status After Move : \n" + this.toString());
     console.info("Move is Completed!");
     //TODO Update GUI state
+
+    this.validateUiState();
     return true;
+  }
+
+  /**
+   * Validates the state of UI entities:
+   *
+   * 1. There should always be 64 seeds in play (before move and after move)
+   */
+  public validateUiState(): void {
+    if (this.isGraphicsMode()) {
+      const seedCount = this.me.game.world.getChildByType(SeedUI).length;
+      if (seedCount != AppConstants.MAX_SEED_COUNT) {
+        throw new Error(
+          `UI State has ${seedCount} seeds present. There should always be 64 seeds in play`
+        );
+      }
+    }
+  }
+
+  /**
+   * Checks to see if graphics should be rendered
+   *
+   * @returns {boolean} if graphics need to be rendered
+   */
+  public isGraphicsMode(): boolean {
+    return !isEmpty(this.me);
   }
 
   /**
@@ -434,6 +467,7 @@ class Board {
       case MoveDirection.Clockwise:
         return hole.player.boardHoles.stepClockwise(hole, numberOfSteps);
       default:
+        /* istanbul ignore next */
         throw new Error(
           `Only Clockwise and Anticlockwise moves are allowed. Recieved : ${direction}`
         );
@@ -449,12 +483,11 @@ class Board {
   private captureAllSeedsFromEnemy(startHole: Hole): boolean {
     if (startHole.isInFrontRow()) {
       const opponentHole = this.getOppossingEnemyHole(startHole);
-      const stolenSeedCount = opponentHole.removeAllSeeds();
+      const stolenSeedCount = opponentHole.moveSeedsIntoCurrentPlayerHand();
       if (stolenSeedCount > 0) {
         console.info(
           `******* HOLE (${startHole.id}) CAPTURED ${stolenSeedCount} SEEDS FROM (${opponentHole.id}) ********`
         );
-        this.currentPlayer.addSeeds(stolenSeedCount);
         this.currentPlayer.capturedOnPrevMove = true;
         return true;
       }
@@ -484,6 +517,7 @@ class Board {
     return buffer.replace(/\n$/, ""); //remove newline at the end
   }
 
+  /* istanbul ignore next */
   public runSimulation(randomise: boolean): void {
     const moves: Array<Move> = this.getAllAvailableValidMoves(
       this.currentPlayer
@@ -522,15 +556,8 @@ class Board {
       return true;
     }
     for (const hole of this.currentPlayer.boardHoles) {
-      if (hole.moveStatus == MoveDirection.UnAuthorised) {
-        throw new Error(
-          this.currentPlayer.toString() +
-            " has hole(s) with unathorized status: \n" +
-            this.currentPlayer.boardHoles.toString()
-        );
-      }
       if (hole.moveStatus != MoveDirection.Locked) {
-        // found a valid move... game is not over yet!
+        // found a non-locked hole which means that the game is not over yet!
         return false;
       }
     }
@@ -597,7 +624,9 @@ class Board {
       );
     }
     if (topPlayerScore + btmPlayerScore != AppConstants.MAX_SEED_COUNT) {
-      throw new Error("Total score is not 64.");
+      throw new Error(
+        `Total score is not 64. Got : ${topPlayerScore + btmPlayerScore}`
+      );
     }
     return scoreMap;
   }

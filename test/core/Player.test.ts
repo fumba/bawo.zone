@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+import Board from "../../src/js/core/Board";
 import Player from "../../src/js/core/Player";
 import PlayerSide from "../../src/js/core/PlayerSide";
 
@@ -38,64 +39,34 @@ describe("Player", () => {
     expect(new Player(PlayerSide.Bottom).capturedOnPrevMove).toBe(false);
   });
 
-  describe("add seeds to hand", () => {
-    let player: Player;
-    beforeEach(() => {
-      player = new Player(PlayerSide.Top);
-    });
-    test("should add correct number of seeds", () => {
-      player.addSeeds(1);
-      expect(player.numSeedsInHand).toBe(1);
-      player.addSeeds(10);
-      expect(player.numSeedsInHand).toBe(11);
-    });
-
-    test("should not allow more than 64 seeds to be added", () => {
-      expect(() => player.addSeeds(65)).toThrow(
-        "Total number of seeds after operation is greater than 64 | input: 65"
-      );
-    });
-
-    test("should not allow player to add zero seeds", () => {
-      expect(() => player.addSeeds(0)).toThrow(
-        "Attempted to add or remove no seeds"
-      );
-    });
-
-    test("should not allow player to add negative number of seeds", () => {
-      expect(() => player.addSeeds(-1)).toThrow(
-        "Attempted to add or remove negative number seeds | input : -1"
-      );
-    });
-  });
-
   describe("remove seeds from hand", () => {
     let player: Player;
+    const hole = new Board().topPlayer.boardHoles.getHoleWithID(1);
     beforeEach(() => {
       player = new Player(PlayerSide.Top);
     });
     test("should remove correct number of seeds", () => {
-      player.addSeeds(10);
-      player.removeSeeds(2);
+      player.numSeedsInHand = 10;
+      player.moveSeedsIntoBoardHole(2, hole);
       expect(player.numSeedsInHand).toBe(8);
-      player.removeSeeds(1);
+      player.moveSeedsIntoBoardHole(1, hole);
       expect(player.numSeedsInHand).toBe(7);
     });
 
     test("should not allow seeds to be removed from an empty hand", () => {
-      expect(() => player.removeSeeds(1)).toThrow(
+      expect(() => player.moveSeedsIntoBoardHole(1, hole)).toThrow(
         "Total number of seeds after operation is negative | input: -1"
       );
     });
 
     test("should not allow zero seeds to be removed", () => {
-      expect(() => player.removeSeeds(0)).toThrow(
+      expect(() => player.moveSeedsIntoBoardHole(0, hole)).toThrow(
         "Attempted to add or remove no seeds"
       );
     });
 
     test("should not allow player to remove negative number of seeds", () => {
-      expect(() => player.addSeeds(-1)).toThrow(
+      expect(() => player.moveSeedsIntoBoardHole(-1, hole)).toThrow(
         "Attempted to add or remove negative number seeds | input : -1"
       );
     });
