@@ -32,3 +32,19 @@ describe("#padZero", () => {
     expect(Utility.padZero(15)).toBe("15");
   });
 });
+
+describe("#randomPointWithinCircle", () => {
+  test("should generate random points within a circle of given radius", () => {
+    // generate 50 random points and make sure that each is within the bounds.
+    // in this case, x and y points should range within radius and -radius
+    for (let radius = 1; radius < 50; radius++) {
+      const points = Utility.randomPointWithinCircle(radius, 0, 0);
+      //check x coordinate
+      expect(points[0]).toBeLessThan(radius);
+      expect(points[0]).toBeGreaterThan(-radius);
+      //check y coordinate
+      expect(points[1]).toBeLessThan(radius);
+      expect(points[1]).toBeGreaterThan(-radius);
+    }
+  });
+});
