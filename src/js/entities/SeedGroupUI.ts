@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import AppConstants from "../core/AppConstants";
 import Board from "../core/Board";
 import Hole from "../core/Hole";
 import me from "../me";
-import HoleUI from "./HoleUI";
 import SeedUI from "./SeedUI";
+import Vector from "../core/Vector";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -42,20 +40,44 @@ class SeedGroupUI extends me.DraggableEntity {
   private board: Board;
 
   /**
-   *
-   * @param {number} x  x coordinates of the hole object
-   * @param {number} y  y coordinates of the hole objec
+   * initial position for the seed group before it was dragged
+   */
+  private readonly originalPos: Vector;
+
+  /**
+   * seed group entity radius
+   */
+  public readonly radius: number;
+
+  /**
+   * initial center x-coordinate
+   */
+  public readonly originalCenter: Vector;
+
+  /**
    * @param {Board} board the board on which the hole for this seed collection belongs to
    * @param {Hole} hole the hole in which the seeds are being placed
    */
-  constructor(x: number, y: number, board: Board, hole: Hole) {
+  constructor(board: Board, hole: Hole) {
     const settings = {
       image: me.loader.getImage(AppConstants.SEED_GROUP_UI),
       height: 50,
       width: 50,
       id: `${AppConstants.SEED_GROUP_UI}-${hole.UID}`,
     };
-    super(x, y, settings);
+
+    //Readjust x and y coordinates since they are based hole values which contains the smaller seedgroup entity
+    const holeUI = hole.ui;
+    const x_i = holeUI.pos.x + (holeUI.width - settings.width) / 2;
+    const y_i = holeUI.pos.y + (holeUI.height - settings.height) / 2;
+
+    super(x_i, y_i, settings);
+    this.originalPos = new Vector(x_i, y_i);
+    this.originalCenter = new Vector(
+      x_i + settings.width / 2,
+      y_i + settings.height / 2
+    );
+    this.radius = settings.height / 2;
     this.hole = hole;
     this.board = board;
     this.renderable.alpha = 0; //make container invisible
@@ -68,6 +90,7 @@ class SeedGroupUI extends me.DraggableEntity {
     this.removePointerEvent("pointerup", this);
 
     // Define the new events that return false (don't fall through).
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.mouseDown = (e: any) => {
       // Do not allow player to make moves on hole that does not belong to them
       if (!this.isHoleOwner()) {
@@ -76,6 +99,7 @@ class SeedGroupUI extends me.DraggableEntity {
       this.translatePointerEvent(e, me.event.DRAGSTART);
       return false;
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.mouseUp = (e: any) => {
       // Do not allow player to make moves on hole that does not belong to them
       if (!this.isHoleOwner()) {
@@ -84,9 +108,8 @@ class SeedGroupUI extends me.DraggableEntity {
       this.translatePointerEvent(e, me.event.DRAGEND);
 
       //move back draggable seed group container to its initial position
-      const holePos = this.getUIHole().pos;
-      this.pos.x = holePos.x;
-      this.pos.y = holePos.y;
+      this.pos.x = this.originalPos.x;
+      this.pos.y = this.originalPos.y;
       this.renderable.alpha = 0;
       return false;
     };
@@ -110,18 +133,20 @@ class SeedGroupUI extends me.DraggableEntity {
     this.onPointerEvent("pointerleave", this, this.pointerLeave.bind(this));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
   dragStart(event: any): void {
     super.dragStart(event);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
   dragEnd(event: any): void {
     super.dragEnd(event);
-    this.getAllUISeeds().forEach((element: SeedUI, index: number) => {
-      element.pos.x += 10 * index; //TODO from Hole render method
-      element.pos.y += 10 * index; //TODO from Hole render method
+    this.getAllUISeeds().forEach((element: SeedUI) => {
+      element.randomisePosition();
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
   dragMove(event: any): void {
     if (this.dragging == true) {
       this.getAllUISeeds().forEach((element: SeedUI) => {
@@ -137,11 +162,10 @@ class SeedGroupUI extends me.DraggableEntity {
   }
 
   private getAllUISeeds(): Array<SeedUI> {
-    return me.game.world.getChildByProp("id", SeedUI.seedGroupId(this.hole));
-  }
-
-  private getUIHole(): HoleUI {
-    return me.game.world.getChildByProp("id", HoleUI.holeId(this.hole))[0];
+    return me.game.world.getChildByProp(
+      "id",
+      SeedUI.seedGroupId(this.hole.UID)
+    );
   }
 }
 

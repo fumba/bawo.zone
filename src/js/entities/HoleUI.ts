@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import AppConstants from "../core/AppConstants";
 import Hole from "../core/Hole";
 import me from "../me";
@@ -52,7 +50,7 @@ class HoleUI extends me.DroptargetEntity {
     console.info(`${draggableEntity.id} dropped into ${this.id}`);
   }
 
-  public static holeId(hole: Hole) {
+  public static holeId(hole: Hole): string {
     return `${AppConstants.HOLE_UI}-${hole.UID}`;
   }
 }

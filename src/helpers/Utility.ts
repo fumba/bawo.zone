@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+import Vector from "../js/core/Vector";
+
 class Utility {
   public static padZero(num: number): string {
     const str = num.toString();
@@ -31,18 +33,18 @@ class Utility {
    * @param {number} radius the radius of the circle
    * @param {number} xCenter center x coordinate value
    * @param {number} yCenter center y coordinate value
-   * @returns {Array<number>} randomly generated [x,y] coordinates
+   * @returns {Vector} randomly generated (x,y) coordinates
    */
   public static randomPointWithinCircle(
     radius: number,
     xCenter: number,
     yCenter: number
-  ): Array<number> {
+  ): Vector {
     const angle = Math.random() * 2 * Math.PI;
     const hypotenuse = Math.sqrt(Math.random()) * radius;
     const adjacent = Math.cos(angle) * hypotenuse;
     const opposite = Math.sin(angle) * hypotenuse;
-    return [xCenter + adjacent, yCenter + opposite];
+    return new Vector(xCenter + adjacent, yCenter + opposite);
   }
 }
 export default Utility;
