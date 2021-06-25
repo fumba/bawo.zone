@@ -26,7 +26,7 @@
     "dev": "webpack serve --config=build/webpack.dev.config.js --mode=development",
     "postinstall": "electron-builder install-app-deps",
     "test": "jest --verbose --coverage",
-    "start": "node build/start.ts",
+    "start": "node build/start.js",
     "release": "yarn test -u && webpack --config=build/webpack.app.config.js --env=production && electron-builder",
     "lint": "eslint src/**/*.ts --max-warnings=0; stylelint src/**/*.css",
     "simulate": "RANDOM_MOVES=false yarn ts-node src/js/Simulation.ts",
