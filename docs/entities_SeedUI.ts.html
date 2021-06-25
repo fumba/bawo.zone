@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Global</title>
+  <title> entities/SeedUI.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,237 +79,71 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Title</p>
-                    <h1>Global</h1>
+                    <p>Source</p>
+                    <h1>entities/SeedUI.ts</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
-    
-        <h2></h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class='vertical-section'>
-            <h1>Members</h1>
-            <div class="members">
-            
-                <div class="member">
-
-<h4 class="name" id="MoveDirection">
-    <a class="href-link" href="#MoveDirection">#</a>
-    
-    <span class="code-name">
-        MoveDirection
-    </span>
-    
-</h4>
-
-
-
-
-<div class="description">
-    Move direction: Only clockwise and anti-clockwise moves are allowed when theplayer is executing a move.Each hole has a move status during gameplay. If both Clockwise andanti-clockwise moves can be performed, the status is marked as Both. Holeswith no valid moves are marked as locked. Holes that do not belong to thecurrent player are marked as Unauthorized.<p>The direction in which a move can be made.</p><p>Note: When executing moves, only MoveDirection#Clockwise andMoveDirection#AntiClockwise are valid values. Each Hole has a movestatus during gameplay, if both Clockwise and anti-clockwise moves can beperformed, the status is marked as MoveDirection#Both. Holes with novalid moves are marked as MoveDirection#Locked. Holes that do notbelong to the current player are marked asMoveDirection#Unathorised.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_MoveDirection.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_MoveDirection.ts.html">core/MoveDirection.ts</a>, <a href="core_MoveDirection.ts.html#line48">line 48</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-<h4 class="name" id="PlayerSide">
-    <a class="href-link" href="#PlayerSide">#</a>
-    
-    <span class="code-name">
-        PlayerSide
-    </span>
-    
-</h4>
-
-
-
-
-<div class="description">
-    <p><a href="global.html#PlayerSide">PlayerSide</a> represent the sides that a player can be on the board</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_PlayerSide.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_PlayerSide.ts.html">core/PlayerSide.ts</a>, <a href="core_PlayerSide.ts.html#line25">line 25</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-</div>
-            
-            </div>
-        </div>
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import AppConstants from "../core/AppConstants";
+import Hole from "../core/Hole";
+import me from "../me";
+
+/*
+ * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
+ * &lt;a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone&lt;/a>
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Bawo board seed
+ */
+class SeedUI extends me.Entity {
+  /**
+   *
+   * @param {number} x  x coordinates of the seed object
+   * @param {number} y  y coordinates of the seed object
+   * @param {Hole} hole the hole in which this seed currently belongs
+   */
+  constructor(x: number, y: number, hole: Hole) {
+    const settings = {
+      image: me.loader.getImage(AppConstants.SEED_UI),
+      height: 25,
+      width: 25,
+      id: SeedUI.seedGroupId(hole),
+    };
+    super(x, y, settings);
+  }
+
+  public static seedGroupId(hole: Hole) {
+    return `${AppConstants.SEED_UI}-${hole.UID}`;
+  }
+}
+
+export default SeedUI;
+</code></pre>
+        </article>
+    </section>
 
 
 

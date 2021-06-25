@@ -70,7 +70,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -89,7 +89,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Move<span class="signature">(prevContinuedMovesCount, hole, board, direction)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Move<span class="signature">(hole, direction, prevContinuedMovesCount)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -113,13 +113,17 @@
         
         <span class="code-name">
             
-                new Move<span class="signature">(prevContinuedMovesCount, hole, board, direction)</span><span class="type-signature"></span>
+                new Move<span class="signature">(hole, direction, prevContinuedMovesCount)</span><span class="type-signature"></span>
             
         </span>
     </h4>
     
 
     
+    
+    <div class="description">
+        constrtuctor
+    </div>
     
 
 
@@ -158,36 +162,15 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>prevContinuedMovesCount</code></td>
-  
-
-  <td class="type">
-  
-  </td>
-
-  
-
-  
-      <td class="default">
-      
-          0
-      
-      </td>
-  
-
-  <td class="description last">the number of subsequent (continued) moves executed before current move</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
       <td class="name"><code>hole</code></td>
   
 
   <td class="type">
+  
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
   
   </td>
 
@@ -208,34 +191,15 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>board</code></td>
-  
-
-  <td class="type">
-  
-  </td>
-
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">the board on which the move is being performed</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
       <td class="name"><code>direction</code></td>
   
 
   <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#MoveDirection">MoveDirection</a></span>
+
+
   
   </td>
 
@@ -248,6 +212,37 @@
   
 
   <td class="description last">move direction</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>prevContinuedMovesCount</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+      <td class="default">
+      
+          0
+      
+      </td>
+  
+
+  <td class="description last">the number of subsequent (continued) moves executed before current move</td>
 </tr>
 
 
@@ -293,9 +288,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_Move.ts.html" class="button">View Source</a>
+            <a href="core_Move.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_Move.ts.html">js/core/Move.ts</a>, <a href="js_core_Move.ts.html#line30">line 30</a>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line30">line 30</a>
             </span>
         </p>
     
@@ -357,7 +352,7 @@
         
         <span class="code-name">
             
-                getDestinationHole<span class="signature">(move)</span><span class="type-signature"></span>
+                getDestinationHole<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Hole.html">Hole</a>}</span>
             
         </span>
     </h4>
@@ -377,52 +372,6 @@
 
 
 
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>move</code></td>
-  
-
-  <td class="type">
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Move to be performed</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
 
 
 
@@ -461,9 +410,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_Move.ts.html" class="button">View Source</a>
+            <a href="core_Move.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_Move.ts.html">js/core/Move.ts</a>, <a href="js_core_Move.ts.html#line123">line 123</a>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line92">line 92</a>
             </span>
         </p>
     
@@ -497,6 +446,14 @@
     <div class='param-desc column is-7'>Hole on which the move ends</div>
     
     
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+    </div>
+    
 </div>
 
                 
@@ -517,7 +474,7 @@
         
         <span class="code-name">
             
-                isContinuing<span class="signature">()</span><span class="type-signature"></span>
+                isContinuing<span class="signature">()</span><span class="type-signature"> &rarr; {true}</span>
             
         </span>
     </h4>
@@ -575,9 +532,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_Move.ts.html" class="button">View Source</a>
+            <a href="core_Move.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_Move.ts.html">js/core/Move.ts</a>, <a href="js_core_Move.ts.html#line47">line 47</a>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line46">line 46</a>
             </span>
         </p>
     
@@ -608,8 +565,16 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'>{@code true} if the move is continuing.</div>
+    <div class='param-desc column is-7'>if the move is continuing.</div>
     
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">true</span>
+
+
+    </div>
     
 </div>
 
@@ -689,9 +654,9 @@
 
     
         <p class="tag-source">
-            <a href="js_core_Move.ts.html" class="button">View Source</a>
+            <a href="core_Move.ts.html" class="button">View Source</a>
             <span>
-                <a href="js_core_Move.ts.html">js/core/Move.ts</a>, <a href="js_core_Move.ts.html#line97">line 97</a>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line66">line 66</a>
             </span>
         </p>
     

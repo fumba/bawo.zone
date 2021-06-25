@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> core/MtajiModeRules.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">bawo.zone</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>core/MtajiModeRules.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
+ * &lt;a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone&lt;/a>
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import Rules from "./Rules";
+import PlayerSide from "./PlayerSide";
+import AppConstants from "./AppConstants";
+import Move from "./Move";
+import MoveDirection from "./MoveDirection";
+import Hole from "./Hole";
+
+class MtajiModeRules extends Rules {
+  constructor() {
+    super();
+  }
+
+  /**
+   * Mtaji mode does not use home-hole
+   *
+   * @returns {false} false - home is not used in mtaji mode
+   */
+  public hasHomeHole(): boolean {
+    return false;
+  }
+
+  /**
+   *
+   * Specify seed placement using an array with indices 0-15 representing player
+   * hold IDs.
+   * In this version of the game, 2 seeds are placed in each hole.
+   *
+   * @returns {Map} mtaji initial seed arrangement - 2 seeds in each hole
+   */
+  public initialSeedForPlayerRows(): Map&lt;PlayerSide, Array&lt;number>> {
+    const boardSeedInitialArrangement: Array&lt;number> = new Array(
+      AppConstants.NUM_PLAYER_HOLES
+    );
+    for (let index = 0; index &lt; AppConstants.NUM_PLAYER_HOLES; index++) {
+      boardSeedInitialArrangement[index] = 2;
+    }
+    const map: Map&lt;PlayerSide, Array&lt;number>> = new Map();
+    map.set(PlayerSide.Top, boardSeedInitialArrangement);
+    map.set(PlayerSide.Bottom, boardSeedInitialArrangement);
+    return map;
+  }
+
+  /**
+   * Check if the player is attempting to make a valid move.
+   *
+   * @param {Move} move the move to be checked for validity
+   * @returns {boolean} true if the move is valid
+   */
+  public isValidMove(move: Move): boolean {
+    // Rule 1: Continuing moves since they are determined by game rules
+    if (move.isContinuing()) {
+      return true;
+    }
+
+    // Rule 2: Check if this move results in a capture
+    if (this.isValidCapture(move)) {
+      return true;
+    }
+
+    // Rules 3 and 4 only apply if the move plants seed token in any front row holes
+
+    // Rule 3: If there are no capture moves, any front row holes with
+    // seed tokens are valid moves.
+    // Rule 4: If there are no valid front row non-capture moves, use the back row holes.
+    if (this.isValidNonCapture(move, true)) {
+      return true;
+    }
+    if (this.isValidNonCapture(move, false)) {
+      return true;
+    }
+    return false;
+  }
+
+  public nextContinuingMoveAfterCapture(move: Move): Move {
+    // Force Switch direction if steal is made on last 2 holes on the row
+    // Maintain move direction for other steals
+    if (move.hole.player.isOnTopSide()) {
+      return this.updateMoveDirectionAndHole(move, [14, 15], [8, 9], 8, 15);
+    } else {
+      return this.updateMoveDirectionAndHole(move, [6, 7], [0, 1], 0, 7);
+    }
+  }
+
+  //TODO move these to rules class
+  public isValidCapture(move: Move): boolean {
+    //  capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
+    //  capture rule 2: move should end on the front row of the players board side
+    //  capture rule 3: Seed(s) must be present in the first row destination hole
+    //  capture rule 4: Seed(s) must be present in the opponents opposing hole
+    if (
+      move.hole.numSeeds > 1 &amp;&amp;
+      move.getDestinationHole().isInFrontRow() &amp;&amp;
+      !move.getDestinationHole().isEmpty() &amp;&amp;
+      !move.hole.board.adjacentOpponentHole(move.getDestinationHole()).isEmpty()
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  //TODO move these to rules class
+  public isValidNonCapture(move: Move, frontRow: boolean): boolean {
+    if (frontRow &amp;&amp; !move.hole.isInFrontRow()) {
+      return false;
+    }
+    // moves cannot be made on holes with only
+    if (move.hole.numSeeds > 1 &amp;&amp; move.sowsSeedInFrontHole()) {
+      for (const hole of move.hole.player.boardHoles) {
+        for (const direction of move.possibleDirections) {
+          const testMove: Move = new Move(hole, direction);
+          //  non-capture rule: A non-capture move can only be made if there are no existing capture moves
+          if (
+            (move.hole != hole &amp;&amp; this.isValidCapture(testMove)) ||
+            (!frontRow &amp;&amp; this.isValidNonCapture(testMove, true))
+          ) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  private updateMoveDirectionAndHole(
+    capturingMove: Move,
+    clockwiseReverseHoleIDs: Array&lt;number>,
+    anticlockwiseReverseHoleIDs: Array&lt;number>,
+    clockwiseResetHoleId: number,
+    clockwiseReversedResetHoleId: number
+  ): Move {
+    const prevContinuedMovesCount: number =
+      capturingMove.prevContinuedMovesCount + 1;
+    let direction = capturingMove.direction;
+    let hole: Hole;
+
+    const playerHoles = capturingMove.hole.player.boardHoles;
+    if (direction == MoveDirection.Clockwise) {
+      if (clockwiseReverseHoleIDs.includes(capturingMove.hole.id)) {
+        // reverse directions and start on opposite side
+        direction = MoveDirection.AntiClockwise;
+        hole = playerHoles.getHoleWithID(clockwiseReversedResetHoleId);
+      } else {
+        hole = playerHoles.getHoleWithID(clockwiseResetHoleId);
+      }
+    } else {
+      if (anticlockwiseReverseHoleIDs.includes(capturingMove.hole.id)) {
+        // reverse directions and start on opposite side
+        direction = MoveDirection.Clockwise;
+        hole = playerHoles.getHoleWithID(clockwiseResetHoleId);
+      } else {
+        hole = playerHoles.getHoleWithID(clockwiseReversedResetHoleId);
+      }
+    }
+    return new Move(hole, direction, prevContinuedMovesCount);
+  }
+}
+
+export default MtajiModeRules;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

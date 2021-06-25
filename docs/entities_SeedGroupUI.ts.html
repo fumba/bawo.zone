@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> entities/SeedGroupUI.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">bawo.zone</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>entities/SeedGroupUI.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import AppConstants from "../core/AppConstants";
+import Board from "../core/Board";
+import Hole from "../core/Hole";
+import me from "../me";
+import HoleUI from "./HoleUI";
+import SeedUI from "./SeedUI";
+
+/*
+ * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
+ * &lt;a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone&lt;/a>
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Bawo board seed
+ */
+class SeedGroupUI extends me.DraggableEntity {
+  /**
+   * The Hole in which seeds will be placed
+   */
+  private readonly hole: Hole;
+
+  /**
+   * the board on which the hole for this seed collection belongs to
+   */
+  private board: Board;
+
+  /**
+   *
+   * @param {number} x  x coordinates of the hole object
+   * @param {number} y  y coordinates of the hole objec
+   * @param {Board} board the board on which the hole for this seed collection belongs to
+   * @param {Hole} hole the hole in which the seeds are being placed
+   */
+  constructor(x: number, y: number, board: Board, hole: Hole) {
+    const settings = {
+      image: me.loader.getImage(AppConstants.SEED_GROUP_UI),
+      height: 50,
+      width: 50,
+      id: `${AppConstants.SEED_GROUP_UI}-${hole.UID}`,
+    };
+    super(x, y, settings);
+    this.hole = hole;
+    this.board = board;
+    this.renderable.alpha = 0; //make container invisible
+  }
+
+  initEvents(): void {
+    super.initEvents();
+    // Remove the old pointerdown and pointerup events.
+    this.removePointerEvent("pointerdown", this);
+    this.removePointerEvent("pointerup", this);
+
+    // Define the new events that return false (don't fall through).
+    this.mouseDown = (e: any) => {
+      // Do not allow player to make moves on hole that does not belong to them
+      if (!this.isHoleOwner()) {
+        return false;
+      }
+      this.translatePointerEvent(e, me.event.DRAGSTART);
+      return false;
+    };
+    this.mouseUp = (e: any) => {
+      // Do not allow player to make moves on hole that does not belong to them
+      if (!this.isHoleOwner()) {
+        return false;
+      }
+      this.translatePointerEvent(e, me.event.DRAGEND);
+
+      //move back draggable seed group container to its initial position
+      const holePos = this.getUIHole().pos;
+      this.pos.x = holePos.x;
+      this.pos.y = holePos.y;
+      this.renderable.alpha = 0;
+      return false;
+    };
+
+    this.pointerEnter = () => {
+      if (this.isHoleOwner()) {
+        this.renderable.alpha = 1;
+      }
+    };
+
+    this.pointerLeave = () => {
+      if (this.isHoleOwner()) {
+        this.renderable.alpha = 0;
+      }
+    };
+
+    // Add the new pointerdown and pointerup events.
+    this.onPointerEvent("pointerdown", this, this.mouseDown.bind(this));
+    this.onPointerEvent("pointerup", this, this.mouseUp.bind(this));
+    this.onPointerEvent("pointerenter", this, this.pointerEnter.bind(this));
+    this.onPointerEvent("pointerleave", this, this.pointerLeave.bind(this));
+  }
+
+  dragStart(event: any): void {
+    super.dragStart(event);
+  }
+
+  dragEnd(event: any): void {
+    super.dragEnd(event);
+    this.getAllUISeeds().forEach((element: SeedUI, index: number) => {
+      element.pos.x += 10 * index; //TODO from Hole render method
+      element.pos.y += 10 * index; //TODO from Hole render method
+    });
+  }
+
+  dragMove(event: any): void {
+    if (this.dragging == true) {
+      this.getAllUISeeds().forEach((element: SeedUI) => {
+        element.pos.x = this.pos.x;
+        element.pos.y = this.pos.y;
+      });
+    }
+    super.dragMove(event);
+  }
+
+  private isHoleOwner(): boolean {
+    return this.board.getCurrentPlayer() == this.hole.player;
+  }
+
+  private getAllUISeeds(): Array&lt;SeedUI> {
+    return me.game.world.getChildByProp("id", SeedUI.seedGroupId(this.hole));
+  }
+
+  private getUIHole(): HoleUI {
+    return me.game.world.getChildByProp("id", HoleUI.holeId(this.hole))[0];
+  }
+}
+
+export default SeedGroupUI;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>
