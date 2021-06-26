@@ -20,6 +20,7 @@
 
 import AppConstants from "../src/js/core/AppConstants";
 
+/* istanbul ignore next */
 class TestHelper {
   public static disableLogging(): void {
     //disable console log when running tests
@@ -49,7 +50,7 @@ class TestHelper {
 
   public static mockPlayerUI = {
     removeSeed: jest.fn().mockReturnValue(TestHelper.mockSeedUI),
-    addSeed: jest.fn().mockReturnThis()
+    addSeed: jest.fn().mockReturnThis(),
   };
 
   public static mockSeedGroupUI = {
