@@ -18,12 +18,20 @@
  * limitations under the License.
  */
 
+import Board from "../../src/js/core/Board";
 import Hole from "../../src/js/core/Hole";
 import MoveDirection from "../../src/js/core/MoveDirection";
 import Player from "../../src/js/core/Player";
 import PlayerSide from "../../src/js/core/PlayerSide";
+import TestHelper from "../TestHelper";
+
+const me = TestHelper.me;
 
 describe("Hole", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   const player = new Player(PlayerSide.Bottom);
   // hole 3, hole 4, hole 5
   const hole_03: Hole = new Hole(null, null, 3, 0, null, null);
@@ -71,6 +79,16 @@ describe("Hole", () => {
         hole = new Hole(bottomPlayer, null, hole_id, 0, null, null);
         expect(hole.isInFrontRow()).toBe(false);
       }
+    });
+  });
+
+  describe("#moveSeedsIntoCurrentPlayerHand", () => {
+    test("should move seed to UI hole (when graphics is on)", () => {
+      expect(TestHelper.mockSeedUI.group).toBe("group");
+      new Board(me).topPlayer.boardHoles
+        .getHoleWithID(1)
+        .moveSeedsIntoCurrentPlayerHand();
+      expect(TestHelper.mockSeedUI.group).toBe(null);
     });
   });
 

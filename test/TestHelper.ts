@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+import AppConstants from "../src/js/core/AppConstants";
+
 class TestHelper {
   public static disableLogging(): void {
     //disable console log when running tests
@@ -25,16 +27,71 @@ class TestHelper {
     console.info = () => {};
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  public static mockGetChildByType(type: any): Array<unknown> {
+    switch (type.name.toString()) {
+      case "SeedUI": {
+        const seeds = [];
+        for (let i = 0; i < AppConstants.MAX_SEED_COUNT; i++) {
+          seeds.push("seed"); //TODO
+        }
+        return seeds;
+      }
+      default:
+        /* istanbul ignore next */
+        return [];
+    }
+  }
+
+  public static mockSeedUI = {
+    group: "group",
+    randomisePosition: jest.fn().mockReturnThis(),
+  };
+
+  public static mockPlayerUI = {
+    removeSeed: jest.fn().mockReturnValue(TestHelper.mockSeedUI),
+    addSeed: jest.fn().mockReturnThis(),
+  };
+
+  public static mockSeedGroupUI = {
+    getAllUISeeds: jest.fn().mockReturnValue([TestHelper.mockSeedUI]),
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static mockPoolPull(name: string): any {
+    switch (name) {
+      case AppConstants.SEED_UI: {
+        return "seed"; //TODO
+      }
+      case AppConstants.HOLE_UI: {
+        return "hole"; //TODO
+      }
+      case AppConstants.PLAYER_UI: {
+        return TestHelper.mockPlayerUI;
+      }
+      case AppConstants.SEED_GROUP_UI: {
+        return TestHelper.mockSeedGroupUI;
+      }
+      default:
+        /* istanbul ignore next */
+        return null;
+    }
+  }
+
   public static me = {
     game: {
       world: {
         addChild: jest.fn().mockReturnThis(),
         getChild: jest.fn().mockReturnThis(),
-        getChildByType: jest.fn().mockReturnThis(),
+        getChildByType: jest
+          .fn()
+          .mockImplementation((type) => TestHelper.mockGetChildByType(type)),
       },
     },
     pool: {
-      pull: jest.fn().mockReturnThis(),
+      pull: jest
+        .fn()
+        .mockImplementation((name) => TestHelper.mockPoolPull(name)),
     },
   };
 }

@@ -133,10 +133,6 @@ class Player {
       message =
         "Total number of seeds after operation is negative | input: " +
         numSeeds;
-    } else if (this.numSeedsInHand + numSeeds > AppConstants.MAX_SEED_COUNT) {
-      message =
-        "Total number of seeds after operation is greater than 64 | input: " +
-        numSeeds;
     }
     if (message) {
       throw new Error(message);
