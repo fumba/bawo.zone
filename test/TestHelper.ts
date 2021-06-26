@@ -20,7 +20,6 @@
 
 import AppConstants from "../src/js/core/AppConstants";
 
-/* istanbul ignore next */
 class TestHelper {
   public static disableLogging(): void {
     //disable console log when running tests
@@ -39,6 +38,7 @@ class TestHelper {
         return seeds;
       }
       default:
+        /* istanbul ignore next */
         return [];
     }
   }
@@ -73,6 +73,7 @@ class TestHelper {
         return TestHelper.mockSeedGroupUI;
       }
       default:
+        /* istanbul ignore next */
         return null;
     }
   }
