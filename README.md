@@ -29,5 +29,7 @@ Build with docker - https://www.electron.build/multi-platform-build#docker
 
 # PLAY
 
+LINUX
+
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/bawo)
 
