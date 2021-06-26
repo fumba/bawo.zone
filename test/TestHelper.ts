@@ -43,11 +43,17 @@ class TestHelper {
   }
 
   public static mockSeedUI = {
+    group: "group",
     randomisePosition: jest.fn().mockReturnThis(),
   };
 
   public static mockPlayerUI = {
     removeSeed: jest.fn().mockReturnValue(TestHelper.mockSeedUI),
+    addSeed: jest.fn().mockReturnThis()
+  };
+
+  public static mockSeedGroupUI = {
+    getAllUISeeds: jest.fn().mockReturnValue([TestHelper.mockSeedUI]),
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +67,9 @@ class TestHelper {
       }
       case AppConstants.PLAYER_UI: {
         return TestHelper.mockPlayerUI;
+      }
+      case AppConstants.SEED_GROUP_UI: {
+        return TestHelper.mockSeedGroupUI;
       }
       default:
         return null;

@@ -145,16 +145,6 @@ class Hole {
   }
 
   /**
-   *
-   * @param {number} numSeeds Number of seeds to add or remove
-   */
-  private validateNumSeeds(numSeeds: number): void {
-    if (numSeeds < 0 || numSeeds > AppConstants.MAX_SEED_COUNT) {
-      throw new Error("Invalid number of seeds | requested: " + numSeeds);
-    }
-  }
-
-  /**
    * Renders the hole and its contents (seeds)
    */
   private renderHoleAndSeeds(): void {
