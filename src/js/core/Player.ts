@@ -21,6 +21,11 @@
 import PlayerSide from "./PlayerSide";
 import AppConstants from "./AppConstants";
 import PlayerBoardHoles from "./PlayerBoardHoles";
+import Board from "./Board";
+import PlayerUI from "../entities/PlayerUI";
+import { isEmpty } from "lodash";
+import Hole from "./Hole";
+import SeedUI from "../entities/SeedUI";
 /**
  * <p>
  * {@link Player} represents a bawo game player
@@ -39,38 +44,48 @@ class Player {
   // all the board holes belonging to player
   public boardHoles: PlayerBoardHoles;
 
+  // ui player
+  public ui: PlayerUI;
+
   /**
    * constructor
    *
    * @param {PlayerSide} side the side on which the player is on the board
+   * @param {Board} board the board on which the player is
    */
-  constructor(side: PlayerSide) {
+  constructor(side: PlayerSide, board?: Board) {
     this.side = side;
     this.numSeedsInHand = 0;
     this.capturedOnPrevMove = false;
-  }
-
-  /**
-   * Adds seeds to players hand
-   *
-   * @param {number} numSeeds Number of seeds to be added to players hand
-   */
-  public addSeeds(numSeeds: number): void {
-    this.validateNumSeeds(numSeeds);
-    this.validateFinalSeedCount(numSeeds);
-    this.numSeedsInHand += numSeeds;
+    if (!isEmpty(board)) {
+      if (board.isGraphicsMode()) {
+        this.ui = board.me.pool.pull(AppConstants.PLAYER_UI, this);
+      }
+    }
   }
 
   /**
    * Removes seeds from players hand
    *
    * @param {number} numSeeds Number of seeds to be removed from players hand
+   * @param {Hole} hole The hole into which seeds will be moved
    * @returns {number} Number of seeds removed from the player hand
    */
-  public removeSeeds(numSeeds: number): number {
+  public moveSeedsIntoBoardHole(numSeeds: number, hole: Hole): number {
     this.validateNumSeeds(numSeeds);
     this.validateFinalSeedCount(-numSeeds); //minus because we are removing seeds
     this.numSeedsInHand -= numSeeds;
+
+    hole.numSeeds += numSeeds;
+    if (hole.board.isGraphicsMode()) {
+      //add seeds to hole ui
+      for (let i = 0; i < numSeeds; i++) {
+        const seedUI = hole.board.getCurrentPlayer().ui.removeSeed();
+        seedUI.group = hole.seedGroupUI;
+        seedUI.id = SeedUI.seedGroupId(hole.UID);
+        seedUI.randomisePosition();
+      }
+    }
     return numSeeds;
   }
 

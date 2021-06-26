@@ -1,5 +1,7 @@
 import AppConstants from "../core/AppConstants";
 import Hole from "../core/Hole";
+import Move from "../core/Move";
+import MoveDirection from "../core/MoveDirection";
 import me from "../me";
 import SeedGroupUI from "./SeedGroupUI";
 
@@ -24,30 +26,38 @@ import SeedGroupUI from "./SeedGroupUI";
  */
 
 /**
- * Bawo board seed
+ * Bawo board hole
  */
 class HoleUI extends me.DroptargetEntity {
+  private readonly hole: Hole;
+
   /**
-   * @param {number} x  x coordinates of the hole object
-   * @param {number} y  y coordinates of the hole object
    * @param {Hole} hole the hole to which this UI entity corresponds to
    */
-  constructor(x: number, y: number, hole: Hole) {
+  constructor(hole: Hole) {
     const settings = {
       image: me.loader.getImage(AppConstants.HOLE_UI),
       height: 80,
       width: 80,
       id: HoleUI.holeId(hole),
     };
+
+    const xOffSet = 60;
+    const newRowOffset = hole.id <= 7 ? 0 : 100;
+    const x = (hole.id < 8 ? hole.id : 15 - hole.id) * 90 + xOffSet;
+    const y = (hole.player.isOnTopSide() ? 100 : 330) + newRowOffset;
     super(x, y, settings);
     // overlaps are not valid drops
     // draggable seed container UI (SeedGroupUI) has a smaller radius so all drops are expected
     // to be contained within the hole radius.
     this.setCheckMethod(this.CHECKMETHOD_CONTAINS);
+    this.hole = hole;
   }
 
   drop(draggableEntity: SeedGroupUI): void {
     console.info(`${draggableEntity.id} dropped into ${this.id}`);
+    const move = new Move(this.hole, MoveDirection.Clockwise);
+    this.hole.board.executeMove(move);
   }
 
   public static holeId(hole: Hole): string {

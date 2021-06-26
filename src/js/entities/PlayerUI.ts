@@ -1,3 +1,6 @@
+import Player from "../core/Player";
+import me from "../me";
+import SeedUI from "./SeedUI";
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
  * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
@@ -18,25 +21,40 @@
  * limitations under the License.
  */
 
-class TestHelper {
-  public static disableLogging(): void {
-    //disable console log when running tests
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    console.info = () => {};
+class PlayerUI extends me.Entity {
+  /**
+   * Seeds that the player has in their hand
+   */
+  public seedsInHand: Array<SeedUI>;
+
+  constructor(player: Player) {
+    const settings = {
+      //TODO image: me.loader.getImage(AppConstants.PLAYER_UI),
+      height: 20,
+      width: 20,
+      id: player.side,
+    };
+    super(0, 0, settings);
+    this.seedsInHand = [];
   }
 
-  public static me = {
-    game: {
-      world: {
-        addChild: jest.fn().mockReturnThis(),
-        getChild: jest.fn().mockReturnThis(),
-        getChildByType: jest.fn().mockReturnThis(),
-      },
-    },
-    pool: {
-      pull: jest.fn().mockReturnThis(),
-    },
-  };
+  /**
+   * Adds seed to player hand
+   *
+   * @param {SeedUI} seedUI seed to be added in player hand
+   */
+  public addSeed(seedUI: SeedUI): void {
+    this.seedsInHand.push(seedUI);
+  }
+
+  /**
+   * Removes seed from player hand
+   *
+   * @returns {SeedUI} seeds that was removed from players hand
+   */
+  public removeSeed(): SeedUI {
+    return this.seedsInHand.pop();
+  }
 }
 
-export default TestHelper;
+export default PlayerUI;

@@ -66,10 +66,10 @@ class S3Controller {
 
     bucket.upload(params, function (err:any, data:any) {
       if (err) {
-        console.log('There was an error uploading your file: ', err);
+        console.info('There was an error uploading your file: ', err);
         return false;
       }
-      console.log('Successfully uploaded file.', data);
+      console.info('Successfully uploaded file.', data);
       return true;
     });
   }

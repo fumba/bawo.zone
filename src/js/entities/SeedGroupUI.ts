@@ -1,5 +1,4 @@
 import AppConstants from "../core/AppConstants";
-import Board from "../core/Board";
 import Hole from "../core/Hole";
 import me from "../me";
 import SeedUI from "./SeedUI";
@@ -35,11 +34,6 @@ class SeedGroupUI extends me.DraggableEntity {
   private readonly hole: Hole;
 
   /**
-   * the board on which the hole for this seed collection belongs to
-   */
-  private board: Board;
-
-  /**
    * initial position for the seed group before it was dragged
    */
   private readonly originalPos: Vector;
@@ -55,10 +49,9 @@ class SeedGroupUI extends me.DraggableEntity {
   public readonly originalCenter: Vector;
 
   /**
-   * @param {Board} board the board on which the hole for this seed collection belongs to
    * @param {Hole} hole the hole in which the seeds are being placed
    */
-  constructor(board: Board, hole: Hole) {
+  constructor(hole: Hole) {
     const settings = {
       image: me.loader.getImage(AppConstants.SEED_GROUP_UI),
       height: 50,
@@ -79,7 +72,6 @@ class SeedGroupUI extends me.DraggableEntity {
     );
     this.radius = settings.height / 2;
     this.hole = hole;
-    this.board = board;
     this.renderable.alpha = 0; //make container invisible
   }
 
@@ -158,10 +150,10 @@ class SeedGroupUI extends me.DraggableEntity {
   }
 
   private isHoleOwner(): boolean {
-    return this.board.getCurrentPlayer() == this.hole.player;
+    return this.hole.board.getCurrentPlayer() == this.hole.player;
   }
 
-  private getAllUISeeds(): Array<SeedUI> {
+  public getAllUISeeds(): Array<SeedUI> {
     return me.game.world.getChildByProp(
       "id",
       SeedUI.seedGroupId(this.hole.UID)
