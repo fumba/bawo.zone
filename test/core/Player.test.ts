@@ -21,8 +21,15 @@
 import Board from "../../src/js/core/Board";
 import Player from "../../src/js/core/Player";
 import PlayerSide from "../../src/js/core/PlayerSide";
+import TestHelper from "../TestHelper";
+
+const me = TestHelper.me;
 
 describe("Player", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("should assign player on top", () => {
     expect(new Player(PlayerSide.Top).side).toBe(PlayerSide.Top);
   });
@@ -39,9 +46,10 @@ describe("Player", () => {
     expect(new Player(PlayerSide.Bottom).capturedOnPrevMove).toBe(false);
   });
 
-  describe("remove seeds from hand", () => {
+  describe("remove seeds from hand and place them in hole", () => {
     let player: Player;
-    const hole = new Board().topPlayer.boardHoles.getHoleWithID(1);
+    const board = new Board(me);
+    const hole = board.topPlayer.boardHoles.getHoleWithID(1);
     beforeEach(() => {
       player = new Player(PlayerSide.Top);
     });
@@ -66,6 +74,12 @@ describe("Player", () => {
     });
 
     test("should not allow player to remove negative number of seeds", () => {
+      player.numSeedsInHand = 10;
+      player.moveSeedsIntoBoardHole(2, hole);
+      expect(TestHelper.mockSeedUI.randomisePosition).toBeCalled();
+    });
+
+    test("should move seed to UI hole (when graphics is on)", () => {
       expect(() => player.moveSeedsIntoBoardHole(-1, hole)).toThrow(
         "Attempted to add or remove negative number seeds | input : -1"
       );
