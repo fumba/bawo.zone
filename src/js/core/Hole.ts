@@ -165,6 +165,33 @@ class Hole {
   }
 
   /**
+   * Calculates the move direction that corresponds to a users drag and drop action.
+   * Seeds are dragged from an origin hole into the target hole. The direction is only returned if
+   * the target hole is adjacent to the origin.
+   *
+   * @param {Hole} targetHole the hole into which the seeds are being dragged into
+   * @returns {MoveDirection} the direction that corresponds to the users drag and drop action.
+   */
+  public adjacencyDirection(targetHole: Hole): MoveDirection {
+    //retrieved valid move directions for the hole
+    const validDirections = this.availableMovesForCurrentPlayer().map(
+      (move) => move.direction
+    );
+    if (
+      validDirections.includes(MoveDirection.Clockwise) &&
+      this.nextHole.UID == targetHole.UID
+    ) {
+      return MoveDirection.Clockwise;
+    } else if (
+      validDirections.includes(MoveDirection.AntiClockwise) &&
+      this.prevHole.UID == targetHole.UID
+    ) {
+      return MoveDirection.AntiClockwise;
+    }
+    return null;
+  }
+
+  /**
    * Renders the hole and its contents (seeds)
    */
   private renderUI(): void {

@@ -120,6 +120,39 @@ describe("Hole", () => {
     });
   });
 
+  describe("#adjacencyDirection", () => {
+    test("should return anticlockwise for previous adjacent holes", () => {
+      const board = new Board();
+      const startHole = board.topPlayer.boardHoles.getHoleWithID(12);
+      const destinationHole = board.topPlayer.boardHoles.getHoleWithID(11);
+      expect(startHole.adjacencyDirection(destinationHole)).toBe(
+        MoveDirection.AntiClockwise
+      );
+    });
+
+    test("should return clockwise for next adjacent holes", () => {
+      const board = new Board();
+      const startHole = board.topPlayer.boardHoles.getHoleWithID(12);
+      const destinationHole = board.topPlayer.boardHoles.getHoleWithID(13);
+      expect(startHole.adjacencyDirection(destinationHole)).toBe(
+        MoveDirection.Clockwise
+      );
+    });
+
+    test("should return null if drag and drop performed on same hole", () => {
+      const board = new Board();
+      const startHole = board.topPlayer.boardHoles.getHoleWithID(12);
+      expect(startHole.adjacencyDirection(startHole)).toBe(null);
+    });
+
+    test("should return null for invalid moves", () => {
+      const board = new Board();
+      const startHole = board.topPlayer.boardHoles.getHoleWithID(0);
+      const destinationHole = board.topPlayer.boardHoles.getHoleWithID(1);
+      expect(startHole.adjacencyDirection(destinationHole)).toBe(null);
+    });
+  });
+
   describe("#isEmpty", () => {
     test("should be true when hole has no seeds", () => {
       const hole = new Hole(player, null, 4, 0, hole_03, hole_05);
