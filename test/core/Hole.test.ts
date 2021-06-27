@@ -92,6 +92,24 @@ describe("Hole", () => {
     });
   });
 
+  describe("#isOwnedByCurrentPlayer", () => {
+    test("should return true if the current player owns the hole", () => {
+      expect(
+        new Board().topPlayer.boardHoles
+          .getHoleWithID(1)
+          .isOwnedByCurrentPlayer()
+      ).toBe(true);
+    });
+
+    test("should return false if the current player does not own the hole", () => {
+      const board = new Board();
+      const hole = board.topPlayer.boardHoles.getHoleWithID(1);
+      //switch players
+      board.switchPlayers();
+      expect(hole.isOwnedByCurrentPlayer()).toBe(false);
+    });
+  });
+
   describe("#isEmpty", () => {
     test("should be true when hole has no seeds", () => {
       const hole = new Hole(player, null, 4, 0, hole_03, hole_05);

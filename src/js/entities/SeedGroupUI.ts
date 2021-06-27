@@ -31,7 +31,7 @@ class SeedGroupUI extends me.DraggableEntity {
   /**
    * The Hole in which seeds will be placed
    */
-  private readonly hole: Hole;
+  public readonly hole: Hole;
 
   /**
    * initial position for the seed group before it was dragged
@@ -85,7 +85,7 @@ class SeedGroupUI extends me.DraggableEntity {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.mouseDown = (e: any) => {
       // Do not allow player to make moves on hole that does not belong to them
-      if (!this.isHoleOwner()) {
+      if (!this.hole.isOwnedByCurrentPlayer()) {
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGSTART);
@@ -94,7 +94,7 @@ class SeedGroupUI extends me.DraggableEntity {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.mouseUp = (e: any) => {
       // Do not allow player to make moves on hole that does not belong to them
-      if (!this.isHoleOwner()) {
+      if (!this.hole.isOwnedByCurrentPlayer()) {
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGEND);
@@ -107,13 +107,13 @@ class SeedGroupUI extends me.DraggableEntity {
     };
 
     this.pointerEnter = () => {
-      if (this.isHoleOwner()) {
+      if (this.hole.isOwnedByCurrentPlayer()) {
         this.renderable.alpha = 1;
       }
     };
 
     this.pointerLeave = () => {
-      if (this.isHoleOwner()) {
+      if (this.hole.isOwnedByCurrentPlayer()) {
         this.renderable.alpha = 0;
       }
     };
@@ -147,10 +147,6 @@ class SeedGroupUI extends me.DraggableEntity {
       });
     }
     super.dragMove(event);
-  }
-
-  private isHoleOwner(): boolean {
-    return this.hole.board.getCurrentPlayer() == this.hole.player;
   }
 
   public getAllUISeeds(): Array<SeedUI> {

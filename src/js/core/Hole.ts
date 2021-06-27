@@ -145,6 +145,15 @@ class Hole {
   }
 
   /**
+   * Checks to see of the current player owns the hole.
+   *
+   * @returns {boolean} true if the current player owns the hole
+   */
+  public isOwnedByCurrentPlayer(): boolean {
+    return this.board.getCurrentPlayer() == this.player;
+  }
+
+  /**
    * Renders the hole and its contents (seeds)
    */
   private renderHoleAndSeeds(): void {
