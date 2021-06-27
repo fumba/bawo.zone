@@ -282,15 +282,7 @@ class Board {
     this.updateMovesStatus();
     const moves: Array<Move> = [];
     for (const hole of player.boardHoles) {
-      if (
-        hole.moveStatus == MoveDirection.Clockwise ||
-        hole.moveStatus == MoveDirection.AntiClockwise
-      ) {
-        moves.push(new Move(hole, hole.moveStatus));
-      } else if (hole.moveStatus == MoveDirection.Both) {
-        moves.push(new Move(hole, MoveDirection.Clockwise));
-        moves.push(new Move(hole, MoveDirection.AntiClockwise));
-      }
+      hole.availableMovesForCurrentPlayer().forEach((move) => moves.push(move));
     }
     return moves;
   }

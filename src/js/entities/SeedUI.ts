@@ -1,5 +1,6 @@
 import Utility from "../../helpers/Utility";
 import AppConstants from "../core/AppConstants";
+import Vector from "../core/Vector";
 import me from "../me";
 import SeedGroupUI from "./SeedGroupUI";
 
@@ -33,6 +34,11 @@ class SeedUI extends me.Entity {
   public group: SeedGroupUI;
 
   /**
+   * initial position for the seed  before it was dragged
+   */
+  public readonly originalPos: Vector;
+
+  /**
    * @param {SeedUI} seedGroup - group to which this seed belongs to
    * @param {number} uid - unique hole uid
    */
@@ -45,6 +51,7 @@ class SeedUI extends me.Entity {
     };
     super(0, 0, settings);
 
+    this.originalPos = new Vector(this.pos.x, this.pos.y, this.pos.z);
     this.group = seedGroup;
     this.randomisePosition();
   }

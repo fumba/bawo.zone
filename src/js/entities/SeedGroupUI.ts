@@ -31,7 +31,7 @@ class SeedGroupUI extends me.DraggableEntity {
   /**
    * The Hole in which seeds will be placed
    */
-  private readonly hole: Hole;
+  public readonly hole: Hole;
 
   /**
    * initial position for the seed group before it was dragged
@@ -44,7 +44,7 @@ class SeedGroupUI extends me.DraggableEntity {
   public readonly radius: number;
 
   /**
-   * initial center x-coordinate
+   * initial center position
    */
   public readonly originalCenter: Vector;
 
@@ -65,10 +65,11 @@ class SeedGroupUI extends me.DraggableEntity {
     const y_i = holeUI.pos.y + (holeUI.height - settings.height) / 2;
 
     super(x_i, y_i, settings);
-    this.originalPos = new Vector(x_i, y_i);
+    this.originalPos = new Vector(this.pos.x, this.pos.y, this.pos.z);
     this.originalCenter = new Vector(
-      x_i + settings.width / 2,
-      y_i + settings.height / 2
+      this.pos.x + settings.width / 2,
+      this.pos.y + settings.height / 2,
+      this.pos.z
     );
     this.radius = settings.height / 2;
     this.hole = hole;
@@ -81,11 +82,14 @@ class SeedGroupUI extends me.DraggableEntity {
     this.removePointerEvent("pointerdown", this);
     this.removePointerEvent("pointerup", this);
 
+    const isPlayableHole = () =>
+      this.hole.availableMovesForCurrentPlayer().length > 0;
+
     // Define the new events that return false (don't fall through).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.mouseDown = (e: any) => {
       // Do not allow player to make moves on hole that does not belong to them
-      if (!this.isHoleOwner()) {
+      if (!isPlayableHole()) {
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGSTART);
@@ -94,7 +98,7 @@ class SeedGroupUI extends me.DraggableEntity {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.mouseUp = (e: any) => {
       // Do not allow player to make moves on hole that does not belong to them
-      if (!this.isHoleOwner()) {
+      if (!isPlayableHole()) {
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGEND);
@@ -107,15 +111,13 @@ class SeedGroupUI extends me.DraggableEntity {
     };
 
     this.pointerEnter = () => {
-      if (this.isHoleOwner()) {
+      if (isPlayableHole()) {
         this.renderable.alpha = 1;
       }
     };
 
     this.pointerLeave = () => {
-      if (this.isHoleOwner()) {
-        this.renderable.alpha = 0;
-      }
+      this.renderable.alpha = 0;
     };
 
     // Add the new pointerdown and pointerup events.
@@ -133,24 +135,26 @@ class SeedGroupUI extends me.DraggableEntity {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
   dragEnd(event: any): void {
     super.dragEnd(event);
-    this.getAllUISeeds().forEach((element: SeedUI) => {
-      element.randomisePosition();
+    this.getAllUISeeds().forEach((seed: SeedUI) => {
+      seed.randomisePosition();
+      seed.pos.z = seed.originalPos.z;
     });
+    this.pos.z = this.originalPos.z;
+    me.game.world.sort(true);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
   dragMove(event: any): void {
     if (this.dragging == true) {
-      this.getAllUISeeds().forEach((element: SeedUI) => {
-        element.pos.x = this.pos.x;
-        element.pos.y = this.pos.y;
+      this.getAllUISeeds().forEach((seed: SeedUI) => {
+        seed.pos.x = this.pos.x;
+        seed.pos.y = this.pos.y;
+        seed.pos.z = Infinity;
       });
+      this.pos.z = Infinity;
+      me.game.world.sort(true);
     }
     super.dragMove(event);
-  }
-
-  private isHoleOwner(): boolean {
-    return this.hole.board.getCurrentPlayer() == this.hole.player;
   }
 
   public getAllUISeeds(): Array<SeedUI> {

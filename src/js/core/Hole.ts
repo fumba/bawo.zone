@@ -28,6 +28,7 @@ import { isEmpty } from "lodash";
 import HoleUI from "../entities/HoleUI";
 import SeedUI from "../entities/SeedUI";
 import SeedGroupUI from "../entities/SeedGroupUI";
+import Move from "./Move";
 
 class Hole {
   // Number of seeds in hole
@@ -88,7 +89,7 @@ class Hole {
       this.board.isGraphicsMode() &&
       this.id != AppConstants.DUMMY_HOLE_ID
     ) {
-      this.renderHoleAndSeeds();
+      this.renderUI();
     }
   }
 
@@ -145,9 +146,55 @@ class Hole {
   }
 
   /**
+   * Gets the moves that are available for the current player
+   *
+   * @returns {Array<Move>} moves that can be played
+   */
+  public availableMovesForCurrentPlayer(): Array<Move> {
+    const moves: Array<Move> = [];
+    if (
+      this.moveStatus == MoveDirection.Clockwise ||
+      this.moveStatus == MoveDirection.AntiClockwise
+    ) {
+      moves.push(new Move(this, this.moveStatus));
+    } else if (this.moveStatus == MoveDirection.Both) {
+      moves.push(new Move(this, MoveDirection.Clockwise));
+      moves.push(new Move(this, MoveDirection.AntiClockwise));
+    }
+    return moves;
+  }
+
+  /**
+   * Calculates the move direction that corresponds to a users drag and drop action.
+   * Seeds are dragged from an origin hole into the target hole. The direction is only returned if
+   * the target hole is adjacent to the origin.
+   *
+   * @param {Hole} targetHole the hole into which the seeds are being dragged into
+   * @returns {MoveDirection} the direction that corresponds to the users drag and drop action.
+   */
+  public adjacencyDirection(targetHole: Hole): MoveDirection {
+    //retrieved valid move directions for the hole
+    const validDirections = this.availableMovesForCurrentPlayer().map(
+      (move) => move.direction
+    );
+    if (
+      validDirections.includes(MoveDirection.Clockwise) &&
+      this.nextHole.UID == targetHole.UID
+    ) {
+      return MoveDirection.Clockwise;
+    } else if (
+      validDirections.includes(MoveDirection.AntiClockwise) &&
+      this.prevHole.UID == targetHole.UID
+    ) {
+      return MoveDirection.AntiClockwise;
+    }
+    return null;
+  }
+
+  /**
    * Renders the hole and its contents (seeds)
    */
-  private renderHoleAndSeeds(): void {
+  private renderUI(): void {
     //render hole
     const holeUI = this.board.me.pool.pull(AppConstants.HOLE_UI, this);
     this.board.me.game.world.addChild(holeUI);
