@@ -44,7 +44,7 @@ class Utility {
     const hypotenuse = Math.sqrt(Math.random()) * radius;
     const adjacent = Math.cos(angle) * hypotenuse;
     const opposite = Math.sin(angle) * hypotenuse;
-    return new Vector(xCenter + adjacent, yCenter + opposite);
+    return new Vector(xCenter + adjacent, yCenter + opposite, 0);
   }
 }
 export default Utility;

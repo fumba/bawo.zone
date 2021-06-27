@@ -22,8 +22,9 @@ import Vector from "../../src/js/core/Vector";
 
 describe("Vector", () => {
   test("should populate x and y values correctly", () => {
-    const vector = new Vector(1, 2);
+    const vector = new Vector(1, 2, 3);
     expect(vector.x).toBe(1);
     expect(vector.y).toBe(2);
+    expect(vector.z).toBe(3);
   });
 });

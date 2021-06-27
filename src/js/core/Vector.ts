@@ -33,14 +33,21 @@ class Vector {
   public y: number;
 
   /**
+   * z value of the vector
+   */
+  public z: number;
+
+  /**
    * constructor
    *
    * @param {number} x x value of the vector
    * @param {number} y y value of the vector
+   * @param {number} z z value of the vector
    */
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, z: number) {
     this.x = x;
     this.y = y;
+    this.z = z;
   }
 }
 

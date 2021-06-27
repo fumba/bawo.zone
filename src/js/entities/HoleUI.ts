@@ -57,9 +57,9 @@ class HoleUI extends me.DroptargetEntity {
   drop(seedGroupUI: SeedGroupUI): void {
     console.info(`${seedGroupUI.id} dropped into ${this.id}`);
     // do not perform move if a drag and drop is performed on the same hole
-    if(seedGroupUI.hole.UID != this.hole.UID){
-    const move = new Move(this.hole, MoveDirection.Clockwise);
-    this.hole.board.executeMove(move);
+    if (seedGroupUI.hole.UID != this.hole.UID) {
+      const move = new Move(this.hole, MoveDirection.Clockwise);
+      this.hole.board.executeMove(move);
     }
   }
 

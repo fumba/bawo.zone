@@ -28,6 +28,7 @@ import { isEmpty } from "lodash";
 import HoleUI from "../entities/HoleUI";
 import SeedUI from "../entities/SeedUI";
 import SeedGroupUI from "../entities/SeedGroupUI";
+import Move from "./Move";
 
 class Hole {
   // Number of seeds in hole
@@ -88,7 +89,7 @@ class Hole {
       this.board.isGraphicsMode() &&
       this.id != AppConstants.DUMMY_HOLE_ID
     ) {
-      this.renderHoleAndSeeds();
+      this.renderUI();
     }
   }
 
@@ -145,18 +146,28 @@ class Hole {
   }
 
   /**
-   * Checks to see of the current player owns the hole.
+   * Gets the moves that are available for the current player
    *
-   * @returns {boolean} true if the current player owns the hole
+   * @returns {Array<Move>} moves that can be played
    */
-  public isOwnedByCurrentPlayer(): boolean {
-    return this.board.getCurrentPlayer() == this.player;
+  public availableMovesForCurrentPlayer(): Array<Move> {
+    const moves: Array<Move> = [];
+    if (
+      this.moveStatus == MoveDirection.Clockwise ||
+      this.moveStatus == MoveDirection.AntiClockwise
+    ) {
+      moves.push(new Move(this, this.moveStatus));
+    } else if (this.moveStatus == MoveDirection.Both) {
+      moves.push(new Move(this, MoveDirection.Clockwise));
+      moves.push(new Move(this, MoveDirection.AntiClockwise));
+    }
+    return moves;
   }
 
   /**
    * Renders the hole and its contents (seeds)
    */
-  private renderHoleAndSeeds(): void {
+  private renderUI(): void {
     //render hole
     const holeUI = this.board.me.pool.pull(AppConstants.HOLE_UI, this);
     this.board.me.game.world.addChild(holeUI);

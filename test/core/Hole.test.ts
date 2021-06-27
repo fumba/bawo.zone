@@ -97,8 +97,13 @@ describe("Hole", () => {
       expect(
         new Board().topPlayer.boardHoles
           .getHoleWithID(1)
-          .isOwnedByCurrentPlayer()
-      ).toBe(true);
+          .availableMovesForCurrentPlayer().length
+      ).toBe(1);
+      expect(
+        new Board().topPlayer.boardHoles
+          .getHoleWithID(12) //BOTH directions can be played
+          .availableMovesForCurrentPlayer().length
+      ).toBe(2);
     });
 
     test("should return false if the current player does not own the hole", () => {
@@ -106,7 +111,12 @@ describe("Hole", () => {
       const hole = board.topPlayer.boardHoles.getHoleWithID(1);
       //switch players
       board.switchPlayers();
-      expect(hole.isOwnedByCurrentPlayer()).toBe(false);
+      expect(hole.availableMovesForCurrentPlayer().length).toBe(0);
+      expect(
+        board.topPlayer.boardHoles
+          .getHoleWithID(12) //BOTH directions can be played
+          .availableMovesForCurrentPlayer().length
+      ).toBe(0);
     });
   });
 
