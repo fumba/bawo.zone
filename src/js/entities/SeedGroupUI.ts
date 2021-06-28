@@ -73,56 +73,90 @@ class SeedGroupUI extends me.DraggableEntity {
     );
     this.radius = settings.height / 2;
     this.hole = hole;
-    this.renderable.alpha = 0; //make container invisible
+    this.renderable.alpha = 0.1; //TODO : testing only - make container invisible
   }
 
   initEvents(): void {
     super.initEvents();
-    // Remove the old pointerdown and pointerup events.
-    this.removePointerEvent("pointerdown", this);
-    this.removePointerEvent("pointerup", this);
 
     const isPlayableHole = () =>
       this.hole.availableMovesForCurrentPlayer().length > 0;
 
     // Define the new events that return false (don't fall through).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.mouseDown = (e: any) => {
+    this.pointerDown = (e: any) => {
       // Do not allow player to make moves on hole that does not belong to them
       if (!isPlayableHole()) {
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGSTART);
+
+      //TODO add comment (use callback approach??? )
+      const allDraggableSeedGroups: Array<unknown> =
+        me.game.world.getChildByType(SeedGroupUI);
+      allDraggableSeedGroups.forEach(
+        (group: SeedGroupUI) =>
+          (group.hole.ui.renderable = this.hole.ui.sleepingHoleSprite) //all holes should sleep
+      );
       return false;
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.mouseUp = (e: any) => {
+    this.pointerUp = (e: any) => {
       // Do not allow player to make moves on hole that does not belong to them
       if (!isPlayableHole()) {
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGEND);
 
+      //TODO use callback approach
+      const allDraggableSeedGroups: Array<unknown> =
+        me.game.world.getChildByType(SeedGroupUI);
+      allDraggableSeedGroups.forEach(
+        (group: SeedGroupUI) => group.hole.ui.updateHoleUI() //restore green/sleep status
+      );
+
       //move back draggable seed group container to its initial position
       this.pos.x = this.originalPos.x;
       this.pos.y = this.originalPos.y;
-      this.renderable.alpha = 0;
       return false;
     };
 
     this.pointerEnter = () => {
-      if (isPlayableHole()) {
-        this.renderable.alpha = 1;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const allDraggableSeedGroups: Array<any> =
+        me.game.world.getChildByType(SeedGroupUI);
+      const draggingSeedUI: SeedGroupUI = allDraggableSeedGroups.filter(
+        (group: SeedGroupUI) => group.dragging
+      )[0];
+      if (draggingSeedUI) {
+        const moveDirection = draggingSeedUI.hole.adjacencyDirection(this.hole);
+        //TODO: use case statements ???
+        const validDirections = draggingSeedUI.hole
+          .availableMovesForCurrentPlayer()
+          .map((move) => move.direction);
+        if (validDirections.includes(moveDirection)) {
+          this.hole.ui.renderable = this.hole.ui.availableHoleSprite;
+        } else {
+          this.hole.ui.renderable = this.hole.ui.blockedHoleSprite;
+        }
       }
     };
 
     this.pointerLeave = () => {
-      this.renderable.alpha = 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const allDraggableSeedGroups: Array<any> =
+        me.game.world.getChildByType(SeedGroupUI);
+      const draggingSeedUI: SeedGroupUI = allDraggableSeedGroups.filter(
+        (group: SeedGroupUI) => group.dragging
+      )[0];
+      if (draggingSeedUI) {
+        this.hole.ui.renderable = this.hole.ui.sleepingHoleSprite;
+      }
     };
 
     // Add the new pointerdown and pointerup events.
-    this.onPointerEvent("pointerdown", this, this.mouseDown.bind(this));
-    this.onPointerEvent("pointerup", this, this.mouseUp.bind(this));
+    this.onPointerEvent("pointerdown", this, this.pointerDown.bind(this));
+    this.onPointerEvent("pointerup", this, this.pointerUp.bind(this));
     this.onPointerEvent("pointerenter", this, this.pointerEnter.bind(this));
     this.onPointerEvent("pointerleave", this, this.pointerLeave.bind(this));
   }
@@ -136,6 +170,7 @@ class SeedGroupUI extends me.DraggableEntity {
   dragEnd(event: any): void {
     super.dragEnd(event);
     this.getAllUISeeds().forEach((seed: SeedUI) => {
+      //TODO callback???
       seed.randomisePosition();
       seed.pos.z = seed.originalPos.z;
     });
@@ -147,6 +182,7 @@ class SeedGroupUI extends me.DraggableEntity {
   dragMove(event: any): void {
     if (this.dragging == true) {
       this.getAllUISeeds().forEach((seed: SeedUI) => {
+        //TODO callback ???
         seed.pos.x = this.pos.x;
         seed.pos.y = this.pos.y;
         seed.pos.z = Infinity;

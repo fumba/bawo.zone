@@ -32,14 +32,19 @@ class Resources {
   //hole
   private static holeImage: Array<Record<string, unknown>> = [
     {
-      name: AppConstants.HOLE_BLOCKED_UI,
+      name: AppConstants.HOLE_SLEEPING_UI,
       type: "image",
-      src: "data/img/hole_blocked.png",
+      src: "data/img/hole_sleeping.png",
     },
     {
       name: AppConstants.HOLE_AVAILABLE_UI,
       type: "image",
       src: "data/img/hole_available.png",
+    },
+    {
+      name: AppConstants.HOLE_BLOCKED_UI,
+      type: "image",
+      src: "data/img/hole_blocked.png",
     },
   ];
   //seed-collection
