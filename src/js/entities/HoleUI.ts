@@ -1,7 +1,6 @@
 import AppConstants from "../core/AppConstants";
 import Hole from "../core/Hole";
 import Move from "../core/Move";
-import MoveDirection from "../core/MoveDirection";
 import me from "../me";
 import SeedGroupUI from "./SeedGroupUI";
 
@@ -31,15 +30,18 @@ import SeedGroupUI from "./SeedGroupUI";
 class HoleUI extends me.DroptargetEntity {
   private readonly hole: Hole;
 
+  private blockedHoleSprite;
+
+  private availableHoleSprite;
+
   /**
    * @param {Hole} hole the hole to which this UI entity corresponds to
    */
   constructor(hole: Hole) {
     const settings = {
-      image: me.loader.getImage(AppConstants.HOLE_UI),
       height: 80,
       width: 80,
-      id: HoleUI.holeId(hole),
+      id: `${AppConstants.HOLE_UI}-${hole.UID}`,
     };
 
     const xOffSet = 60;
@@ -52,23 +54,46 @@ class HoleUI extends me.DroptargetEntity {
     // to be contained within the hole radius.
     this.setCheckMethod(this.CHECKMETHOD_CONTAINS);
     this.hole = hole;
+
+    //load sprite for the different hole variations - available and locked
+    this.availableHoleSprite = new me.Sprite(0, 0, {
+      image: me.loader.getImage(AppConstants.HOLE_AVAILABLE_UI),
+    });
+    this.blockedHoleSprite = new me.Sprite(0, 0, {
+      image: me.loader.getImage(AppConstants.HOLE_BLOCKED_UI),
+    });
+
+    this.updateHoleUI();
+  }
+
+  private updateHoleUI() {
+    if (this.hole.availableMovesForCurrentPlayer().length > 0) {
+      this.renderable = this.blockedHoleSprite;
+    } else {
+      this.renderable = this.availableHoleSprite;
+    }
   }
 
   drop(seedGroupUI: SeedGroupUI): void {
     console.info(`${seedGroupUI.id} dropped into ${this.id}`);
     // do not perform move if a drag and drop is performed on the same hole
-    if (seedGroupUI.hole.UID != this.hole.UID) {
+    const startingHole = seedGroupUI.hole;
+    if (startingHole.UID != this.hole.UID) {
       // only perform move only on destination holes that are adjacent from the starting hole
-      const moveDirection = seedGroupUI.hole.adjacencyDirection(this.hole);
+      const moveDirection = startingHole.adjacencyDirection(this.hole);
       if (moveDirection) {
-        const move = new Move(this.hole, moveDirection);
+        const move = new Move(startingHole, moveDirection);
+        console.info(`UI requesting move:  \n\t: ${move}`);
         this.hole.board.executeMove(move);
       }
+      //re-render all holes on board
+      const board = this.hole.board;
+      [board.topPlayer, board.bottomPlayer].forEach((player) => {
+        for (const hole of player.boardHoles) {
+          hole.ui.updateHoleUI();
+        }
+      });
     }
-  }
-
-  public static holeId(hole: Hole): string {
-    return `${AppConstants.HOLE_UI}-${hole.UID}`;
   }
 }
 

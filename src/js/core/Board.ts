@@ -96,6 +96,16 @@ class Board {
     //set current playersssP
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
+
+    if (this.isGraphicsMode()) {
+      //render holes on board
+      [this.topPlayer, this.bottomPlayer].forEach((player) => {
+        for (const hole of player.boardHoles) {
+          hole.renderUI();
+        }
+      });
+    }
+
     this.validateUiState();
   }
 

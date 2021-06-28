@@ -83,14 +83,6 @@ class Hole {
 
     // initialize move status as unauthorized
     this.moveStatus = MoveDirection.UnAuthorised;
-
-    if (
-      !isEmpty(this.board) &&
-      this.board.isGraphicsMode() &&
-      this.id != AppConstants.DUMMY_HOLE_ID
-    ) {
-      this.renderUI();
-    }
   }
 
   /**
@@ -194,7 +186,7 @@ class Hole {
   /**
    * Renders the hole and its contents (seeds)
    */
-  private renderUI(): void {
+  public renderUI(): void {
     //render hole
     const holeUI = this.board.me.pool.pull(AppConstants.HOLE_UI, this);
     this.board.me.game.world.addChild(holeUI);
