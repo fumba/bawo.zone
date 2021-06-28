@@ -46,6 +46,11 @@ class Resources {
       type: "image",
       src: "data/img/hole_blocked.png",
     },
+    {
+      name: AppConstants.HOLE_START_UI,
+      type: "image",
+      src: "data/img/hole_start.png",
+    },
   ];
   //seed-collection
   private static seedCollection: Array<Record<string, unknown>> = [

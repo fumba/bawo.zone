@@ -28,13 +28,15 @@ import SeedGroupUI from "./SeedGroupUI";
  * Bawo board hole
  */
 class HoleUI extends me.DroptargetEntity {
-  private readonly hole: Hole;
+  public readonly hole: Hole;
 
   public sleepingHoleSprite;
 
   public availableHoleSprite;
 
   public blockedHoleSprite;
+
+  public startHoleSprite;
 
   /**
    * @param {Hole} hole the hole to which this UI entity corresponds to
@@ -67,11 +69,14 @@ class HoleUI extends me.DroptargetEntity {
     this.blockedHoleSprite = new me.Sprite(0, 0, {
       image: me.loader.getImage(AppConstants.HOLE_BLOCKED_UI), //TODO instead of blocked make this sleeping
     });
+    this.startHoleSprite = new me.Sprite(0, 0, {
+      image: me.loader.getImage(AppConstants.HOLE_START_UI), //TODO instead of blocked make this sleeping
+    });
 
-    this.updateHoleUI();
+    this.sleepStateUI();
   }
 
-  public updateHoleUI(): void {
+  public sleepStateUI(): void {
     if (this.hole.availableMovesForCurrentPlayer().length > 0) {
       this.renderable = this.availableHoleSprite;
     } else {
@@ -95,7 +100,7 @@ class HoleUI extends me.DroptargetEntity {
       const board = this.hole.board;
       [board.topPlayer, board.bottomPlayer].forEach((player) => {
         for (const hole of player.boardHoles) {
-          hole.ui.updateHoleUI();
+          hole.ui.sleepStateUI();
         }
       });
     }

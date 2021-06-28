@@ -3,6 +3,8 @@ import Hole from "../core/Hole";
 import me from "../me";
 import SeedUI from "./SeedUI";
 import Vector from "../core/Vector";
+import UiHelper from "./UiHelper";
+import HoleUI from "./HoleUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -73,68 +75,41 @@ class SeedGroupUI extends me.DraggableEntity {
     );
     this.radius = settings.height / 2;
     this.hole = hole;
-    this.renderable.alpha = 0.1; //TODO : testing only - make container invisible
+    this.renderable.alpha = 0.1;
   }
 
   initEvents(): void {
     super.initEvents();
-
     const isPlayableHole = () =>
       this.hole.availableMovesForCurrentPlayer().length > 0;
 
-    // Define the new events that return false (don't fall through).
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.pointerDown = (e: any) => {
-      // Do not allow player to make moves on hole that does not belong to them
+    this.pointerDown = (e: unknown) => {
       if (!isPlayableHole()) {
+        // Do not allow player to make moves on hole that does not belong to them
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGSTART);
-
-      //TODO add comment (use callback approach??? )
-      const allDraggableSeedGroups: Array<unknown> =
-        me.game.world.getChildByType(SeedGroupUI);
-      allDraggableSeedGroups.forEach(
-        (group: SeedGroupUI) =>
-          (group.hole.ui.renderable = this.hole.ui.sleepingHoleSprite) //all holes should sleep
-      );
       return false;
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.pointerUp = (e: any) => {
-      // Do not allow player to make moves on hole that does not belong to them
+
+    this.pointerUp = (e: unknown) => {
       if (!isPlayableHole()) {
+        // Do not allow player to make moves on hole that does not belong to them
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGEND);
-
-      //TODO use callback approach
-      const allDraggableSeedGroups: Array<unknown> =
-        me.game.world.getChildByType(SeedGroupUI);
-      allDraggableSeedGroups.forEach(
-        (group: SeedGroupUI) => group.hole.ui.updateHoleUI() //restore green/sleep status
-      );
-
-      //move back draggable seed group container to its initial position
-      this.pos.x = this.originalPos.x;
-      this.pos.y = this.originalPos.y;
       return false;
     };
 
     this.pointerEnter = () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const allDraggableSeedGroups: Array<any> =
-        me.game.world.getChildByType(SeedGroupUI);
-      const draggingSeedUI: SeedGroupUI = allDraggableSeedGroups.filter(
-        (group: SeedGroupUI) => group.dragging
-      )[0];
-      if (draggingSeedUI) {
-        const moveDirection = draggingSeedUI.hole.adjacencyDirection(this.hole);
-        //TODO: use case statements ???
-        const validDirections = draggingSeedUI.hole
+      const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
+      if (draggingSeedGroup) {
+        const selectedHole = draggingSeedGroup.hole;
+        const currDirection = selectedHole.adjacencyDirection(this.hole);
+        const validDirections = selectedHole
           .availableMovesForCurrentPlayer()
           .map((move) => move.direction);
-        if (validDirections.includes(moveDirection)) {
+        if (validDirections.includes(currDirection)) {
           this.hole.ui.renderable = this.hole.ui.availableHoleSprite;
         } else {
           this.hole.ui.renderable = this.hole.ui.blockedHoleSprite;
@@ -143,61 +118,72 @@ class SeedGroupUI extends me.DraggableEntity {
     };
 
     this.pointerLeave = () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const allDraggableSeedGroups: Array<any> =
-        me.game.world.getChildByType(SeedGroupUI);
-      const draggingSeedUI: SeedGroupUI = allDraggableSeedGroups.filter(
-        (group: SeedGroupUI) => group.dragging
-      )[0];
-      if (draggingSeedUI) {
-        this.hole.ui.renderable = this.hole.ui.sleepingHoleSprite;
+      const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
+      // set hole status to sleeping on mouse leave unless the hole is an adjacent valid move
+      if (draggingSeedGroup) {
+        if (!draggingSeedGroup.hole.adjacencyDirection(this.hole)) {
+          this.hole.ui.renderable = this.hole.ui.sleepingHoleSprite;
+        }
       }
     };
 
-    // Add the new pointerdown and pointerup events.
     this.onPointerEvent("pointerdown", this, this.pointerDown.bind(this));
     this.onPointerEvent("pointerup", this, this.pointerUp.bind(this));
     this.onPointerEvent("pointerenter", this, this.pointerEnter.bind(this));
     this.onPointerEvent("pointerleave", this, this.pointerLeave.bind(this));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
-  dragStart(event: any): void {
-    super.dragStart(event);
+  private resetSeedGroupContainerToOriginalPos(): void {
+    this.pos.x = this.originalPos.x;
+    this.pos.y = this.originalPos.y;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
-  dragEnd(event: any): void {
+  dragStart(event: unknown): void {
+    super.dragStart(event);
+    UiHelper.forEachUiHole(
+      // all holes (apart from available moves) should be in sleeping mode while drag action is in progress
+      (holeUI: HoleUI) => {
+        if (this.hole.adjacencyDirection(holeUI.hole)) {
+          holeUI.renderable = holeUI.availableHoleSprite;
+        } else {
+          holeUI.renderable = holeUI.sleepingHoleSprite;
+        }
+      },
+      me
+    );
+  }
+
+  dragEnd(event: unknown): void {
     super.dragEnd(event);
-    this.getAllUISeeds().forEach((seed: SeedUI) => {
-      //TODO callback???
-      seed.randomisePosition();
-      seed.pos.z = seed.originalPos.z;
+    UiHelper.forEachUiSeedInHole(this.hole, (seedUI: SeedUI) => {
+      seedUI.randomisePosition();
+      seedUI.pos.z = seedUI.originalPos.z;
     });
+
+    UiHelper.forEachUiHole(
+      //restore hole status
+      (holeUI: HoleUI) => holeUI.sleepStateUI(),
+      me
+    );
+    //move back draggable seed group container to its initial position
+    this.resetSeedGroupContainerToOriginalPos();
+
     this.pos.z = this.originalPos.z;
     me.game.world.sort(true);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/explicit-module-boundary-types
-  dragMove(event: any): void {
+  dragMove(event: unknown): void {
     if (this.dragging == true) {
-      this.getAllUISeeds().forEach((seed: SeedUI) => {
-        //TODO callback ???
-        seed.pos.x = this.pos.x;
-        seed.pos.y = this.pos.y;
-        seed.pos.z = Infinity;
+      this.hole.ui.renderable = this.hole.ui.startHoleSprite;
+      UiHelper.forEachUiSeedInHole(this.hole, (seedUI: SeedUI) => {
+        seedUI.pos.x = this.pos.x;
+        seedUI.pos.y = this.pos.y;
+        seedUI.pos.z = Infinity;
       });
       this.pos.z = Infinity;
       me.game.world.sort(true);
     }
     super.dragMove(event);
-  }
-
-  public getAllUISeeds(): Array<SeedUI> {
-    return me.game.world.getChildByProp(
-      "id",
-      SeedUI.seedGroupId(this.hole.UID)
-    );
   }
 }
 

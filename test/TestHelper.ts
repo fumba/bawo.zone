@@ -53,9 +53,7 @@ class TestHelper {
     addSeed: jest.fn().mockReturnThis(),
   };
 
-  public static mockSeedGroupUI = {
-    getAllUISeeds: jest.fn().mockReturnValue([TestHelper.mockSeedUI]),
-  };
+  public static mockSeedGroupUI = {};
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static mockPoolPull(name: string): any {
@@ -83,6 +81,7 @@ class TestHelper {
       world: {
         addChild: jest.fn().mockReturnThis(),
         getChild: jest.fn().mockReturnThis(),
+        getChildByProp: jest.fn().mockReturnValue([TestHelper.mockSeedUI]),
         getChildByType: jest
           .fn()
           .mockImplementation((type) => TestHelper.mockGetChildByType(type)),
