@@ -30,9 +30,11 @@ import SeedGroupUI from "./SeedGroupUI";
 class HoleUI extends me.DroptargetEntity {
   private readonly hole: Hole;
 
-  private blockedHoleSprite;
+  public sleepingHoleSprite;
 
-  private availableHoleSprite;
+  public availableHoleSprite;
+
+  public blockedHoleSprite;
 
   /**
    * @param {Hole} hole the hole to which this UI entity corresponds to
@@ -59,18 +61,21 @@ class HoleUI extends me.DroptargetEntity {
     this.availableHoleSprite = new me.Sprite(0, 0, {
       image: me.loader.getImage(AppConstants.HOLE_AVAILABLE_UI),
     });
+    this.sleepingHoleSprite = new me.Sprite(0, 0, {
+      image: me.loader.getImage(AppConstants.HOLE_SLEEPING_UI), //TODO instead of blocked make this sleeping
+    });
     this.blockedHoleSprite = new me.Sprite(0, 0, {
-      image: me.loader.getImage(AppConstants.HOLE_BLOCKED_UI),
+      image: me.loader.getImage(AppConstants.HOLE_BLOCKED_UI), //TODO instead of blocked make this sleeping
     });
 
     this.updateHoleUI();
   }
 
-  private updateHoleUI() {
+  public updateHoleUI(): void {
     if (this.hole.availableMovesForCurrentPlayer().length > 0) {
-      this.renderable = this.blockedHoleSprite;
-    } else {
       this.renderable = this.availableHoleSprite;
+    } else {
+      this.renderable = this.sleepingHoleSprite;
     }
   }
 
