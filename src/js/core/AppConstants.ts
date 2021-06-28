@@ -73,6 +73,16 @@ class AppConstants {
   public static readonly HOLE_UI = "hole-ui";
 
   /**
+   * Hole UI - Blocked
+   */
+  public static readonly HOLE_BLOCKED_UI = "hole-blocked-ui";
+
+  /**
+   * Hole UI - Available
+   */
+  public static readonly HOLE_AVAILABLE_UI = "hole-available-ui";
+
+  /**
    * Seed Group UI
    */
   public static readonly SEED_GROUP_UI = "seed-group-ui";

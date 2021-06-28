@@ -74,7 +74,9 @@ class Move {
     buffer = buffer.concat(", owner :" + this.hole.player.side);
     buffer = buffer.concat(", hole id :" + this.hole.id);
     buffer = buffer.concat(", seed count:" + this.hole.numSeeds);
-    buffer = buffer.concat(", step count :" + this.prevContinuedMovesCount);
+    buffer = buffer.concat(
+      ", prev-cont-count :" + this.prevContinuedMovesCount
+    );
     buffer = buffer.concat(", isMtaji:" + this.isMtaji + " \n");
     buffer = buffer.concat("\n");
     return buffer;
