@@ -29,6 +29,7 @@ import HoleUI from "../entities/HoleUI";
 import SeedUI from "../entities/SeedUI";
 import SeedGroupUI from "../entities/SeedGroupUI";
 import Move from "./Move";
+import UiHelper from "../entities/UiHelper";
 
 class Hole {
   // Number of seeds in hole
@@ -125,7 +126,7 @@ class Hole {
 
     if (this.board.isGraphicsMode()) {
       //remove all ui seeds from hole
-      this.seedGroupUI.getAllUISeeds().forEach((seedUI: SeedUI) => {
+      UiHelper.forEachUiSeedInHole(this, (seedUI: SeedUI) => {
         this.board.getCurrentPlayer().ui.addSeed(seedUI);
         seedUI.group = null;
         seedUI.id = null;
