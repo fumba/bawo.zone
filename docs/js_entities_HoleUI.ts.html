@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> HoleUI</title>
+  <title> js/entities/HoleUI.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,207 +79,94 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Class</p>
-                    <h1>HoleUI</h1>
+                    <p>Source</p>
+                    <h1>js/entities/HoleUI.ts</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>HoleUI<span class="signature">(hole)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Bawo board hole</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
-
-
-    
-    <h4 class="name" id="HoleUI">
-        <a class="href-link" href="#HoleUI">#</a>
-        
-        <span class="code-name">
-            
-                new HoleUI<span class="signature">(hole)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>hole</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type"><a href="Hole.html">Hole</a></span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">the hole to which this UI entity corresponds to</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="js_entities_HoleUI.ts.html" class="button">View Source</a>
-            <span>
-                <a href="js_entities_HoleUI.ts.html">js/entities/HoleUI.ts</a>, <a href="js_entities_HoleUI.ts.html#line27">line 27</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-        
-    
-    </div>
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import AppConstants from "../core/AppConstants";
+import Hole from "../core/Hole";
+import Move from "../core/Move";
+import MoveDirection from "../core/MoveDirection";
+import me from "../me";
+import SeedGroupUI from "./SeedGroupUI";
+
+/*
+ * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
+ * &lt;a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone&lt;/a>
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Bawo board hole
+ */
+class HoleUI extends me.DroptargetEntity {
+  private readonly hole: Hole;
+
+  /**
+   * @param {Hole} hole the hole to which this UI entity corresponds to
+   */
+  constructor(hole: Hole) {
+    const settings = {
+      image: me.loader.getImage(AppConstants.HOLE_UI),
+      height: 80,
+      width: 80,
+      id: HoleUI.holeId(hole),
+    };
+
+    const xOffSet = 60;
+    const newRowOffset = hole.id &lt;= 7 ? 0 : 100;
+    const x = (hole.id &lt; 8 ? hole.id : 15 - hole.id) * 90 + xOffSet;
+    const y = (hole.player.isOnTopSide() ? 100 : 330) + newRowOffset;
+    super(x, y, settings);
+    // overlaps are not valid drops
+    // draggable seed container UI (SeedGroupUI) has a smaller radius so all drops are expected
+    // to be contained within the hole radius.
+    this.setCheckMethod(this.CHECKMETHOD_CONTAINS);
+    this.hole = hole;
+  }
+
+  drop(seedGroupUI: SeedGroupUI): void {
+    console.info(`${seedGroupUI.id} dropped into ${this.id}`);
+    // do not perform move if a drag and drop is performed on the same hole
+    if (seedGroupUI.hole.UID != this.hole.UID) {
+      // only perform move only on destination holes that are adjacent from the starting hole
+      const moveDirection = seedGroupUI.hole.adjacencyDirection(this.hole);
+      if (moveDirection) {
+        const move = new Move(this.hole, moveDirection);
+        this.hole.board.executeMove(move);
+      }
+    }
+  }
+
+  public static holeId(hole: Hole): string {
+    return `${AppConstants.HOLE_UI}-${hole.UID}`;
+  }
+}
+
+export default HoleUI;
+</code></pre>
+        </article>
+    </section>
 
 
 

@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -90,7 +90,6 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import Hole from "./Hole";
-import Board from "./Board";
 import MoveDirection from "./MoveDirection";
 /*
  * bawo.zone - &lt;a href="https://bawo.zone">https://bawo.zone&lt;/a>
@@ -114,9 +113,8 @@ import MoveDirection from "./MoveDirection";
 class Move {
   public prevContinuedMovesCount: number;
   public hole: Hole;
-  public readonly board: Board;
   public direction: MoveDirection;
-  private readonly possibleDirections = [
+  public readonly possibleDirections = [
     MoveDirection.AntiClockwise,
     MoveDirection.Clockwise,
   ];
@@ -135,21 +133,19 @@ class Move {
   public isMtaji: boolean;
 
   /**
+   * constrtuctor
    *
-   * @param prevContinuedMovesCount the number of subsequent (continued) moves executed before current move
-   * @param hole the hole on which the moves starts on
-   * @param board the board on which the move is being performed
-   * @param direction move direction
+   * @param {Hole} hole the hole on which the moves starts on
+   * @param {MoveDirection} direction move direction
+   * @param {number} prevContinuedMovesCount the number of subsequent (continued) moves executed before current move
    */
   constructor(
-    board: Board,
     hole: Hole,
     direction: MoveDirection,
     prevContinuedMovesCount = 0
   ) {
     this.prevContinuedMovesCount = prevContinuedMovesCount;
     this.hole = hole;
-    this.board = board;
     this.direction = direction;
     this.isMtaji = true;
   }
@@ -157,44 +153,10 @@ class Move {
    * Determines if a move is continuing. This happens when previous moves have
    * been executed before this move.
    *
-   * @returns {@code true} if the move is continuing.
+   * @returns  {true} if the move is continuing.
    */
   public isContinuing(): boolean {
     return this.prevContinuedMovesCount > 0;
-  }
-
-  //TODO
-  public isValidCapture(): boolean {
-    // General Bawo capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
-    // General Bawo capture rule 2: move should end on the front row of the players board side
-    // General Bawo capture rule 3: Seed(s) must be present in the first row destination hole
-    // General Bawo capture rule 4: Seed(s) must be present in the opponents opposing hole
-    if (
-      this.hole.numSeeds > 1 &amp;&amp;
-      this.getDestinationHole().isInFrontRow() &amp;&amp;
-      !this.getDestinationHole().isEmpty() &amp;&amp;
-      !this.board.adjacentOpponentHole(this.getDestinationHole()).isEmpty()
-    ) {
-      return true;
-    }
-    return false;
-  }
-
-  //TODO
-  public isValidNonCapture(): boolean {
-    if (this.sowsSeedInFrontHole()) {
-      for (const hole of this.hole.player.boardHoles) {
-        for (const direction of this.possibleDirections) {
-          const move: Move = new Move(this.board, hole, direction);
-          // General Bawo non-capture rule: A non-capture move can only be made if there are no existing capture moves
-          if (this.hole != hole &amp;&amp; move.isValidCapture()) {
-            return false;
-          }
-        }
-      }
-      return true;
-    }
-    return false;
   }
 
   public toString(): string {
@@ -215,7 +177,7 @@ class Move {
    *
    * @returns {boolean} true if move sows seed in any front row hole
    */
-  private sowsSeedInFrontHole(): boolean {
+  public sowsSeedInFrontHole(): boolean {
     let hole: Hole = this.hole;
     for (let i = 0; i &lt; this.hole.numSeeds; i++) {
       if (this.direction == MoveDirection.Clockwise) {
@@ -238,10 +200,10 @@ class Move {
    * Gets the hole on which the specified move will be planting the last seed in
    * the players hand.
    *
-   * @param move Move to be performed
-   * @returns Hole on which the move ends
+   *
+   * @returns {Hole} Hole on which the move ends
    */
-  private getDestinationHole(): Hole {
+  public getDestinationHole(): Hole {
     switch (this.direction) {
       case MoveDirection.Clockwise:
         return this.hole.player.boardHoles.stepClockwise(

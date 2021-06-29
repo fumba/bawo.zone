@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -89,8 +89,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import Logger from "../../helpers/Logger";
-import game from "../game";
+            <pre class="prettyprint source linenums"><code>import game from "../Game";
 import me from "../me";
 
 /**
@@ -99,7 +98,7 @@ import me from "../me";
 class ScoreItem extends me.Renderable {
   constructor(x: number, y: number) {
     super(x, y, 10, 10);
-    Logger.info("Show HUD", ScoreItem.name);
+    console.info("Show HUD");
     this.score = -1;
   }
 
@@ -114,6 +113,7 @@ class ScoreItem extends me.Renderable {
     return false;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   draw(context: unknown) {
     // draw it baby !
   }

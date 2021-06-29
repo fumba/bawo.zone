@@ -70,7 +70,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -347,9 +347,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Hole.ts.html" class="button">View Source</a>
+            <a href="js_core_Hole.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Hole.ts.html">core/Hole.ts</a>, <a href="core_Hole.ts.html#line37">line 37</a>
+                <a href="js_core_Hole.ts.html">js/core/Hole.ts</a>, <a href="js_core_Hole.ts.html#line38">line 38</a>
             </span>
         </p>
     
@@ -406,12 +406,12 @@
 
 
     
-    <h4 class="name" id="addSeeds">
-        <a class="href-link" href="#addSeeds">#</a>
+    <h4 class="name" id="adjacencyDirection">
+        <a class="href-link" href="#adjacencyDirection">#</a>
         
         <span class="code-name">
             
-                addSeeds<span class="signature">(numSeeds)</span><span class="type-signature"> &rarr; {number}</span>
+                adjacencyDirection<span class="signature">(targetHole)</span><span class="type-signature"> &rarr; {<a href="global.html#MoveDirection">MoveDirection</a>}</span>
             
         </span>
     </h4>
@@ -420,7 +420,7 @@
     
     
     <div class="description">
-        Add seed tokens to the hole.
+        Calculates the move direction that corresponds to a users drag and drop action.Seeds are dragged from an origin hole into the target hole. The direction is only returned ifthe target hole is adjacent to the origin.
     </div>
     
 
@@ -458,13 +458,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>numSeeds</code></td>
+      <td class="name"><code>targetHole</code></td>
   
 
   <td class="type">
   
       
-<span class="param-type">number</span>
+<span class="param-type"><a href="Hole.html">Hole</a></span>
 
 
   
@@ -474,7 +474,7 @@
 
   
 
-  <td class="description last">Number of seeds to be added to the hole.</td>
+  <td class="description last">the hole into which the seeds are being dragged into</td>
 </tr>
 
 
@@ -520,9 +520,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Hole.ts.html" class="button">View Source</a>
+            <a href="js_core_Hole.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Hole.ts.html">core/Hole.ts</a>, <a href="core_Hole.ts.html#line93">line 93</a>
+                <a href="js_core_Hole.ts.html">js/core/Hole.ts</a>, <a href="js_core_Hole.ts.html#line127">line 127</a>
             </span>
         </p>
     
@@ -553,13 +553,135 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'>Total Number of seeds in the hole after adding the new seed tokens to        it.</div>
+    <div class='param-desc column is-7'>the direction that corresponds to the users drag and drop action.</div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">number</span>
+<span class="param-type"><a href="global.html#MoveDirection">MoveDirection</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="availableMovesForCurrentPlayer">
+        <a class="href-link" href="#availableMovesForCurrentPlayer">#</a>
+        
+        <span class="code-name">
+            
+                availableMovesForCurrentPlayer<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;<a href="Move.html">Move</a>>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Gets the moves that are available for the current player
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="js_core_Hole.ts.html" class="button">View Source</a>
+            <span>
+                <a href="js_core_Hole.ts.html">js/core/Hole.ts</a>, <a href="js_core_Hole.ts.html#line107">line 107</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>moves that can be played</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Array.&lt;<a href="Move.html">Move</a>></span>
 
 
     </div>
@@ -642,9 +764,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Hole.ts.html" class="button">View Source</a>
+            <a href="js_core_Hole.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Hole.ts.html">core/Hole.ts</a>, <a href="core_Hole.ts.html#line80">line 80</a>
+                <a href="js_core_Hole.ts.html">js/core/Hole.ts</a>, <a href="js_core_Hole.ts.html#line75">line 75</a>
             </span>
         </p>
     
@@ -676,128 +798,6 @@
 <div class="columns">
     
     <div class='param-desc column is-7'>true if seeds are present</div>
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
-        
-<span class="param-type">boolean</span>
-
-
-    </div>
-    
-</div>
-
-                
-        </div>
-    </div>
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="isGraphicsMode">
-        <a class="href-link" href="#isGraphicsMode">#</a>
-        
-        <span class="code-name">
-            
-                isGraphicsMode<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        Checks to see if graphics should be rendered
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_Hole.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_Hole.ts.html">core/Hole.ts</a>, <a href="core_Hole.ts.html#line58">line 58</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
-            
-                    
-
-<div class="columns">
-    
-    <div class='param-desc column is-7'>if graphics need to be rendered</div>
     
     
     <div class='column is-5 has-text-left'>
@@ -886,9 +886,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Hole.ts.html" class="button">View Source</a>
+            <a href="js_core_Hole.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Hole.ts.html">core/Hole.ts</a>, <a href="core_Hole.ts.html#line67">line 67</a>
+                <a href="js_core_Hole.ts.html">js/core/Hole.ts</a>, <a href="js_core_Hole.ts.html#line62">line 62</a>
             </span>
         </p>
     
@@ -945,12 +945,12 @@
 
 
     
-    <h4 class="name" id="removeAllSeeds">
-        <a class="href-link" href="#removeAllSeeds">#</a>
+    <h4 class="name" id="moveSeedsIntoCurrentPlayerHand">
+        <a class="href-link" href="#moveSeedsIntoCurrentPlayerHand">#</a>
         
         <span class="code-name">
             
-                removeAllSeeds<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span>
+                moveSeedsIntoCurrentPlayerHand<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span>
             
         </span>
     </h4>
@@ -959,7 +959,7 @@
     
     
     <div class="description">
-        Removes all seeds from the hole clearing it to a count of 0.
+        Moves all seeds from the hole into players hand - clearing it to a count of 0.
     </div>
     
 
@@ -1008,9 +1008,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Hole.ts.html" class="button">View Source</a>
+            <a href="js_core_Hole.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Hole.ts.html">core/Hole.ts</a>, <a href="core_Hole.ts.html#line105">line 105</a>
+                <a href="js_core_Hole.ts.html">js/core/Hole.ts</a>, <a href="js_core_Hole.ts.html#line86">line 86</a>
             </span>
         </p>
     
@@ -1041,7 +1041,7 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'>The number of seeds that were removed.</div>
+    <div class='param-desc column is-7'>The number of seeds that were moved from hole into players hand.</div>
     
     
     <div class='column is-5 has-text-left'>
@@ -1067,12 +1067,12 @@
 
 
     
-    <h4 class="name" id="renderHoleAndSeeds">
-        <a class="href-link" href="#renderHoleAndSeeds">#</a>
+    <h4 class="name" id="renderUI">
+        <a class="href-link" href="#renderUI">#</a>
         
         <span class="code-name">
             
-                renderHoleAndSeeds<span class="signature">()</span><span class="type-signature"></span>
+                renderUI<span class="signature">()</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -1130,153 +1130,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Hole.ts.html" class="button">View Source</a>
+            <a href="js_core_Hole.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Hole.ts.html">core/Hole.ts</a>, <a href="core_Hole.ts.html#line122">line 122</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="validateNumSeeds">
-        <a class="href-link" href="#validateNumSeeds">#</a>
-        
-        <span class="code-name">
-            
-                validateNumSeeds<span class="signature">(numSeeds)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>numSeeds</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">number</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Number of seeds to add or remove</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_Hole.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_Hole.ts.html">core/Hole.ts</a>, <a href="core_Hole.ts.html#line114">line 114</a>
+                <a href="js_core_Hole.ts.html">js/core/Hole.ts</a>, <a href="js_core_Hole.ts.html#line143">line 143</a>
             </span>
         </p>
     
