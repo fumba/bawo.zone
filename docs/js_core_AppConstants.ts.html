@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -147,6 +147,31 @@ class AppConstants {
    * lost the game.
    */
   public static readonly INFINITE_LOOP_THRESHOLD: number = 50;
+
+  /**
+   * This id identifies the dummy hole (pointer). See PlayerBoardHoles
+   */
+  public static readonly DUMMY_HOLE_ID = -1;
+
+  /**
+   * Seed UI
+   */
+  public static readonly SEED_UI = "seed-ui";
+
+  /**
+   * Hole UI
+   */
+  public static readonly HOLE_UI = "hole-ui";
+
+  /**
+   * Seed Group UI
+   */
+  public static readonly SEED_GROUP_UI = "seed-group-ui";
+
+  /**
+   * Player UI
+   */
+  public static readonly PLAYER_UI = "player-ui";
 }
 
 export default AppConstants;

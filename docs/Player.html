@@ -70,7 +70,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -89,7 +89,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Player<span class="signature">(side)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Player<span class="signature">(side, board)</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p><a href="Player.html">Player</a> represents a bawo game player</p></div>
         
@@ -115,7 +115,7 @@
         
         <span class="code-name">
             
-                new Player<span class="signature">(side)</span><span class="type-signature"></span>
+                new Player<span class="signature">(side, board)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -183,6 +183,31 @@
 
 
         
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>board</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Board.html">Board</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">the board on which the player is</td>
+</tr>
+
+
+        
         </tbody>
     </table>
 </div>
@@ -224,9 +249,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Player.ts.html" class="button">View Source</a>
+            <a href="js_core_Player.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Player.ts.html">core/Player.ts</a>, <a href="core_Player.ts.html#line28">line 28</a>
+                <a href="js_core_Player.ts.html">js/core/Player.ts</a>, <a href="js_core_Player.ts.html#line30">line 30</a>
             </span>
         </p>
     
@@ -278,154 +303,6 @@
         <div class='vertical-section'>
             <h1>Methods</h1>
             <div class="members">
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="addSeeds">
-        <a class="href-link" href="#addSeeds">#</a>
-        
-        <span class="code-name">
-            
-                addSeeds<span class="signature">(numSeeds)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        Adds seeds to players hand
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>numSeeds</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">number</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Number of seeds to be added to players hand</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="core_Player.ts.html" class="button">View Source</a>
-            <span>
-                <a href="core_Player.ts.html">core/Player.ts</a>, <a href="core_Player.ts.html#line44">line 44</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
             
                 <div class="member">
 
@@ -494,9 +371,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Player.ts.html" class="button">View Source</a>
+            <a href="js_core_Player.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Player.ts.html">core/Player.ts</a>, <a href="core_Player.ts.html#line67">line 67</a>
+                <a href="js_core_Player.ts.html">js/core/Player.ts</a>, <a href="js_core_Player.ts.html#line76">line 76</a>
             </span>
         </p>
     
@@ -553,12 +430,12 @@
 
 
     
-    <h4 class="name" id="removeSeeds">
-        <a class="href-link" href="#removeSeeds">#</a>
+    <h4 class="name" id="moveSeedsIntoBoardHole">
+        <a class="href-link" href="#moveSeedsIntoBoardHole">#</a>
         
         <span class="code-name">
             
-                removeSeeds<span class="signature">(numSeeds)</span><span class="type-signature"> &rarr; {number}</span>
+                moveSeedsIntoBoardHole<span class="signature">(numSeeds, hole)</span><span class="type-signature"> &rarr; {number}</span>
             
         </span>
     </h4>
@@ -626,6 +503,31 @@
 
 
         
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>hole</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="Hole.html">Hole</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The hole into which seeds will be moved</td>
+</tr>
+
+
+        
         </tbody>
     </table>
 </div>
@@ -667,9 +569,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Player.ts.html" class="button">View Source</a>
+            <a href="js_core_Player.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Player.ts.html">core/Player.ts</a>, <a href="core_Player.ts.html#line55">line 55</a>
+                <a href="js_core_Player.ts.html">js/core/Player.ts</a>, <a href="js_core_Player.ts.html#line54">line 54</a>
             </span>
         </p>
     
@@ -840,9 +742,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Player.ts.html" class="button">View Source</a>
+            <a href="js_core_Player.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Player.ts.html">core/Player.ts</a>, <a href="core_Player.ts.html#line97">line 97</a>
+                <a href="js_core_Player.ts.html">js/core/Player.ts</a>, <a href="js_core_Player.ts.html#line106">line 106</a>
             </span>
         </p>
     
@@ -988,9 +890,9 @@
 
     
         <p class="tag-source">
-            <a href="core_Player.ts.html" class="button">View Source</a>
+            <a href="js_core_Player.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Player.ts.html">core/Player.ts</a>, <a href="core_Player.ts.html#line78">line 78</a>
+                <a href="js_core_Player.ts.html">js/core/Player.ts</a>, <a href="js_core_Player.ts.html#line87">line 87</a>
             </span>
         </p>
     

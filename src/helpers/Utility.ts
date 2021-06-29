@@ -21,6 +21,13 @@
 import Vector from "../js/core/Vector";
 
 class Utility {
+  /**
+   * Adds zero to a number that is less than 9
+   *
+   * @param {number} num number representing hole ID
+   * @returns {string} the number after being padded or not
+   */
+
   public static padZero(num: number): string {
     const str = num.toString();
     return str.length < 2 ? "0".concat(str) : str;
@@ -47,4 +54,5 @@ class Utility {
     return new Vector(xCenter + adjacent, yCenter + opposite, 0);
   }
 }
+
 export default Utility;

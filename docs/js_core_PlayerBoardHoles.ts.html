@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -122,6 +122,7 @@
 import Hole from "./Hole";
 import Player from "./Player";
 import AppConstants from "./AppConstants";
+import Board from "./Board";
 
 class PlayerBoardHoles implements Iterable&lt;Hole> {
   // Hole 00
@@ -134,24 +135,28 @@ class PlayerBoardHoles implements Iterable&lt;Hole> {
   private startHolePointer: Hole;
   // Hole owner
   private player: Player;
+  // the board on which holes will be placed
+  public readonly board: Board;
 
   /**
    * Constructor
    *
-   * @param player
+   * @param {Player} player the player who owns the holes
+   * @param {Board} board the board on which the player is placed
    */
-  constructor(player: Player) {
+  constructor(player: Player, board: Board) {
     this.startHole = null;
     this.endHole = null;
     this.totalNumHoles = 0;
     this.startHolePointer = null;
     this.player = player;
+    this.board = board;
   }
 
   /**
    * Iterator for all the holes assigned to the player
    *
-   * @returns all the holes assigned to the player
+   * @returns {Hole} all the holes assigned to the player
    */
   [Symbol.iterator](): Iterator&lt;Hole> {
     let currentHole: Hole = this.startHolePointer;
@@ -172,14 +177,14 @@ class PlayerBoardHoles implements Iterable&lt;Hole> {
   /**
    * Add new Holes at the end of the chain.
    *
-   * @param player   The player to whom the new hole will be assigned to.
-   * @param numSeeds Number of seeds to be placed in the hole.
-   * @returns Added Hole
+   * @param {number} numSeeds Number of seeds to be placed in the hole.
+   * @returns {Hole} Added Hole
    */
   public insertAtEnd(numSeeds: number): Hole {
     if (this.totalNumHoles &lt; AppConstants.NUM_PLAYER_HOLES) {
       const newBoardHole: Hole = new Hole(
         this.player,
+        this.board,
         this.totalNumHoles,
         numSeeds,
         null,
@@ -193,7 +198,8 @@ class PlayerBoardHoles implements Iterable&lt;Hole> {
 
         this.startHolePointer = new Hole(
           this.player,
-          -1,
+          this.board,
+          AppConstants.DUMMY_HOLE_ID,
           0,
           null,
           this.startHole
@@ -221,8 +227,8 @@ class PlayerBoardHoles implements Iterable&lt;Hole> {
   /**
    * Retrieves the Hole from the board using its given ID.
    *
-   * @param holeId ID to be used to retrieve hole
-   * @returns Retrieved hole
+   * @param {number} holeId ID to be used to retrieve hole
+   * @returns {Hole} Retrieved hole
    */
   public getHoleWithID(holeId: number): Hole {
     this.validateHoleId(holeId);
@@ -238,7 +244,7 @@ class PlayerBoardHoles implements Iterable&lt;Hole> {
    * Make sure that all the 16 holes have been added before attempting to retrieve
    * any.
    *
-   * @param holeId Hole id to be validated.
+   * @param {number} holeId Hole id to be validated.
    */
   private validateHoleId(holeId: number): void {
     if (
@@ -259,9 +265,9 @@ class PlayerBoardHoles implements Iterable&lt;Hole> {
   /**
    * Step back anti-clockwise for the specified number of steps.
    *
-   * @param boardHole Starting Hole
-   * @param numSteps  Number of steps to move backwards.
-   * @returns Hole
+   * @param {Hole} boardHole Starting Hole
+   * @param {number} numSteps  Number of steps to move backwards.
+   * @returns {Hole} Hole
    */
   public stepAntiClockwise(boardHole: Hole, numSteps: number): Hole {
     this.validateNumSteps(numSteps);
@@ -296,7 +302,7 @@ class PlayerBoardHoles implements Iterable&lt;Hole> {
   /**
    * Allow positive integers less than 64 for numSteps.
    *
-   * @param numSteps Number of steps to be made.
+   * @param {number} numSteps Number of steps to be made.
    */
   private validateNumSteps(numSteps: number): void {
     if (numSteps &lt; 1 || numSteps > AppConstants.MAX_SEED_COUNT) {
@@ -309,9 +315,9 @@ class PlayerBoardHoles implements Iterable&lt;Hole> {
   /**
    * Step forward clockwise for the specified number of steps.
    *
-   * @param boardHole Starting Hole
-   * @param numSteps  Number of steps to move backwards.
-   * @returns The destination hole.
+   * @param {Hole} boardHole Starting Hole
+   * @param {number} numSteps  Number of steps to move backwards.
+   * @returns {Hole} The destination hole.
    */
   public stepClockwise(boardHole: Hole, numSteps: number): Hole {
     this.validateNumSteps(numSteps);

@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -124,7 +124,7 @@ class MtajiModeRules extends Rules {
   /**
    * Mtaji mode does not use home-hole
    *
-   * @returns false - home is not used in mtaji mode
+   * @returns {false} false - home is not used in mtaji mode
    */
   public hasHomeHole(): boolean {
     return false;
@@ -136,7 +136,7 @@ class MtajiModeRules extends Rules {
    * hold IDs.
    * In this version of the game, 2 seeds are placed in each hole.
    *
-   * @returns  mtaji initial seed arrangement - 2 seeds in each hole
+   * @returns {Map} mtaji initial seed arrangement - 2 seeds in each hole
    */
   public initialSeedForPlayerRows(): Map&lt;PlayerSide, Array&lt;number>> {
     const boardSeedInitialArrangement: Array&lt;number> = new Array(
@@ -154,7 +154,8 @@ class MtajiModeRules extends Rules {
   /**
    * Check if the player is attempting to make a valid move.
    *
-   * @param move
+   * @param {Move} move the move to be checked for validity
+   * @returns {boolean} true if the move is valid
    */
   public isValidMove(move: Move): boolean {
     // Rule 1: Continuing moves since they are determined by game rules
@@ -163,7 +164,7 @@ class MtajiModeRules extends Rules {
     }
 
     // Rule 2: Check if this move results in a capture
-    if (move.isValidCapture()) {
+    if (this.isValidCapture(move)) {
       return true;
     }
 
@@ -172,7 +173,10 @@ class MtajiModeRules extends Rules {
     // Rule 3: If there are no capture moves, any front row holes with
     // seed tokens are valid moves.
     // Rule 4: If there are no valid front row non-capture moves, use the back row holes.
-    if (move.isValidNonCapture()) {
+    if (this.isValidNonCapture(move, true)) {
+      return true;
+    }
+    if (this.isValidNonCapture(move, false)) {
       return true;
     }
     return false;
@@ -188,6 +192,47 @@ class MtajiModeRules extends Rules {
     }
   }
 
+  //TODO move these to rules class
+  public isValidCapture(move: Move): boolean {
+    //  capture rule 1: atleast 2 seeds must be present in players hole for a move to result into a valid capture
+    //  capture rule 2: move should end on the front row of the players board side
+    //  capture rule 3: Seed(s) must be present in the first row destination hole
+    //  capture rule 4: Seed(s) must be present in the opponents opposing hole
+    if (
+      move.hole.numSeeds > 1 &amp;&amp;
+      move.getDestinationHole().isInFrontRow() &amp;&amp;
+      !move.getDestinationHole().isEmpty() &amp;&amp;
+      !move.hole.board.adjacentOpponentHole(move.getDestinationHole()).isEmpty()
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  //TODO move these to rules class
+  public isValidNonCapture(move: Move, frontRow: boolean): boolean {
+    if (frontRow &amp;&amp; !move.hole.isInFrontRow()) {
+      return false;
+    }
+    // moves cannot be made on holes with only
+    if (move.hole.numSeeds > 1 &amp;&amp; move.sowsSeedInFrontHole()) {
+      for (const hole of move.hole.player.boardHoles) {
+        for (const direction of move.possibleDirections) {
+          const testMove: Move = new Move(hole, direction);
+          //  non-capture rule: A non-capture move can only be made if there are no existing capture moves
+          if (
+            (move.hole != hole &amp;&amp; this.isValidCapture(testMove)) ||
+            (!frontRow &amp;&amp; this.isValidNonCapture(testMove, true))
+          ) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
   private updateMoveDirectionAndHole(
     capturingMove: Move,
     clockwiseReverseHoleIDs: Array&lt;number>,
@@ -199,7 +244,6 @@ class MtajiModeRules extends Rules {
       capturingMove.prevContinuedMovesCount + 1;
     let direction = capturingMove.direction;
     let hole: Hole;
-    const board = capturingMove.board;
 
     const playerHoles = capturingMove.hole.player.boardHoles;
     if (direction == MoveDirection.Clockwise) {
@@ -219,7 +263,7 @@ class MtajiModeRules extends Rules {
         hole = playerHoles.getHoleWithID(clockwiseReversedResetHoleId);
       }
     }
-    return new Move(board, hole, direction, prevContinuedMovesCount);
+    return new Move(hole, direction, prevContinuedMovesCount);
   }
 }
 

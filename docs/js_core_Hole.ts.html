@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Hole.html">Hole</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fs">fs</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -110,8 +110,16 @@
  */
 
 import AppConstants from "./AppConstants";
+import Board from "./Board";
 import MoveDirection from "./MoveDirection";
 import Player from "./Player";
+import Utility from "../../helpers/Utility";
+
+import { isEmpty } from "lodash";
+import HoleUI from "../entities/HoleUI";
+import SeedUI from "../entities/SeedUI";
+import SeedGroupUI from "../entities/SeedGroupUI";
+import Move from "./Move";
 
 class Hole {
   // Number of seeds in hole
@@ -120,17 +128,26 @@ class Hole {
   public nextHole: Hole;
   // Previous hole
   public prevHole: Hole;
-  // Holes unique ID
+  // Hole ID (based on PlayerBoardHoles)
   public readonly id: number;
+  // Unique hole ID (with player side)
+  public readonly UID: string;
   // The player who is assigned this hole
   public readonly player: Player;
   // Whether the player is allowed to make moves on this hole.
   public moveStatus: MoveDirection;
+  // the board on which the hole is placed
+  public readonly board: Board;
+  // Hole UI corresponding to this hole
+  public ui: HoleUI;
+  // Seed Group UI corresponding to this hole
+  public seedGroupUI: SeedGroupUI;
 
   /**
    * Constructor
    *
    * @param {Player} player   The player to whom this hole is being assigned to
+   * @param {Board} board The board on which the hole is placed
    * @param {number} id      Unique hole ID (Ranging 0-16) -1 is used for the dummy
    *                 pointer to the first hole.
    * @param {number} numSeeds Number of seeds to be initially added to the hole.
@@ -139,6 +156,7 @@ class Hole {
    */
   constructor(
     player: Player,
+    board: Board,
     id: number,
     numSeeds: number,
     prevHole: Hole,
@@ -146,12 +164,24 @@ class Hole {
   ) {
     this.player = player;
     this.id = id;
+    if (!isEmpty(this.player)) {
+      this.UID = `[${Utility.padZero(this.id)}-${this.player.side}]`;
+    }
     this.numSeeds = numSeeds;
     this.nextHole = nextHole;
     this.prevHole = prevHole;
+    this.board = board;
 
     // initialize move status as unauthorized
     this.moveStatus = MoveDirection.UnAuthorised;
+
+    if (
+      !isEmpty(this.board) &amp;&amp;
+      this.board.isGraphicsMode() &amp;&amp;
+      this.id != AppConstants.DUMMY_HOLE_ID
+    ) {
+      this.renderUI();
+    }
   }
 
   /**
@@ -178,53 +208,103 @@ class Hole {
   }
 
   public toString(): string {
-    return `[${this.pad(this.id)}(${this.pad(this.numSeeds)})-${
+    return `[${Utility.padZero(this.id)}(${Utility.padZero(this.numSeeds)})-${
       this.moveStatus
     }]`;
   }
 
   /**
-   * Add seed tokens to the hole.
+   * Moves all seeds from the hole into players hand - clearing it to a count of 0.
    *
-   * @param  {number} numSeeds Number of seeds to be added to the hole.
-   * @returns {number} Total Number of seeds in the hole after adding the new seed tokens to
-   *         it.
+   * @returns {number} The number of seeds that were moved from hole into players hand.
    */
-  public addSeeds(numSeeds: number): number {
-    this.validateNumSeeds(numSeeds);
-    if (this.numSeeds + numSeeds > AppConstants.MAX_SEED_COUNT) {
-      throw new Error(
-        `Overflow - The hole has ${this.numSeeds} seeds. | requested to add: ${numSeeds}`
-      );
-    }
-    return (this.numSeeds += numSeeds);
-  }
-
-  /**
-   * Removes all seeds from the hole clearing it to a count of 0.
-   *
-   * @returns {number} The number of seeds that were removed.
-   */
-  public removeAllSeeds(): number {
+  public moveSeedsIntoCurrentPlayerHand(): number {
     const numSeedsTemp = this.numSeeds;
     this.numSeeds = 0;
+
+    if (this.board.isGraphicsMode()) {
+      //remove all ui seeds from hole
+      this.seedGroupUI.getAllUISeeds().forEach((seedUI: SeedUI) => {
+        this.board.getCurrentPlayer().ui.addSeed(seedUI);
+        seedUI.group = null;
+        seedUI.id = null;
+      });
+    }
+    if (numSeedsTemp > 0) {
+      this.board.getCurrentPlayer().numSeedsInHand += numSeedsTemp;
+    }
     return numSeedsTemp;
   }
 
   /**
+   * Gets the moves that are available for the current player
    *
-   * @param {number} numSeeds Number of seeds to add or remove
+   * @returns {Array&lt;Move>} moves that can be played
    */
-  private validateNumSeeds(numSeeds: number): void {
-    if (numSeeds &lt; 0 || numSeeds > AppConstants.MAX_SEED_COUNT) {
-      throw new Error("Invalid number of seeds | requested: " + numSeeds);
+  public availableMovesForCurrentPlayer(): Array&lt;Move> {
+    const moves: Array&lt;Move> = [];
+    if (
+      this.moveStatus == MoveDirection.Clockwise ||
+      this.moveStatus == MoveDirection.AntiClockwise
+    ) {
+      moves.push(new Move(this, this.moveStatus));
+    } else if (this.moveStatus == MoveDirection.Both) {
+      moves.push(new Move(this, MoveDirection.Clockwise));
+      moves.push(new Move(this, MoveDirection.AntiClockwise));
     }
+    return moves;
   }
 
-  //TODO
-  private pad(num: number): string {
-    const str = num.toString();
-    return str.length &lt; 2 ? "0".concat(str) : str;
+  /**
+   * Calculates the move direction that corresponds to a users drag and drop action.
+   * Seeds are dragged from an origin hole into the target hole. The direction is only returned if
+   * the target hole is adjacent to the origin.
+   *
+   * @param {Hole} targetHole the hole into which the seeds are being dragged into
+   * @returns {MoveDirection} the direction that corresponds to the users drag and drop action.
+   */
+  public adjacencyDirection(targetHole: Hole): MoveDirection {
+    //retrieved valid move directions for the hole
+    const validDirections = this.availableMovesForCurrentPlayer().map(
+      (move) => move.direction
+    );
+    if (
+      validDirections.includes(MoveDirection.Clockwise) &amp;&amp;
+      this.nextHole.UID == targetHole.UID
+    ) {
+      return MoveDirection.Clockwise;
+    } else if (
+      validDirections.includes(MoveDirection.AntiClockwise) &amp;&amp;
+      this.prevHole.UID == targetHole.UID
+    ) {
+      return MoveDirection.AntiClockwise;
+    }
+    return null;
+  }
+
+  /**
+   * Renders the hole and its contents (seeds)
+   */
+  private renderUI(): void {
+    //render hole
+    const holeUI = this.board.me.pool.pull(AppConstants.HOLE_UI, this);
+    this.board.me.game.world.addChild(holeUI);
+    this.ui = holeUI;
+
+    // invisible draggable collection that contains seeds
+    const seedGroup = this.board.me.pool.pull(AppConstants.SEED_GROUP_UI, this);
+    this.seedGroupUI = seedGroup;
+    this.board.me.game.world.addChild(seedGroup);
+
+    for (let i = 0; i &lt; this.numSeeds; i++) {
+      // render seeds that belong to hole
+      const seedUI = this.board.me.pool.pull(
+        AppConstants.SEED_UI,
+        this.seedGroupUI,
+        this.UID
+      );
+      this.board.me.game.world.addChild(seedUI);
+    }
   }
 }
 
