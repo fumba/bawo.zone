@@ -64,13 +64,13 @@ class HoleUI extends me.DroptargetEntity {
       image: me.loader.getImage(AppConstants.HOLE_AVAILABLE_UI),
     });
     this.sleepingHoleSprite = new me.Sprite(0, 0, {
-      image: me.loader.getImage(AppConstants.HOLE_SLEEPING_UI), //TODO instead of blocked make this sleeping
+      image: me.loader.getImage(AppConstants.HOLE_SLEEPING_UI),
     });
     this.blockedHoleSprite = new me.Sprite(0, 0, {
-      image: me.loader.getImage(AppConstants.HOLE_BLOCKED_UI), //TODO instead of blocked make this sleeping
+      image: me.loader.getImage(AppConstants.HOLE_BLOCKED_UI),
     });
     this.startHoleSprite = new me.Sprite(0, 0, {
-      image: me.loader.getImage(AppConstants.HOLE_START_UI), //TODO instead of blocked make this sleeping
+      image: me.loader.getImage(AppConstants.HOLE_START_UI),
     });
 
     this.sleepStateUI();
@@ -85,10 +85,10 @@ class HoleUI extends me.DroptargetEntity {
   }
 
   drop(seedGroupUI: SeedGroupUI): void {
-    console.info(`${seedGroupUI.id} dropped into ${this.id}`);
     // do not perform move if a drag and drop is performed on the same hole
     const startingHole = seedGroupUI.hole;
     if (startingHole.UID != this.hole.UID) {
+      console.info(`${seedGroupUI.id} dropped into ${this.id}`);
       // only perform move only on destination holes that are adjacent from the starting hole
       const moveDirection = startingHole.adjacencyDirection(this.hole);
       if (moveDirection) {
@@ -103,6 +103,8 @@ class HoleUI extends me.DroptargetEntity {
           hole.ui.sleepStateUI();
         }
       });
+    } else {
+      console.info("drag and dropped into the same hole");
     }
   }
 }
