@@ -26,9 +26,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn install
-    - run: yarn test
+    - run: yarn jest --coverage
     - run: yarn lint
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.2
       with:
         github-token: ${{ github.token }}
+    
