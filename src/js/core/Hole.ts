@@ -25,11 +25,11 @@ import Player from "./Player";
 import Utility from "../../helpers/Utility";
 
 import { isEmpty } from "lodash";
-import HoleUI from "../entities/HoleUI";
-import SeedUI from "../entities/SeedUI";
-import SeedGroupUI from "../entities/SeedGroupUI";
+import HoleUI from "../ui_entities/HoleUI";
+import SeedUI from "../ui_entities/SeedUI";
+import SeedGroupUI from "../ui_entities/SeedGroupUI";
 import Move from "./Move";
-import UiHelper from "../entities/UiHelper";
+import UiHelper from "../ui_entities/UiHelper";
 
 class Hole {
   // Number of seeds in hole

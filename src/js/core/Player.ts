@@ -22,10 +22,10 @@ import PlayerSide from "./PlayerSide";
 import AppConstants from "./AppConstants";
 import PlayerBoardHoles from "./PlayerBoardHoles";
 import Board from "./Board";
-import PlayerUI from "../entities/PlayerUI";
+import PlayerUI from "../ui_entities/PlayerUI";
 import { isEmpty } from "lodash";
 import Hole from "./Hole";
-import SeedUI from "../entities/SeedUI";
+import SeedUI from "../ui_entities/SeedUI";
 /**
  * <p>
  * {@link Player} represents a bawo game player
