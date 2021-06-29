@@ -30,6 +30,6 @@ jobs:
       uses: coverallsapp/github-action@v1.1.2
       with:
         github-token: ${{ github.token }}
-    - run: yarn jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+    - run: yarn jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
     - run: yarn lint
     
