@@ -76,10 +76,19 @@ class SeedGroupUI extends me.DraggableEntity {
     this.radius = settings.height / 2;
     this.hole = hole;
     this.renderable.alpha = 0.1;
+
+    const font = new me.Text(this.pos.x, this.pos.y - 30, {
+      font: "Arial",
+      size: 9,
+      fillStyle: this.color,
+      text: this.id,
+    });
+    me.game.world.addChild(font);
   }
 
   initEvents(): void {
     super.initEvents();
+
     const isPlayableHole = () =>
       this.hole.availableMovesForCurrentPlayer().length > 0;
 

@@ -104,7 +104,11 @@ class HoleUI extends me.DroptargetEntity {
         }
       });
     } else {
-      console.info("drag and dropped into the same hole");
+      console.info(
+        "drag and dropped into the same hole, ",
+        seedGroupUI.id,
+        this.id
+      );
     }
   }
 }
