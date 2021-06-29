@@ -9,7 +9,7 @@ import Move from "./Move";
 import MoveDirection from "./MoveDirection";
 import Me from "../me";
 import { isEmpty } from "lodash";
-import SeedUI from "../entities/SeedUI";
+import SeedUI from "../ui_entities/SeedUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>

@@ -5,11 +5,11 @@ import me from "./me";
 import PlayScreen from "./screens/PlayScreen";
 import TitleScreen from "./screens/title";
 import game from "./Game";
-import SeedUI from "./entities/SeedUI";
-import HoleUI from "./entities/HoleUI";
-import SeedGroupUI from "./entities/SeedGroupUI";
+import SeedUI from "./ui_entities/SeedUI";
+import HoleUI from "./ui_entities/HoleUI";
+import SeedGroupUI from "./ui_entities/SeedGroupUI";
 import AppConstants from "./core/AppConstants";
-import PlayerUI from "./entities/PlayerUI";
+import PlayerUI from "./ui_entities/PlayerUI";
 
 class Bootstrap {
   constructor() {
