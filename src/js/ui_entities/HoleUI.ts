@@ -33,16 +33,16 @@ class HoleUI extends me.DroptargetEntity {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public sleepingHoleSprite: any;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public availableHoleSprite: any;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public blockedHoleSprite: any;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public startHoleSprite: any;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public label: any;
 
   /**
