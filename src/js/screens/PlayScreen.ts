@@ -1,6 +1,6 @@
 import me from "../me";
 import game from "../Game";
-import HUD from "../entities/HUD";
+import HUD from "../ui_entities/HUD";
 import Board from "../core/Board";
 
 class PlayScreen extends me.Stage {

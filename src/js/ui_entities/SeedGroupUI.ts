@@ -107,6 +107,8 @@ class SeedGroupUI extends me.DraggableEntity {
         return false;
       }
       this.translatePointerEvent(e, me.event.DRAGEND);
+      //move back draggable seed group container to its initial position
+      this.resetToOriginalPosition();
       return false;
     };
 
@@ -142,7 +144,7 @@ class SeedGroupUI extends me.DraggableEntity {
     this.onPointerEvent("pointerleave", this, this.pointerLeave.bind(this));
   }
 
-  public resetSeedGroupContainerToOriginalPos(): void {
+  public resetToOriginalPosition(): void {
     this.pos.x = this.originalPos.x;
     this.pos.y = this.originalPos.y;
     this.pos.z = this.originalPos.z;
