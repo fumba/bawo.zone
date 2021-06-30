@@ -142,9 +142,10 @@ class SeedGroupUI extends me.DraggableEntity {
     this.onPointerEvent("pointerleave", this, this.pointerLeave.bind(this));
   }
 
-  private resetSeedGroupContainerToOriginalPos(): void {
+  public resetSeedGroupContainerToOriginalPos(): void {
     this.pos.x = this.originalPos.x;
     this.pos.y = this.originalPos.y;
+    this.pos.z = this.originalPos.z;
   }
 
   dragStart(event: unknown): void {
@@ -174,14 +175,11 @@ class SeedGroupUI extends me.DraggableEntity {
       (holeUI: HoleUI) => holeUI.sleepStateUI(),
       me
     );
-    //move back draggable seed group container to its initial position
-    this.resetSeedGroupContainerToOriginalPos();
-
-    this.pos.z = this.originalPos.z;
     me.game.world.sort(true);
   }
 
   dragMove(event: unknown): void {
+    super.dragMove(event);
     if (this.dragging == true) {
       this.hole.ui.renderable = this.hole.ui.startHoleSprite;
       UiHelper.forEachUiSeedInHole(this.hole, (seedUI: SeedUI) => {
@@ -192,7 +190,6 @@ class SeedGroupUI extends me.DraggableEntity {
       this.pos.z = Infinity;
       me.game.world.sort(true);
     }
-    super.dragMove(event);
   }
 }
 
