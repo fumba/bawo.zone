@@ -85,6 +85,7 @@ class HoleUI extends me.DroptargetEntity {
   }
 
   drop(seedGroupUI: SeedGroupUI): void {
+
     // do not perform move if a drag and drop is performed on the same hole
     const startingHole = seedGroupUI.hole;
     if (startingHole.UID != this.hole.UID) {
