@@ -29,6 +29,7 @@ import HoleUI from "./HoleUI";
 /**
  * Bawo board seed
  */
+/* istanbul ignore next */
 class SeedGroupUI extends me.DraggableEntity {
   /**
    * The Hole in which seeds will be placed

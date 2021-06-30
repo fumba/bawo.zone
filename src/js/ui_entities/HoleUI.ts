@@ -27,6 +27,7 @@ import SeedGroupUI from "./SeedGroupUI";
 /**
  * Bawo board hole
  */
+/* istanbul ignore next */
 class HoleUI extends me.DroptargetEntity {
   public readonly hole: Hole;
 

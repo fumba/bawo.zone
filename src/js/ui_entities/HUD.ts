@@ -4,6 +4,7 @@ import me from "../me";
 /**
  * a basic HUD (Heads Up Display) item to display score
  */
+/* istanbul ignore next */
 class ScoreItem extends me.Renderable {
   constructor(x: number, y: number) {
     super(x, y, 10, 10);
