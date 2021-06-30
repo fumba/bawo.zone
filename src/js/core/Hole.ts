@@ -22,7 +22,7 @@ import AppConstants from "./AppConstants";
 import Board from "./Board";
 import MoveDirection from "./MoveDirection";
 import Player from "./Player";
-import Utility from "../../helpers/Utility";
+import Utility from "../Utility";
 
 import { isEmpty } from "lodash";
 import HoleUI from "../ui_entities/HoleUI";

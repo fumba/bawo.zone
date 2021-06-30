@@ -1,4 +1,4 @@
-import Utility from "../../helpers/Utility";
+import Utility from "../Utility";
 import AppConstants from "../core/AppConstants";
 import Vector from "../core/Vector";
 import me from "../me";
