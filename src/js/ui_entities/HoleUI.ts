@@ -74,6 +74,14 @@ class HoleUI extends me.DroptargetEntity {
     });
 
     this.sleepStateUI();
+
+    const label = new me.Text(this.pos.x + 15, this.pos.y - 10, {
+      font: "Arial",
+      size: 9,
+      fillStyle: this.color,
+      text: this.hole.toString(),
+    });
+    me.game.world.addChild(label);
   }
 
   public sleepStateUI(): void {
@@ -85,7 +93,6 @@ class HoleUI extends me.DroptargetEntity {
   }
 
   drop(seedGroupUI: SeedGroupUI): void {
-
     // do not perform move if a drag and drop is performed on the same hole
     const startingHole = seedGroupUI.hole;
     if (startingHole.UID != this.hole.UID) {
