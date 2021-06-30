@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-import Utility from "../../src/helpers/Utility";
+import Utility from "../src/js/Utility";
 
 describe("#padZero", () => {
   test("should try to add zero to a number that is less than 9", () => {

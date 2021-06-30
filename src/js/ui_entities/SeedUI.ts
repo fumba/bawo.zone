@@ -1,4 +1,4 @@
-import Utility from "../../helpers/Utility";
+import Utility from "../Utility";
 import AppConstants from "../core/AppConstants";
 import Vector from "../core/Vector";
 import me from "../me";
@@ -27,6 +27,7 @@ import SeedGroupUI from "./SeedGroupUI";
 /**
  * Bawo board seed
  */
+/* istanbul ignore next */
 class SeedUI extends me.Entity {
   /**
    * the group to which this seed belongs to

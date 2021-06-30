@@ -27,16 +27,24 @@ import SeedGroupUI from "./SeedGroupUI";
 /**
  * Bawo board hole
  */
+/* istanbul ignore next */
 class HoleUI extends me.DroptargetEntity {
   public readonly hole: Hole;
 
-  public sleepingHoleSprite;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public sleepingHoleSprite: any;
 
-  public availableHoleSprite;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public availableHoleSprite: any;
 
-  public blockedHoleSprite;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public blockedHoleSprite: any;
 
-  public startHoleSprite;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public startHoleSprite: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public label: any;
 
   /**
    * @param {Hole} hole the hole to which this UI entity corresponds to
@@ -75,13 +83,13 @@ class HoleUI extends me.DroptargetEntity {
 
     this.sleepStateUI();
 
-    const label = new me.Text(this.pos.x + 15, this.pos.y - 10, {
+    this.label = new me.Text(this.pos.x + 15, this.pos.y - 10, {
       font: "Arial",
       size: 9,
       fillStyle: this.color,
-      text: this.hole.toString(),
     });
-    me.game.world.addChild(label);
+    this.label.setText(this.hole.toString());
+    me.game.world.addChild(this.label);
   }
 
   public sleepStateUI(): void {
@@ -108,6 +116,7 @@ class HoleUI extends me.DroptargetEntity {
       const board = this.hole.board;
       [board.topPlayer, board.bottomPlayer].forEach((player) => {
         for (const hole of player.boardHoles) {
+          hole.ui.label.setText(hole.toString());
           hole.ui.sleepStateUI();
         }
       });

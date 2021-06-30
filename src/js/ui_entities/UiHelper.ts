@@ -23,6 +23,7 @@ import SeedUI from "./SeedUI";
  * limitations under the License.
  */
 
+/* istanbul ignore next */
 class UiHelper {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   public static forEachUiHole(callback: CallableFunction, me: any): void {
