@@ -121,6 +121,9 @@ class Hole {
    * @returns {number} The number of seeds that were moved from hole into players hand.
    */
   public transferAllSeedsToCurrPlayer(): number {
+    if (this.numSeeds == 0) {
+      return 0;
+    }
     const numSeedsTemp = this.numSeeds;
     this.numSeeds = 0;
 

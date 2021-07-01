@@ -70,7 +70,6 @@ class PlayScreen extends me.Stage {
             break;
           }
         }
-        me.state.pause(true);
       } else {
         const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
         //re-render all holes on board
