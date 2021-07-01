@@ -112,14 +112,6 @@ class HoleUI extends me.DroptargetEntity {
         console.info(`UI requesting move:  \n\t: ${move}`);
         this.hole.board.executeMove(move);
       }
-      //re-render all holes on board
-      const board = this.hole.board;
-      [board.topPlayer, board.bottomPlayer].forEach((player) => {
-        for (const hole of player.boardHoles) {
-          hole.ui.label.setText(hole.toString());
-          hole.ui.sleepStateUI();
-        }
-      });
     } else {
       console.info(
         "drag and dropped into the same hole, ",

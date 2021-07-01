@@ -23,6 +23,9 @@ import Hole from "../../src/js/core/Hole";
 import Move from "../../src/js/core/Move";
 import MoveDirection from "../../src/js/core/MoveDirection";
 import PlayerBoardHoles from "../../src/js/core/PlayerBoardHoles";
+import TestHelper from "../TestHelper";
+
+TestHelper.disableLogging();
 
 describe("Move", () => {
   const board: Board = new Board();

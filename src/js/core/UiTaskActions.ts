@@ -1,5 +1,4 @@
-/*
- * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
+/* bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
  * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -18,16 +17,9 @@
  * limitations under the License.
  */
 
-import Vector from "../../src/js/core/Vector";
-import TestHelper from "../TestHelper";
+enum UiTaskActions {
+  SOW_SEED_INTO_HOLE = "SOW_SEED_INTO_HOLE",
+  GRAB_ALL_SEEDS_FROM_HOLE = "GRAB_ALL_SEEDS_FROM_HOLE",
+}
 
-TestHelper.disableLogging();
-
-describe("Vector", () => {
-  test("should populate x and y values correctly", () => {
-    const vector = new Vector(1, 2, 3);
-    expect(vector.x).toBe(1);
-    expect(vector.y).toBe(2);
-    expect(vector.z).toBe(3);
-  });
-});
+export default UiTaskActions;

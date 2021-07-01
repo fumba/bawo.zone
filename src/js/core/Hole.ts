@@ -29,7 +29,7 @@ import HoleUI from "../ui_entities/HoleUI";
 import SeedUI from "../ui_entities/SeedUI";
 import SeedGroupUI from "../ui_entities/SeedGroupUI";
 import Move from "./Move";
-import UiHelper from "../ui_entities/UiHelper";
+import UiTaskActions from "./UiTaskActions";
 
 class Hole {
   // Number of seeds in hole
@@ -120,17 +120,16 @@ class Hole {
    *
    * @returns {number} The number of seeds that were moved from hole into players hand.
    */
-  public moveSeedsIntoCurrentPlayerHand(): number {
+  public transferAllSeedsToCurrPlayer(): number {
+    if (this.numSeeds == 0) {
+      return 0;
+    }
     const numSeedsTemp = this.numSeeds;
     this.numSeeds = 0;
 
-    if (this.board.isGraphicsMode()) {
-      //remove all ui seeds from hole
-      UiHelper.forEachUiSeedInHole(this, (seedUI: SeedUI) => {
-        this.board.getCurrentPlayer().ui.addSeed(seedUI);
-        seedUI.group = null;
-        seedUI.id = null;
-      });
+    if (this.board.isInGraphicsMode()) {
+      const task = { name: UiTaskActions.GRAB_ALL_SEEDS_FROM_HOLE, hole: this };
+      this.board.uiTaskQueue.enqueue(task);
     }
     if (numSeedsTemp > 0) {
       this.board.getCurrentPlayer().numSeedsInHand += numSeedsTemp;
@@ -138,6 +137,67 @@ class Hole {
     return numSeedsTemp;
   }
 
+  /**
+   * Removes seeds from players hand
+   *
+   * @param {number} numSeeds Number of seeds to be removed from players hand
+   * @returns {number} Number of seeds removed from the player hand
+   */
+  public transferSeedsFromCurrPlayer(numSeeds: number): number {
+    this.validateNumSeeds(numSeeds);
+    this.validateFinalSeedCount(-numSeeds); //minus because we are removing seeds
+    this.board.getCurrentPlayer().numSeedsInHand -= numSeeds;
+
+    this.numSeeds += numSeeds;
+    if (this.board.isInGraphicsMode()) {
+      //add seeds to hole ui
+      for (let i = 0; i < numSeeds; i++) {
+        const task = {
+          name: UiTaskActions.SOW_SEED_INTO_HOLE,
+          seedId: SeedUI.seedGroupId(this.UID),
+          seedGroupUI: this.seedGroupUI,
+        };
+        this.board.uiTaskQueue.enqueue(task);
+      }
+    }
+    return numSeeds;
+  }
+
+  /**
+   * Checks if the number of seeds to be added or removed from players hand is valid
+   *
+   * @param {number} numSeeds Number of seeds to be added or removed from players hand
+   */
+  private validateNumSeeds(numSeeds: number): void {
+    let message: string = null;
+    if (numSeeds < 0) {
+      message =
+        "Attempted to add or remove negative number seeds | input : " +
+        numSeeds;
+    } else if (numSeeds == 0) {
+      message = "Attempted to add or remove no seeds";
+    }
+    if (message) {
+      throw new Error(message);
+    }
+  }
+
+  /**
+   * Checks if the the total number of seeds in players hand is valid
+   *
+   * @param {number} numSeeds Number of seeds in players hand after adding or removing
+   */
+  private validateFinalSeedCount(numSeeds: number): void {
+    let message: string = null;
+    if (this.board.getCurrentPlayer().numSeedsInHand + numSeeds < 0) {
+      message =
+        "Total number of seeds after operation is negative | input: " +
+        numSeeds;
+    }
+    if (message) {
+      throw new Error(message);
+    }
+  }
   /**
    * Gets the moves that are available for the current player
    *

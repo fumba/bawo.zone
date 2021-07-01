@@ -26,6 +26,7 @@ import PlayerSide from "../../src/js/core/PlayerSide";
 import TestHelper from "../TestHelper";
 
 const me = TestHelper.me;
+TestHelper.disableLogging();
 
 describe("Hole", () => {
   afterEach(() => {
@@ -82,13 +83,54 @@ describe("Hole", () => {
     });
   });
 
-  describe("#moveSeedsIntoCurrentPlayerHand", () => {
-    test("should move seed to UI hole (when graphics is on)", () => {
-      expect(TestHelper.mockSeedUI.group).toBe("group");
-      new Board(me).topPlayer.boardHoles
+  describe("#transferAllSeedsToCurrPlayer", () => {
+    test("should move seed to player UI (when graphics is on)", () => {
+      const board = new Board(me);
+      board.topPlayer.boardHoles
         .getHoleWithID(1)
-        .moveSeedsIntoCurrentPlayerHand();
-      expect(TestHelper.mockSeedUI.group).toBe(null);
+        .transferAllSeedsToCurrPlayer();
+      expect(board.uiTaskQueue.length).toBe(1);
+    });
+  });
+
+  describe("#transferSeedsFromCurrPlayer", () => {
+    let board: Board;
+    let hole: Hole;
+    beforeEach(() => {
+      board = new Board(me);
+      hole = board.topPlayer.boardHoles.getHoleWithID(1);
+    });
+
+    test("should move seed to UI hole (when graphics is on)", () => {
+      board.getCurrentPlayer().numSeedsInHand = 10;
+      hole.transferSeedsFromCurrPlayer(2);
+      expect(board.uiTaskQueue.length).toBe(2);
+    });
+
+    test("should remove correct number of seeds", () => {
+      board.getCurrentPlayer().numSeedsInHand = 10;
+      hole.transferSeedsFromCurrPlayer(2);
+      expect(board.getCurrentPlayer().numSeedsInHand).toBe(8);
+      hole.transferSeedsFromCurrPlayer(1);
+      expect(board.getCurrentPlayer().numSeedsInHand).toBe(7);
+    });
+
+    test("should not allow seeds to be removed from an empty hand", () => {
+      expect(() => hole.transferSeedsFromCurrPlayer(1)).toThrow(
+        "Total number of seeds after operation is negative | input: -1"
+      );
+    });
+
+    test("should not allow zero seeds to be removed", () => {
+      expect(() => hole.transferSeedsFromCurrPlayer(0)).toThrow(
+        "Attempted to add or remove no seeds"
+      );
+    });
+
+    test("should not allow player to remove negative number of seeds", () => {
+      expect(() => hole.transferSeedsFromCurrPlayer(-1)).toThrow(
+        "Attempted to add or remove negative number seeds | input : -1"
+      );
     });
   });
 

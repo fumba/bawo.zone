@@ -24,8 +24,6 @@ import PlayerBoardHoles from "./PlayerBoardHoles";
 import Board from "./Board";
 import PlayerUI from "../ui_entities/PlayerUI";
 import { isEmpty } from "lodash";
-import Hole from "./Hole";
-import SeedUI from "../ui_entities/SeedUI";
 /**
  * <p>
  * {@link Player} represents a bawo game player
@@ -58,35 +56,10 @@ class Player {
     this.numSeedsInHand = 0;
     this.capturedOnPrevMove = false;
     if (!isEmpty(board)) {
-      if (board.isGraphicsMode()) {
+      if (board.isInGraphicsMode()) {
         this.ui = board.me.pool.pull(AppConstants.PLAYER_UI, this);
       }
     }
-  }
-
-  /**
-   * Removes seeds from players hand
-   *
-   * @param {number} numSeeds Number of seeds to be removed from players hand
-   * @param {Hole} hole The hole into which seeds will be moved
-   * @returns {number} Number of seeds removed from the player hand
-   */
-  public moveSeedsIntoBoardHole(numSeeds: number, hole: Hole): number {
-    this.validateNumSeeds(numSeeds);
-    this.validateFinalSeedCount(-numSeeds); //minus because we are removing seeds
-    this.numSeedsInHand -= numSeeds;
-
-    hole.numSeeds += numSeeds;
-    if (hole.board.isGraphicsMode()) {
-      //add seeds to hole ui
-      for (let i = 0; i < numSeeds; i++) {
-        const seedUI = hole.board.getCurrentPlayer().ui.removeSeed();
-        seedUI.group = hole.seedGroupUI;
-        seedUI.id = SeedUI.seedGroupId(hole.UID);
-        seedUI.randomisePosition();
-      }
-    }
-    return numSeeds;
   }
 
   /**
@@ -101,42 +74,6 @@ class Player {
 
   public toString(): string {
     return `PLAYER[ side: ${this.side}, hand-seeds: ${this.numSeedsInHand}, captured-on-prev-move?: ${this.capturedOnPrevMove}]`;
-  }
-
-  /**
-   * Checks if the number of seeds to be added or removed from players hand is valid
-   *
-   * @param {number} numSeeds Number of seeds to be added or removed from players hand
-   */
-  private validateNumSeeds(numSeeds: number): void {
-    let message: string = null;
-    if (numSeeds < 0) {
-      message =
-        "Attempted to add or remove negative number seeds | input : " +
-        numSeeds;
-    } else if (numSeeds == 0) {
-      message = "Attempted to add or remove no seeds";
-    }
-    if (message) {
-      throw new Error(message);
-    }
-  }
-
-  /**
-   * Checks if the the total number of seeds in players hand is valid
-   *
-   * @param {number} numSeeds Number of seeds in players hand after adding or removing
-   */
-  private validateFinalSeedCount(numSeeds: number): void {
-    let message: string = null;
-    if (this.numSeedsInHand + numSeeds < 0) {
-      message =
-        "Total number of seeds after operation is negative | input: " +
-        numSeeds;
-    }
-    if (message) {
-      throw new Error(message);
-    }
   }
 }
 
