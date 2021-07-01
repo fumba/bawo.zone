@@ -83,12 +83,28 @@ describe("Hole", () => {
     });
   });
 
+  describe("#transferAllSeedsToCurrPlayer", () => {
+    test("should move seed to player UI (when graphics is on)", () => {
+      const board = new Board(me);
+      board.topPlayer.boardHoles
+        .getHoleWithID(1)
+        .transferAllSeedsToCurrPlayer();
+      expect(board.uiTaskQueue.length).toBe(1);
+    });
+  });
+
   describe("#transferSeedsFromCurrPlayer", () => {
     let board: Board;
     let hole: Hole;
     beforeEach(() => {
       board = new Board(me);
       hole = board.topPlayer.boardHoles.getHoleWithID(1);
+    });
+
+    test("should move seed to UI hole (when graphics is on)", () => {
+      board.getCurrentPlayer().numSeedsInHand = 10;
+      hole.transferSeedsFromCurrPlayer(2);
+      expect(board.uiTaskQueue.length).toBe(2);
     });
 
     test("should remove correct number of seeds", () => {
