@@ -51,7 +51,8 @@ describe("#randomPointWithinCircle", () => {
 
 describe("#getRandomInt", () => {
   test("should generate a random integer less than the specified max", () => {
-    expect(Utility.getRandomInt(3)).toBeLessThan(3);
-    expect(Utility.getRandomInt(20)).toBeLessThan(20);
+    for (let i = 0; i < 20; i++) {
+      expect(Utility.getRandomInt(5)).toBeLessThan(5);
+    }
   });
 });
