@@ -10,6 +10,7 @@ import MoveDirection from "./MoveDirection";
 import Me from "../me";
 import { isEmpty } from "lodash";
 import SeedUI from "../ui_entities/SeedUI";
+import Utility from "../Utility";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -525,7 +526,7 @@ class Board {
       this.currentPlayer
     );
     // either always pick first move or randomise
-    const move = moves[randomise ? this.getRandomInt(moves.length) : 0];
+    const move = moves[randomise ? Utility.getRandomInt(moves.length) : 0];
     this.executeMove(move);
     if (!this.isGameOver()) {
       // recursively run the simulation
@@ -641,11 +642,6 @@ class Board {
    */
   private getOpponentPlayer(player: Player): Player {
     return player.isOnTopSide() ? this.bottomPlayer : this.topPlayer;
-  }
-
-  //TODO
-  private getRandomInt(max: number): number {
-    return Math.floor(Math.random() * max);
   }
 }
 export default Board;
