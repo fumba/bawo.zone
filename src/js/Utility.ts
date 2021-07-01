@@ -53,6 +53,16 @@ class Utility {
     const opposite = Math.sin(angle) * hypotenuse;
     return new Vector(xCenter + adjacent, yCenter + opposite, 0);
   }
+
+  /**
+   * Generates a random integer that is less than the specified max
+   *
+   * @param {number} max the maximum limit of the generated integer
+   * @returns {number} a random generated number
+   */
+  public static getRandomInt(max: number): number {
+    return Math.floor(Math.random() * max);
+  }
 }
 
 export default Utility;
