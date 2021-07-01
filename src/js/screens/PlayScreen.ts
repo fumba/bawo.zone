@@ -2,6 +2,11 @@ import me from "../me";
 import game from "../Game";
 import HUD from "../ui_entities/HUD";
 import Board from "../core/Board";
+import SeedUI from "../ui_entities/SeedUI";
+import SeedGroupUI from "../ui_entities/SeedGroupUI";
+import UiHelper from "../ui_entities/UiHelper";
+import UiTaskActions from "../core/UiTaskActions";
+import Hole from "../core/Hole";
 
 class PlayScreen extends me.Stage {
   private board: Board;
@@ -15,8 +20,6 @@ class PlayScreen extends me.Stage {
     game.data.score = 0;
 
     this.board = new Board(me);
-    //TODO testing only
-    //this.board.runSimulation(false);
 
     console.info("Show play screen");
 
@@ -24,6 +27,63 @@ class PlayScreen extends me.Stage {
     // Can also be forced by specifying a "Infinity" z value to the addChild function.
     this.HUD = new HUD();
     me.game.world.addChild(this.HUD);
+
+    //update GUI elements state
+    me.timer.setInterval(() => {
+      const task = this.board.uiTaskQueue.dequeue();
+      if (task) {
+        //re-render all holes on board
+        [this.board.topPlayer, this.board.bottomPlayer].forEach((player) => {
+          for (const hole of player.boardHoles) {
+            hole.ui.label.setText(hole.toString());
+            hole.ui.renderable = hole.ui.sleepingHoleSprite;
+          }
+        });
+        console.info(`UI - Recieved task : ${task.name}`);
+        switch (task.name) {
+          case UiTaskActions.SOW_SEED_INTO_HOLE: {
+            const seedGroupUI: SeedGroupUI = task.seedGroupUI as SeedGroupUI;
+            console.info(`UI - Sowing seed into ${seedGroupUI.hole.UID}`);
+            const seedUI: SeedUI = this.board
+              .getCurrentPlayer()
+              .ui.removeSeed();
+            seedUI.group = seedGroupUI;
+            seedUI.id = task.seedId;
+            seedUI.randomisePosition();
+
+            seedGroupUI.hole.ui.renderable =
+              seedGroupUI.hole.ui.startHoleSprite;
+            break;
+          }
+          case UiTaskActions.GRAB_ALL_SEEDS_FROM_HOLE: {
+            const hole: Hole = task.hole as Hole;
+            console.info(`UI - getting all seeds from hole ${hole.UID}`);
+
+            //remove all ui seeds from hole
+            UiHelper.forEachUiSeedInHole(hole, (seedUI: SeedUI) => {
+              this.board.getCurrentPlayer().ui.addSeed(seedUI);
+              seedUI.group = null;
+              seedUI.id = null;
+            });
+
+            hole.ui.renderable = hole.ui.startHoleSprite;
+            break;
+          }
+        }
+        me.state.pause(true);
+      } else {
+        const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
+        //re-render all holes on board
+        if (!draggingSeedGroup) {
+          [this.board.topPlayer, this.board.bottomPlayer].forEach((player) => {
+            for (const hole of player.boardHoles) {
+              hole.ui.label.setText(hole.toString());
+              hole.ui.sleepStateUI();
+            }
+          });
+        }
+      }
+    }, 800);
   }
 
   onDestroyEvent(): void {

@@ -11,6 +11,7 @@ import Me from "../me";
 import { isEmpty } from "lodash";
 import SeedUI from "../ui_entities/SeedUI";
 import Utility from "../Utility";
+import { Queue } from "queue-typescript";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -61,6 +62,7 @@ class Board {
   public readonly topPlayer: Player;
   private readonly rules: Rules;
   public readonly me: typeof Me;
+  public uiTaskQueue: Queue<Record<string, unknown>>;
 
   /**
    * The gameplay is in a continuous loop if the player continues to play beyond a
@@ -98,13 +100,14 @@ class Board {
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
 
-    if (this.isGraphicsMode()) {
+    if (this.isInGraphicsMode()) {
       //render holes on board
       [this.topPlayer, this.bottomPlayer].forEach((player) => {
         for (const hole of player.boardHoles) {
           hole.renderUI();
         }
       });
+      this.uiTaskQueue = new Queue();
     }
 
     this.validateUiState();
@@ -319,10 +322,7 @@ class Board {
       // are now regarded to be in infinite move status. The game will end and the player who got themselves into an infinite loop will loose.
 
       // place all the seeds back into the start hole for the move.
-      this.currentPlayer.moveSeedsIntoBoardHole(
-        this.currentPlayer.numSeedsInHand,
-        move.hole
-      );
+      move.hole.transferSeedsFromCurrPlayer(this.currentPlayer.numSeedsInHand);
 
       this.isInContinousLoopStatus = true;
       // TODO update GUI state
@@ -339,7 +339,7 @@ class Board {
     // Continuing moves already have seeds in the player hands
     // Initial moves need to get the seeds from the hole into the players hand
     if (!move.isContinuing()) {
-      currentHole.moveSeedsIntoCurrentPlayerHand();
+      currentHole.transferAllSeedsToCurrPlayer();
       //TODO-GUI: add seeds to animated hand
     }
 
@@ -365,10 +365,7 @@ class Board {
       }
       // Place 1 seed in the destination hole and move on to the next
       // hole.
-      this.currentPlayer.moveSeedsIntoBoardHole(
-        numSeedsToSowPerStep,
-        destinationHole
-      ); //TODO-GUI: remove seed from hand
+      destinationHole.transferSeedsFromCurrPlayer(numSeedsToSowPerStep); //TODO-GUI: remove seed from hand
       currentHole = destinationHole;
 
       //TODO update GUI state
@@ -397,7 +394,7 @@ class Board {
         return this.executeMove(continuingMove);
       } else {
         // Take all seeds in hole and continue with current player without capturing any seeds
-        currentHole.moveSeedsIntoCurrentPlayerHand();
+        currentHole.transferAllSeedsToCurrPlayer();
         continuingMove = new Move(
           currentHole,
           move.direction,
@@ -431,7 +428,7 @@ class Board {
    * 1. There should always be 64 seeds in play (before move and after move)
    */
   public validateUiState(): void {
-    if (this.isGraphicsMode()) {
+    if (this.isInGraphicsMode()) {
       const seedCount = this.me.game.world.getChildByType(SeedUI).length;
       if (seedCount != AppConstants.MAX_SEED_COUNT) {
         throw new Error(
@@ -446,7 +443,7 @@ class Board {
    *
    * @returns {boolean} if graphics need to be rendered
    */
-  public isGraphicsMode(): boolean {
+  public isInGraphicsMode(): boolean {
     return !isEmpty(this.me);
   }
 
@@ -486,7 +483,7 @@ class Board {
   private captureAllSeedsFromEnemy(startHole: Hole): boolean {
     if (startHole.isInFrontRow()) {
       const opponentHole = this.getOppossingEnemyHole(startHole);
-      const stolenSeedCount = opponentHole.moveSeedsIntoCurrentPlayerHand();
+      const stolenSeedCount = opponentHole.transferAllSeedsToCurrPlayer();
       if (stolenSeedCount > 0) {
         console.info(
           `******* HOLE (${startHole.id}) CAPTURED ${stolenSeedCount} SEEDS FROM (${opponentHole.id}) ********`

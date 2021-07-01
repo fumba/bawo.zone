@@ -18,12 +18,11 @@
  * limitations under the License.
  */
 
-import Board from "../../src/js/core/Board";
 import Player from "../../src/js/core/Player";
 import PlayerSide from "../../src/js/core/PlayerSide";
 import TestHelper from "../TestHelper";
 
-const me = TestHelper.me;
+TestHelper.disableLogging();
 
 describe("Player", () => {
   afterEach(() => {
@@ -44,46 +43,6 @@ describe("Player", () => {
 
   test("player should initially not have any previously tracked capture moves", () => {
     expect(new Player(PlayerSide.Bottom).capturedOnPrevMove).toBe(false);
-  });
-
-  describe("remove seeds from hand and place them in hole", () => {
-    let player: Player;
-    const board = new Board(me);
-    const hole = board.topPlayer.boardHoles.getHoleWithID(1);
-    beforeEach(() => {
-      player = new Player(PlayerSide.Top);
-    });
-    test("should remove correct number of seeds", () => {
-      player.numSeedsInHand = 10;
-      player.moveSeedsIntoBoardHole(2, hole);
-      expect(player.numSeedsInHand).toBe(8);
-      player.moveSeedsIntoBoardHole(1, hole);
-      expect(player.numSeedsInHand).toBe(7);
-    });
-
-    test("should not allow seeds to be removed from an empty hand", () => {
-      expect(() => player.moveSeedsIntoBoardHole(1, hole)).toThrow(
-        "Total number of seeds after operation is negative | input: -1"
-      );
-    });
-
-    test("should not allow zero seeds to be removed", () => {
-      expect(() => player.moveSeedsIntoBoardHole(0, hole)).toThrow(
-        "Attempted to add or remove no seeds"
-      );
-    });
-
-    test("should not allow player to remove negative number of seeds", () => {
-      player.numSeedsInHand = 10;
-      player.moveSeedsIntoBoardHole(2, hole);
-      expect(TestHelper.mockSeedUI.randomisePosition).toBeCalled();
-    });
-
-    test("should move seed to UI hole (when graphics is on)", () => {
-      expect(() => player.moveSeedsIntoBoardHole(-1, hole)).toThrow(
-        "Attempted to add or remove negative number seeds | input : -1"
-      );
-    });
   });
 
   describe("#isOnTopSide", () => {

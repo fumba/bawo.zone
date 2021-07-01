@@ -22,6 +22,9 @@ import AppConstants from "../../src/js/core/AppConstants";
 import Player from "../../src/js/core/Player";
 import PlayerBoardHoles from "../../src/js/core/PlayerBoardHoles";
 import PlayerSide from "../../src/js/core/PlayerSide";
+import TestHelper from "../TestHelper";
+
+TestHelper.disableLogging();
 
 describe("PlayerBoardHoles", () => {
   const player = new Player(PlayerSide.Top);

@@ -83,6 +83,7 @@ class SeedGroupUI extends me.DraggableEntity {
     super.initEvents();
 
     const isPlayableHole = () =>
+      this.hole.board.uiTaskQueue.length == 0 &&
       this.hole.availableMovesForCurrentPlayer().length > 0;
 
     this.pointerDown = (e: unknown) => {
