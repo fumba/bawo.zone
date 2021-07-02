@@ -35,7 +35,11 @@ class PlayScreen extends me.Stage {
         //re-render all holes on board
         [this.board.topPlayer, this.board.bottomPlayer].forEach((player) => {
           for (const hole of player.boardHoles) {
-            hole.ui.label.setText(hole.toString());
+            let count = 0;
+            UiHelper.forEachUiSeedInHole(hole, () => {
+              count++;
+            });
+            hole.ui.label.setText(count);
             hole.ui.renderable = hole.ui.sleepingHoleSprite;
           }
         });
@@ -46,10 +50,18 @@ class PlayScreen extends me.Stage {
             console.info(`UI - Sowing seed into ${seedGroupUI.hole.UID}`);
             const seedUI: SeedUI = this.board
               .getCurrentPlayer()
-              .ui.removeSeed();
+              .ui.removeSeed(seedGroupUI);
             seedUI.group = seedGroupUI;
             seedUI.id = task.seedId;
             seedUI.randomisePosition();
+
+            UiHelper.forEachUiSeedInHole(seedGroupUI.hole, (seedUI: SeedUI) => {
+              seedUI.pos.z = 0;
+              me.game.world.sort(true);
+            });
+            for (const seedUI of this.board.getCurrentPlayer().ui.seedsInHand) {
+              seedUI.randomisePosition();
+            }
 
             seedGroupUI.hole.ui.renderable =
               seedGroupUI.hole.ui.startHoleSprite;
@@ -61,9 +73,11 @@ class PlayScreen extends me.Stage {
 
             //remove all ui seeds from hole
             UiHelper.forEachUiSeedInHole(hole, (seedUI: SeedUI) => {
-              this.board.getCurrentPlayer().ui.addSeed(seedUI);
+              const currentPlayerHandUI = this.board.getCurrentPlayer();
+              currentPlayerHandUI.ui.addSeed(seedUI);
               seedUI.group = null;
               seedUI.id = null;
+              seedUI.randomisePosition();
             });
 
             hole.ui.renderable = hole.ui.startHoleSprite;
@@ -82,7 +96,7 @@ class PlayScreen extends me.Stage {
           });
         }
       }
-    }, 800);
+    }, 500);
   }
 
   onDestroyEvent(): void {

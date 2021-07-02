@@ -60,12 +60,21 @@ class Resources {
       src: "data/img/seed-collection.png",
     },
   ];
+  //hand
+  private static hand: Array<Record<string, unknown>> = [
+    {
+      name: AppConstants.PLAYER_UI,
+      type: "image",
+      src: "data/img/hand.png",
+    },
+  ];
 
   public static assets: Array<Record<string, unknown>> = [
     ...Resources.backgroundImage,
     ...Resources.seedImage,
     ...Resources.holeImage,
     ...Resources.seedCollection,
+    ...Resources.hand,
   ];
 }
 
