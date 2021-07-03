@@ -42,11 +42,6 @@ class SeedGroupUI extends me.DraggableEntity {
   private readonly originalPos: Vector;
 
   /**
-   * seed group entity radius
-   */
-  public readonly radius: number;
-
-  /**
    * initial center position
    */
   public readonly originalCenter: Vector;
@@ -74,9 +69,20 @@ class SeedGroupUI extends me.DraggableEntity {
       this.pos.y + settings.height / 2,
       this.pos.z
     );
-    this.radius = settings.height / 2;
     this.hole = hole;
     this.renderable.alpha = 0.1;
+  }
+
+  /**
+   *
+   * @returns {Vector} vector representing the center point for the container
+   */
+  public center(): Vector {
+    return this.originalCenter;
+  }
+
+  public radius(): number {
+    return this.height / 2;
   }
 
   initEvents(): void {
