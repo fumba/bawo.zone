@@ -28,6 +28,8 @@ class PlayScreen extends me.Stage {
     this.HUD = new HUD();
     me.game.world.addChild(this.HUD);
 
+    const gameSpeed = 500;
+
     //update GUI elements state
     me.timer.setInterval(() => {
       const task = this.board.uiTaskQueue.dequeue();
@@ -96,7 +98,7 @@ class PlayScreen extends me.Stage {
           });
         }
       }
-    }, 500);
+    }, gameSpeed);
   }
 
   onDestroyEvent(): void {
