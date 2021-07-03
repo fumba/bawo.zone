@@ -56,10 +56,10 @@ class HoleUI extends me.DroptargetEntity {
       id: `${AppConstants.HOLE_UI}-${hole.UID}`,
     };
 
-    const xOffSet = 60;
+    const xOffSet = 40;
     const newRowOffset = hole.id <= 7 ? 0 : 100;
     const x = (hole.id < 8 ? hole.id : 15 - hole.id) * 90 + xOffSet;
-    const y = (hole.player.isOnTopSide() ? 100 : 330) + newRowOffset;
+    const y = (hole.player.isOnTopSide() ? 150 : 380) + newRowOffset;
     super(x, y, settings);
     // overlaps are not valid drops
     // draggable seed container UI (SeedGroupUI) has a smaller radius so all drops are expected

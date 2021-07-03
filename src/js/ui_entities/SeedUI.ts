@@ -3,6 +3,8 @@ import AppConstants from "../core/AppConstants";
 import Vector from "../core/Vector";
 import me from "../me";
 import SeedGroupUI from "./SeedGroupUI";
+import Board from "../core/Board";
+import { isEmpty } from "lodash";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -34,6 +36,8 @@ class SeedUI extends me.Entity {
    */
   public group: SeedGroupUI;
 
+  public board: Board;
+
   /**
    * initial position for the seed  before it was dragged
    */
@@ -54,6 +58,7 @@ class SeedUI extends me.Entity {
 
     this.originalPos = new Vector(this.pos.x, this.pos.y, this.pos.z);
     this.group = seedGroup;
+    this.board = seedGroup.hole.board;
     this.randomisePosition();
   }
 
@@ -61,13 +66,20 @@ class SeedUI extends me.Entity {
    * Randomises the position of the seed in the hole - seed group container
    */
   public randomisePosition(): void {
+    const location = isEmpty(this.group)
+      ? this.board.getCurrentPlayer().ui
+      : this.group;
     const randomSeedPoint = Utility.randomPointWithinCircle(
-      this.group.radius,
-      this.group.originalCenter.x,
-      this.group.originalCenter.y
+      location.radius(),
+      location.center().x,
+      location.center().y
     );
     this.pos.x = randomSeedPoint.x - this.height / 2;
     this.pos.y = randomSeedPoint.y - this.width / 2;
+
+    this.pos.z = location.pos.z + 1;
+    me.game.world.sort(true);
+
     this.renderable.rotate(Math.random() * Math.PI * 2); //random rotation
   }
 
