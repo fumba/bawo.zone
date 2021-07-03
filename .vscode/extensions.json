@@ -1,5 +1,19 @@
 {
     "recommendations": [
-        "dbaeumer.vscode-eslint"
+        "dbaeumer.vscode-eslint",
+        "jdforsythe.add-new-line-to-files",
+        "coenraads.bracket-pair-colorizer",
+        "github.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "kisstkondoros.vscode-gutter-preview",
+        "oderwat.indent-rainbow",
+        "zignd.html-css-class-completion",
+        "vespa-dev-works.jestrunit",
+        "shd101wyy.markdown-preview-enhanced",
+        "foxundermoon.shell-format",
+        "stylelint.vscode-stylelint",
+        "jock.svg",
+        "visualstudioexptteam.vscodeintellicode",
+        "redhat.vscode-yaml"
     ]
 }
