@@ -107,6 +107,7 @@ class Board {
           hole.renderUI();
         }
       });
+      // initialise UI task thread
       this.uiTaskQueue = new Queue();
     }
 
