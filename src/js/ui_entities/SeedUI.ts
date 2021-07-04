@@ -77,10 +77,16 @@ class SeedUI extends me.Entity {
     this.pos.x = randomSeedPoint.x - this.height / 2;
     this.pos.y = randomSeedPoint.y - this.width / 2;
 
+    this.putOnTopOfContainer();
+    this.renderable.rotate(Math.random() * Math.PI * 2); //random rotation
+  }
+
+  public putOnTopOfContainer(): void {
+    const location = isEmpty(this.group)
+      ? this.board.getCurrentPlayer().ui
+      : this.group;
     this.pos.z = location.pos.z + 1;
     me.game.world.sort(true);
-
-    this.renderable.rotate(Math.random() * Math.PI * 2); //random rotation
   }
 
   public static seedGroupId(uid: string): string {

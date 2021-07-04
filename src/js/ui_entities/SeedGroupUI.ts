@@ -71,6 +71,7 @@ class SeedGroupUI extends me.DraggableEntity {
     );
     this.hole = hole;
     this.renderable.alpha = 0.1;
+    this.updateContainerStatus();
   }
 
   /**
@@ -85,15 +86,18 @@ class SeedGroupUI extends me.DraggableEntity {
     return this.height / 2;
   }
 
+  private isPlayableHole(): boolean {
+    return (
+      this.hole.board.uiTaskQueue.length == 0 &&
+      this.hole.availableMovesForCurrentPlayer().length > 0
+    );
+  }
+
   initEvents(): void {
     super.initEvents();
 
-    const isPlayableHole = () =>
-      this.hole.board.uiTaskQueue.length == 0 &&
-      this.hole.availableMovesForCurrentPlayer().length > 0;
-
     this.pointerDown = (e: unknown) => {
-      if (!isPlayableHole()) {
+      if (!this.isPlayableHole()) {
         // Do not allow player to make moves on hole that does not belong to them
         return false;
       }
@@ -102,7 +106,8 @@ class SeedGroupUI extends me.DraggableEntity {
     };
 
     this.pointerUp = (e: unknown) => {
-      if (!isPlayableHole()) {
+      this.renderable.alpha = 0.1;
+      if (!this.isPlayableHole()) {
         // Do not allow player to make moves on hole that does not belong to them
         return false;
       }
@@ -113,6 +118,8 @@ class SeedGroupUI extends me.DraggableEntity {
     };
 
     this.pointerEnter = () => {
+      this.renderable.alpha = 1;
+
       const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
       if (draggingSeedGroup) {
         const selectedHole = draggingSeedGroup.hole;
@@ -122,13 +129,17 @@ class SeedGroupUI extends me.DraggableEntity {
           .map((move) => move.direction);
         if (validDirections.includes(currDirection)) {
           this.hole.ui.renderable = this.hole.ui.availableHoleSprite;
+          this.renderable.tint.setColor(188, 250, 221);
         } else {
           this.hole.ui.renderable = this.hole.ui.blockedHoleSprite;
+          this.renderable.tint.setColor(249, 105, 105);
         }
       }
     };
 
     this.pointerLeave = () => {
+      this.renderable.alpha = 0.1;
+
       const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
       // set hole status to sleeping on mouse leave unless the hole is an adjacent valid move
       if (draggingSeedGroup) {
@@ -142,6 +153,14 @@ class SeedGroupUI extends me.DraggableEntity {
     this.onPointerEvent("pointerup", this, this.pointerUp.bind(this));
     this.onPointerEvent("pointerenter", this, this.pointerEnter.bind(this));
     this.onPointerEvent("pointerleave", this, this.pointerLeave.bind(this));
+  }
+
+  public updateContainerStatus(): void {
+    if (this.isPlayableHole()) {
+      this.renderable.tint.setColor(188, 250, 221);
+    } else {
+      this.renderable.tint.setColor(249, 105, 105);
+    }
   }
 
   public resetToOriginalPosition(): void {
@@ -159,6 +178,7 @@ class SeedGroupUI extends me.DraggableEntity {
           holeUI.renderable = holeUI.availableHoleSprite;
         } else {
           holeUI.renderable = holeUI.sleepingHoleSprite;
+          holeUI.hole.seedGroupUI.renderable.tint.setColor(105, 105, 105);
         }
       },
       me
@@ -169,12 +189,14 @@ class SeedGroupUI extends me.DraggableEntity {
     super.dragEnd(event);
     UiHelper.forEachUiSeedInHole(this.hole, (seedUI: SeedUI) => {
       seedUI.randomisePosition();
-      seedUI.pos.z = seedUI.originalPos.z;
     });
 
     UiHelper.forEachUiHole(
       //restore hole status
-      (holeUI: HoleUI) => holeUI.sleepStateUI(),
+      (holeUI: HoleUI) => {
+        holeUI.sleepStateUI();
+        holeUI.hole.seedGroupUI.updateContainerStatus();
+      },
       me
     );
     me.game.world.sort(true);
@@ -184,6 +206,7 @@ class SeedGroupUI extends me.DraggableEntity {
     super.dragMove(event);
     if (this.dragging == true) {
       this.hole.ui.renderable = this.hole.ui.startHoleSprite;
+      this.renderable.tint.setColor(0, 204, 102);
       UiHelper.forEachUiSeedInHole(this.hole, (seedUI: SeedUI) => {
         seedUI.pos.x = this.pos.x;
         seedUI.pos.y = this.pos.y;

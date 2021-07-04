@@ -41,6 +41,7 @@ class PlayerUI extends me.Entity {
     super(0, 0, settings);
 
     this.renderable.alpha = 0;
+    this.renderable.tint.setColor(153, 76, 0);
     this.seedsInHand = [];
   }
 
@@ -59,7 +60,7 @@ class PlayerUI extends me.Entity {
   private positionHand(holeUI: HoleUI) {
     this.pos.x = holeUI.pos.x - (this.width - holeUI.width) / 2;
     this.pos.y = holeUI.pos.y - (this.height - holeUI.height) / 2;
-    this.pos.z = holeUI.pos.z + 1;
+    this.pos.z = Number.MAX_SAFE_INTEGER; //layers : hole, seed, hand
   }
 
   /**
