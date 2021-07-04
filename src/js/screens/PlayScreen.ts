@@ -7,6 +7,8 @@ import SeedGroupUI from "../ui_entities/SeedGroupUI";
 import UiHelper from "../ui_entities/UiHelper";
 import UiTaskActions from "../core/UiTaskActions";
 import Hole from "../core/Hole";
+import Utility from "../Utility";
+import Move from "../core/Move";
 
 class PlayScreen extends me.Stage {
   private board: Board;
@@ -28,11 +30,12 @@ class PlayScreen extends me.Stage {
     this.HUD = new HUD();
     me.game.world.addChild(this.HUD);
 
-    const gameSpeed = 500;
+    const gameSpeed = 300;
+    let isCpuTurn = false;
 
     //update GUI elements state
 
-    let refreshHoleSleepingState = true; //initially refresh state so that the initial seed arrangement is rendered
+    let refreshHoleSleepingState = false; //initially refresh state so that the initial seed arrangement is rendered
     me.timer.setInterval(() => {
       const task = this.board.uiTaskQueue.dequeue();
       if (task) {
@@ -93,9 +96,21 @@ class PlayScreen extends me.Stage {
 
           // ui and non-ui game board should always be in sync
           this.validateUiState();
+          isCpuTurn = !this.board.getCurrentPlayer().isOnTopSide();
         }
       }
     }, gameSpeed);
+
+    me.timer.setInterval(() => {
+      if (isCpuTurn) {
+        isCpuTurn = false;
+        const moves: Array<Move> = this.board.getAllAvailableValidMoves(
+          this.board.getCurrentPlayer()
+        );
+        const move = moves[Utility.getRandomInt(moves.length)];
+        this.board.executeMove(move);
+      }
+    }, 100);
   }
 
   public validateUiState(): void {
