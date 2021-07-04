@@ -38,10 +38,11 @@ class PlayScreen extends me.Stage {
       if (task) {
         // refresh all holes status after the task is complete
         refreshHoleSleepingState = true;
-        //re-render all holes on board for every UI update
+        //initially set all hole UI as inactive during gameplay animation
         UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
           hole.ui.label.setText(hole.ui.seedCount());
           hole.ui.renderable = hole.ui.sleepingHoleSprite;
+          hole.seedGroupUI.renderable.tint.setColor(105, 105, 105);
         });
         switch (task.name) {
           case UiTaskActions.SOW_SEED_INTO_HOLE: {
@@ -55,8 +56,7 @@ class PlayScreen extends me.Stage {
             seedUI.randomisePosition();
 
             UiHelper.forEachUiSeedInHole(seedGroupUI.hole, (seedUI: SeedUI) => {
-              seedUI.pos.z = 0;
-              me.game.world.sort(true);
+              seedUI.putOnTopOfContainer();
             });
             for (const seedUI of this.board.getCurrentPlayer().ui.seedsInHand) {
               seedUI.randomisePosition();
@@ -87,6 +87,7 @@ class PlayScreen extends me.Stage {
           UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
             hole.ui.label.setText(hole.ui.seedCount());
             hole.ui.sleepStateUI();
+            hole.seedGroupUI.updateContainerStatus();
           });
           refreshHoleSleepingState = false;
 

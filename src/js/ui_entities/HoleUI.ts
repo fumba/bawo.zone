@@ -83,6 +83,7 @@ class HoleUI extends me.DroptargetEntity {
     });
 
     this.sleepStateUI();
+    this.renderable.alpha = 0.8;
 
     this.label = new me.Text(this.pos.x + 15, this.pos.y - 12, {
       font: "Arial",

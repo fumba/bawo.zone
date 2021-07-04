@@ -63,7 +63,7 @@ class Board {
   public readonly topPlayer: Player;
   private readonly rules: Rules;
   public readonly me: typeof Me;
-  public uiTaskQueue: Queue<Record<string, unknown>>;
+  public uiTaskQueue: Queue<Record<string, unknown>> = new Queue();
 
   /**
    * The gameplay is in a continuous loop if the player continues to play beyond a
@@ -108,8 +108,6 @@ class Board {
           hole.renderUI();
         }
       });
-      // initialise UI task thread
-      this.uiTaskQueue = new Queue();
     }
 
     this.validateUiState();
