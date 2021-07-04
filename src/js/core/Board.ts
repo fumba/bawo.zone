@@ -12,6 +12,7 @@ import { isEmpty } from "lodash";
 import SeedUI from "../ui_entities/SeedUI";
 import Utility from "../Utility";
 import { Queue } from "queue-typescript";
+import PlayerUI from "../ui_entities/PlayerUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -430,10 +431,17 @@ class Board {
    */
   public validateUiState(): void {
     if (this.isInGraphicsMode()) {
-      const seedCount = this.me.game.world.getChildByType(SeedUI).length;
-      if (seedCount != AppConstants.MAX_SEED_COUNT) {
+      const seedUiCount = this.me.game.world.getChildByType(SeedUI).length;
+      if (seedUiCount != AppConstants.MAX_SEED_COUNT) {
         throw new Error(
-          `UI State has ${seedCount} seeds present. There should always be 64 seeds in play`
+          `UI State has ${seedUiCount} seeds present. There should always be 64 seeds in play`
+        );
+      }
+      const playerUiCount = this.me.game.world.getChildByType(PlayerUI).length;
+      /* istanbul ignore next */
+      if (playerUiCount != 2) {
+        throw new Error(
+          `UI State has ${playerUiCount} players on board. There should always be 2.`
         );
       }
     }

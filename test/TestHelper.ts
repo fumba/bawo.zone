@@ -37,6 +37,9 @@ class TestHelper {
         }
         return seeds;
       }
+      case "PlayerUI": {
+        return ["top", "bottom"];
+      }
       default:
         /* istanbul ignore next */
         return [];
