@@ -3,6 +3,7 @@ import Hole from "../core/Hole";
 import Move from "../core/Move";
 import me from "../me";
 import SeedGroupUI from "./SeedGroupUI";
+import UiHelper from "./UiHelper";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -83,12 +84,12 @@ class HoleUI extends me.DroptargetEntity {
 
     this.sleepStateUI();
 
-    this.label = new me.Text(this.pos.x + 15, this.pos.y - 10, {
+    this.label = new me.Text(this.pos.x + 15, this.pos.y - 12, {
       font: "Arial",
-      size: 9,
+      size: 15,
       fillStyle: this.color,
     });
-    this.label.setText(this.hole.toString());
+    this.label.setText(this.seedCount());
     me.game.world.addChild(this.label);
   }
 
@@ -119,6 +120,14 @@ class HoleUI extends me.DroptargetEntity {
         this.id
       );
     }
+  }
+
+  public seedCount(): number {
+    let count = 0;
+    UiHelper.forEachUiSeedInHole(this.hole, () => {
+      count++;
+    });
+    return count;
   }
 }
 

@@ -1,3 +1,5 @@
+import { CANCELLED } from "dns";
+import Board from "../core/Board";
 import Hole from "../core/Hole";
 import HoleUI from "./HoleUI";
 import SeedGroupUI from "./SeedGroupUI";
@@ -46,6 +48,17 @@ class UiHelper {
       SeedUI.seedGroupId(hole.UID)
     );
     seeds.forEach((seed) => callback(seed));
+  }
+
+  public static forEachBoardHole(
+    board: Board,
+    callback: CallableFunction
+  ): void {
+    [board.topPlayer, board.bottomPlayer].forEach((player) => {
+      for (const hole of player.boardHoles) {
+        callback(hole);
+      }
+    });
   }
 }
 

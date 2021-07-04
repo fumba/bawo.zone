@@ -31,21 +31,18 @@ class PlayScreen extends me.Stage {
     const gameSpeed = 500;
 
     //update GUI elements state
+
+    let refreshHoleSleepingState = true; //initially refresh state so that the initial seed arrangement is rendered
     me.timer.setInterval(() => {
       const task = this.board.uiTaskQueue.dequeue();
       if (task) {
-        //re-render all holes on board
-        [this.board.topPlayer, this.board.bottomPlayer].forEach((player) => {
-          for (const hole of player.boardHoles) {
-            let count = 0;
-            UiHelper.forEachUiSeedInHole(hole, () => {
-              count++;
-            });
-            hole.ui.label.setText(count);
-            hole.ui.renderable = hole.ui.sleepingHoleSprite;
-          }
+        // refresh all holes status after the task is complete
+        refreshHoleSleepingState = true;
+        //re-render all holes on board for every UI update
+        UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
+          hole.ui.label.setText(hole.ui.seedCount());
+          hole.ui.renderable = hole.ui.sleepingHoleSprite;
         });
-        console.info(`UI - Recieved task : ${task.name}`);
         switch (task.name) {
           case UiTaskActions.SOW_SEED_INTO_HOLE: {
             const seedGroupUI: SeedGroupUI = task.seedGroupUI as SeedGroupUI;
@@ -64,7 +61,6 @@ class PlayScreen extends me.Stage {
             for (const seedUI of this.board.getCurrentPlayer().ui.seedsInHand) {
               seedUI.randomisePosition();
             }
-
             seedGroupUI.hole.ui.renderable =
               seedGroupUI.hole.ui.startHoleSprite;
             break;
@@ -72,7 +68,6 @@ class PlayScreen extends me.Stage {
           case UiTaskActions.GRAB_ALL_SEEDS_FROM_HOLE: {
             const hole: Hole = task.hole as Hole;
             console.info(`UI - getting all seeds from hole ${hole.UID}`);
-
             //remove all ui seeds from hole
             UiHelper.forEachUiSeedInHole(hole, (seedUI: SeedUI) => {
               const currentPlayerHandUI = this.board.getCurrentPlayer();
@@ -81,7 +76,6 @@ class PlayScreen extends me.Stage {
               seedUI.id = null;
               seedUI.randomisePosition();
             });
-
             hole.ui.renderable = hole.ui.startHoleSprite;
             break;
           }
@@ -89,13 +83,12 @@ class PlayScreen extends me.Stage {
       } else {
         const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
         //re-render all holes on board
-        if (!draggingSeedGroup) {
-          [this.board.topPlayer, this.board.bottomPlayer].forEach((player) => {
-            for (const hole of player.boardHoles) {
-              hole.ui.label.setText(hole.toString());
-              hole.ui.sleepStateUI();
-            }
+        if (!draggingSeedGroup && refreshHoleSleepingState == true) {
+          UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
+            hole.ui.label.setText(hole.ui.seedCount());
+            hole.ui.sleepStateUI();
           });
+          refreshHoleSleepingState = false;
         }
       }
     }, gameSpeed);
