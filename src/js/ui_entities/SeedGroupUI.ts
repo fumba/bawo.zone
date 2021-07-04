@@ -72,6 +72,7 @@ class SeedGroupUI extends me.DraggableEntity {
     this.hole = hole;
     this.renderable.alpha = 0.1;
     this.updateContainerStatus();
+    this.isKinematic = true;
   }
 
   /**

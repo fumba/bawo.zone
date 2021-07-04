@@ -55,6 +55,7 @@ class PlayerUI extends me.Entity {
     this.renderable.alpha = 1;
     this.positionHand(seedUI.group.hole.ui);
     me.game.world.sort(true);
+    seedUI.body.force.x = seedUI.body.maxVel.x;
   }
 
   private positionHand(holeUI: HoleUI) {

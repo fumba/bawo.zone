@@ -60,6 +60,53 @@ class SeedUI extends me.Entity {
     this.group = seedGroup;
     this.board = seedGroup.hole.board;
     this.randomisePosition();
+
+    console.log(this.renderable);
+
+    // add a physic body with an ellipse as body shape
+    this.body = new me.Body(
+      this,
+      new me.Ellipse(6, 6, this.width / 4, this.height / 4)
+    );
+    this.body.force.set(me.Math.randomFloat(-1, 1), me.Math.randomFloat(-1, 1));
+    this.body.friction.set(0.4, 0.4);
+  }
+
+  update(): boolean {
+    this.pos.add(this.body.force);
+
+    // hole limit check
+    if (this.pos.x > this.group.pos.x + this.group.width) {
+      this.body.force.x = -Math.sign(this.body.force.x);
+    }
+    if (this.pos.x < this.group.pos.x) {
+      this.body.force.x = -Math.sign(this.body.force.x);
+    }
+    if (this.pos.y > this.group.pos.y + this.group.height) {
+      this.body.force.y = -Math.sign(this.body.force.y);
+    }
+    if (this.pos.y < this.group.pos.y) {
+      this.body.force.y = -Math.sign(this.body.force.y);
+    }
+
+    if (me.collision.check(this)) {
+      this.body.force.set(0, 0);
+    }
+    return true;
+  }
+
+  // collision handler
+  onCollision(response: any): boolean {
+    this.pos.sub(response.overlapN);
+
+    if (response.overlapN.x !== 0) {
+      this.body.vel.x = -Math.sign(this.body.vel.x);
+    }
+    if (response.overlapN.y !== 0) {
+      this.body.vel.y = -Math.sign(this.body.vel.y);
+    }
+
+    return false;
   }
 
   /**
