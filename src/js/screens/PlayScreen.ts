@@ -82,16 +82,31 @@ class PlayScreen extends me.Stage {
         }
       } else {
         const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
-        //re-render all holes on board
         if (!draggingSeedGroup && refreshHoleSleepingState == true) {
+          // re-render all holes on board
           UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
             hole.ui.label.setText(hole.ui.seedCount());
             hole.ui.sleepStateUI();
           });
           refreshHoleSleepingState = false;
+
+          // ui and non-ui game board should always be in sync
+          this.validateUiState();
         }
       }
     }, gameSpeed);
+  }
+
+  public validateUiState(): void {
+    UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
+      if (hole.numSeeds != hole.ui.seedCount()) {
+        throw new Error(
+          `UI (${hole.ui.seedCount()}) and non-UI (${
+            hole.numSeeds
+          }) board not in sync : ${hole.toString()}`
+        );
+      }
+    });
   }
 
   onDestroyEvent(): void {
