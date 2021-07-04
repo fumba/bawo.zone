@@ -438,6 +438,7 @@ class Board {
         );
       }
       const playerUiCount = this.me.game.world.getChildByType(PlayerUI).length;
+      /* istanbul ignore next */
       if (playerUiCount != 2) {
         throw new Error(
           `UI State has ${playerUiCount} players on board. There should always be 2.`
