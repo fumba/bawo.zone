@@ -28,6 +28,7 @@ jobs:
     - run: yarn install
     - run: yarn jest --coverage
     - run: yarn lint
+    - run: yarn release
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.2
       with:
