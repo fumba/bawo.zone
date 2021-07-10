@@ -1516,10 +1516,10 @@
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.2.3.tgz#ef65165aea2924c9359205bf748865b8881753c0"
   integrity sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==
 
-"@types/regenerator-runtime@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@types/regenerator-runtime/-/regenerator-runtime-0.13.0.tgz#8b81e6047da0fbb71927c23d749e2a9edf9aad9b"
-  integrity sha512-U5osy6qZU3lOPGQRHGDIAt/hC/jAE7zP4Aq258UMXnF8/htmZ+72ALrSsmWTtqML7lCztKkKaPz6Pb5XHJF0Vw==
+"@types/regenerator-runtime@^0.13.1":
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/@types/regenerator-runtime/-/regenerator-runtime-0.13.1.tgz#1285f0b1b0508e0ead609104b9a42409473122d1"
+  integrity sha512-Wr4Kopo+zs7kl1mxveVrP7Hl5nEzauQKdSNFN5Eg27Ze11MAgJYKgidYc9AAkQzGXXWH9lqVzPbXUGH6M8VY6g==
 
 "@types/stack-utils@^2.0.0":
   version "2.0.0"
