@@ -47,7 +47,7 @@
     "@babel/preset-env": "^7.14.7",
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.171",
-    "@types/regenerator-runtime": "^0.13.0",
+    "@types/regenerator-runtime": "^0.13.1",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "aws-sdk": "^2.940.0",
