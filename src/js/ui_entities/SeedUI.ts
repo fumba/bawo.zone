@@ -63,7 +63,7 @@ class SeedUI extends me.Entity {
   }
 
   /**
-   * Randomises the position of the seed in the hole - seed group container
+   * Randomizes the position of the seed in the hole - seed group container
    */
   public randomisePosition(): void {
     const location = isEmpty(this.group)
