@@ -232,7 +232,7 @@ class Board {
   /**
    * Switch Players.
    *
-   * @throws Errow when an attempt is made to switch while one of the players has seeds in hands.
+   * @throws Error when an attempt is made to switch while one of the players has seeds in hands.
    */
   public switchPlayers(): void {
     if (

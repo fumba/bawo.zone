@@ -31,7 +31,18 @@ class PlayScreen extends me.Stage {
     me.game.world.addChild(this.HUD);
 
     const gameSpeed = 300;
-    let isCpuTurn = false;
+
+    // CPU player should always be on the top side
+    let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? true : false;
+    if (!isCpuTopPlayerTurn) {
+      this.board.switchPlayers(); //go to bottom side of board for human player
+      // re-render all holes on board
+      UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
+        hole.ui.label.setText(hole.ui.seedCount());
+        hole.ui.sleepStateUI();
+        hole.seedGroupUI.updateContainerStatus();
+      });
+    }
 
     //update GUI elements state
 
@@ -96,14 +107,15 @@ class PlayScreen extends me.Stage {
 
           // ui and non-ui game board should always be in sync
           this.validateUiState();
-          isCpuTurn = !this.board.getCurrentPlayer().isOnTopSide();
+          // switch to CPU player if its the top players turn
+          isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
         }
       }
     }, gameSpeed);
 
     me.timer.setInterval(() => {
-      if (isCpuTurn) {
-        isCpuTurn = false;
+      if (isCpuTopPlayerTurn) {
+        isCpuTopPlayerTurn = false;
         const moves: Array<Move> = this.board.getAllAvailableValidMoves(
           this.board.getCurrentPlayer()
         );
