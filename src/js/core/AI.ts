@@ -29,7 +29,8 @@ class AI {
    * @returns {Move} the best move that the CPU can make
    */
   public static computeBestMove(board: Board): Move {
-    const moves: Array<Move> = board.getAllAvailableValidMoves(
+    const boardClone: Board = board.clone();
+    const moves: Array<Move> = boardClone.getAllAvailableValidMoves(
       board.getCurrentPlayer()
     );
     const move = moves[Utility.getRandomInt(moves.length)];
