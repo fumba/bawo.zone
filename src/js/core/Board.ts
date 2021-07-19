@@ -592,6 +592,7 @@ class Board {
   /**
    * Re-renders the state of the hole, HUD, and other UI components on the board
    */
+  /* istanbul ignore next */
   public refreshUiState(): void {
     UiHelper.forEachBoardHole(this, (hole: Hole) => {
       hole.ui.label.setText(hole.ui.seedCount());
