@@ -9,6 +9,7 @@ import UiTaskActions from "../core/UiTaskActions";
 import Hole from "../core/Hole";
 import AI from "../core/AI";
 import Utility from "../Utility";
+import BoardUiState from "../core/BoardUiState";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -57,7 +58,7 @@ class PlayScreen extends me.Stage {
       //go to bottom side of board for human player
       this.board.switchPlayers();
       // re-render all holes on board
-      this.board.refreshUiState();
+      this.board.draw(BoardUiState.RESTING);
     }
 
     //update GUI elements state
@@ -69,11 +70,7 @@ class PlayScreen extends me.Stage {
         // refresh all holes status after the task is complete
         refreshHoleSleepingState = true;
         //initially set all hole UI as inactive during gameplay animation
-        UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
-          hole.ui.label.setText(hole.ui.seedCount());
-          hole.ui.renderable = hole.ui.sleepingHoleSprite;
-          hole.seedGroupUI.renderable.tint.setColor(105, 105, 105);
-        });
+        this.board.draw(BoardUiState.PLAY_IN_PROGRESS);
         switch (task.name) {
           case UiTaskActions.SOW_SEED_INTO_HOLE: {
             const seedGroupUI: SeedGroupUI = task.seedGroupUI as SeedGroupUI;
@@ -115,7 +112,7 @@ class PlayScreen extends me.Stage {
         if (!draggingSeedGroup && refreshHoleSleepingState == true) {
           // game is currently in sleep state (waiting for next player move)
           // re-render all holes on board
-          this.board.refreshUiState();
+          this.board.draw(BoardUiState.RESTING);
           refreshHoleSleepingState = false;
           // switch to CPU player if its the top players turn
           isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();

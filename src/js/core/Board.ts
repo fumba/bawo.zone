@@ -14,6 +14,7 @@ import Utility from "../Utility";
 import { Queue } from "queue-typescript";
 import PlayerUI from "../ui_entities/PlayerUI";
 import UiHelper from "../ui_entities/UiHelper";
+import BoardUiState from "./BoardUiState";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -622,16 +623,32 @@ class Board {
    * Re-renders the state of the hole, HUD, and other UI components on the board
    */
   /* istanbul ignore next */
-  public refreshUiState(): void {
-    UiHelper.forEachBoardHole(this, (hole: Hole) => {
-      hole.ui.label.setText(hole.ui.seedCount());
-      hole.ui.sleepStateUI();
-      hole.seedGroupUI.updateContainerStatus();
-    });
+  public draw(state: BoardUiState): void {
+    switch (state) {
+      case BoardUiState.RESTING: {
+        UiHelper.forEachBoardHole(this, (hole: Hole) => {
+          hole.ui.label.setText(hole.ui.seedCount());
+          hole.ui.sleepStateUI();
+          hole.seedGroupUI.updateContainerStatus();
+        });
+        break;
+      }
+      case BoardUiState.PLAY_IN_PROGRESS: {
+        UiHelper.forEachBoardHole(this, (hole: Hole) => {
+          hole.ui.label.setText(hole.ui.seedCount());
+          hole.ui.renderable = hole.ui.sleepingHoleSprite;
+          hole.seedGroupUI.renderable.tint.setColor(105, 105, 105); //gray out all holes
+        });
+        break;
+      }
+    }
 
     //validate that ui and non-ui board are in sync
     UiHelper.forEachBoardHole(this, (hole: Hole) => {
-      if (hole.numSeeds != hole.ui.seedCount()) {
+      if (
+        state != BoardUiState.PLAY_IN_PROGRESS &&
+        hole.numSeeds != hole.ui.seedCount()
+      ) {
         throw new Error(
           `UI (${hole.ui.seedCount()}) and non-UI (${
             hole.numSeeds
