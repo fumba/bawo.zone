@@ -13,6 +13,7 @@ import SeedUI from "../ui_entities/SeedUI";
 import Utility from "../Utility";
 import { Queue } from "queue-typescript";
 import PlayerUI from "../ui_entities/PlayerUI";
+import UiHelper from "../ui_entities/UiHelper";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -70,7 +71,7 @@ class Board {
    * threshold amount of moves.
    * The game will end and the player who got themselves into an infinite loop will lose.
    */
-  private isInContinousLoopStatus = false;
+  private isInContinuousLoopStatus = false;
 
   /**
    * @param {any} me melonjs instance
@@ -83,7 +84,7 @@ class Board {
     this.rules = rules;
     this.rules.validate();
 
-    // initialise player board holes
+    // initialize player board holes
     [this.topPlayer, this.bottomPlayer].forEach((player) => {
       const playerInitSeedConfig: Array<number> = this.rules
         .initialSeedForPlayerRows()
@@ -97,7 +98,7 @@ class Board {
       }
     });
 
-    //set current playersssP
+    //set current players
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
 
@@ -122,9 +123,9 @@ class Board {
    */
   public adjacentOpponentHole(hole: Hole): Hole {
     if (hole.isInFrontRow()) {
-      const oppossingId: number = 15 - hole.id;
+      const opposingId: number = 15 - hole.id;
       const opponentPlayer: Player = this.getOpponentPlayer(hole.player);
-      return opponentPlayer.boardHoles.getHoleWithID(oppossingId);
+      return opponentPlayer.boardHoles.getHoleWithID(opposingId);
     }
     throw new Error(
       `Attempted to retrieve adjacent opponent hole from a hole that is not in the front row | input: ${hole.id}`
@@ -308,13 +309,13 @@ class Board {
    * implementation of the GameRules interface.
    *
    * @param {Move} move The move to be executed.
-   * @returns {boolean} A boolean value representing whether or not the move was succesful.
+   * @returns {boolean} A boolean value representing whether or not the move was successful.
    */
   public executeMove(move: Move): boolean {
-    console.info(`Recieved move : ${move.toString()}`);
+    console.info(`Received move : ${move.toString()}`);
     this.validateUiState();
     if (move.hole.player != this.currentPlayer) {
-      throw new Error("Player is unathorised to make move");
+      throw new Error("Player is unauthorised to make move");
     }
     console.info("Board Status before executing move : \n" + this.toString());
     if (move.prevContinuedMovesCount > AppConstants.INFINITE_LOOP_THRESHOLD) {
@@ -324,7 +325,7 @@ class Board {
       // place all the seeds back into the start hole for the move.
       move.hole.transferSeedsFromCurrPlayer(this.currentPlayer.numSeedsInHand);
 
-      this.isInContinousLoopStatus = true;
+      this.isInContinuousLoopStatus = true;
       // TODO update GUI state
       return true;
     }
@@ -404,7 +405,7 @@ class Board {
           // get mtaji status from parent
           continuingMove.isMtaji = move.isMtaji;
         } else {
-          // this is an initial move that didnt capture...
+          // this is an initial move that didn't capture...
           // Do not allow any other moves to capture at this point...
           continuingMove.isMtaji = false;
         }
@@ -476,7 +477,7 @@ class Board {
       default:
         /* istanbul ignore next */
         throw new Error(
-          `Only Clockwise and Anticlockwise moves are allowed. Recieved : ${direction}`
+          `Only Clockwise and Anticlockwise moves are allowed. Received : ${direction}`
         );
     }
   }
@@ -489,7 +490,7 @@ class Board {
    */
   private captureAllSeedsFromEnemy(startHole: Hole): boolean {
     if (startHole.isInFrontRow()) {
-      const opponentHole = this.getOppossingEnemyHole(startHole);
+      const opponentHole = this.getOpposingEnemyHole(startHole);
       const stolenSeedCount = opponentHole.transferAllSeedsToCurrPlayer();
       if (stolenSeedCount > 0) {
         console.info(
@@ -508,11 +509,11 @@ class Board {
    * @param {Hole} hole Hole from which the opposing enemy hole is to be retrieved.
    * @returns {Hole} Opposing enemy hole.
    */
-  public getOppossingEnemyHole(hole: Hole): Hole {
+  public getOpposingEnemyHole(hole: Hole): Hole {
     if (hole.isInFrontRow()) {
-      const oppossingId = 15 - hole.id;
+      const opposingId = 15 - hole.id;
       const opponentPlayer = this.getOpponentPlayer(hole.player);
-      return opponentPlayer.boardHoles.getHoleWithID(oppossingId);
+      return opponentPlayer.boardHoles.getHoleWithID(opposingId);
     }
     throw new Error("Could not retrieve opposing enemy hole");
   }
@@ -559,7 +560,7 @@ class Board {
    * @returns {boolean} true if the game is over.
    */
   public isGameOver(): boolean {
-    if (this.isInContinousLoopStatus) {
+    if (this.isInContinuousLoopStatus) {
       return true;
     }
     for (const hole of this.currentPlayer.boardHoles) {
@@ -586,6 +587,28 @@ class Board {
         "The game is still in play. There is no winning player yet."
       );
     }
+  }
+
+  /**
+   * Re-renders the state of the hole, HUD, and other UI components on the board
+   */
+  public refreshUiState(): void {
+    UiHelper.forEachBoardHole(this, (hole: Hole) => {
+      hole.ui.label.setText(hole.ui.seedCount());
+      hole.ui.sleepStateUI();
+      hole.seedGroupUI.updateContainerStatus();
+    });
+
+    //validate that ui and non-ui board are in sync
+    UiHelper.forEachBoardHole(this, (hole: Hole) => {
+      if (hole.numSeeds != hole.ui.seedCount()) {
+        throw new Error(
+          `UI (${hole.ui.seedCount()}) and non-UI (${
+            hole.numSeeds
+          }) board not in sync : ${hole.toString()}`
+        );
+      }
+    });
   }
 
   /**
@@ -619,7 +642,7 @@ class Board {
 
     // if one of the players got into an infinite loop, they are punished by
     // loosing all their seed scores to the opponent player.
-    if (this.isInContinousLoopStatus) {
+    if (this.isInContinuousLoopStatus) {
       const loosingPlayerSeedCount = scoreMap.get(this.currentPlayer.side);
       const winningPlayerSeedCount = scoreMap.get(
         this.getOpponentPlayer(this.currentPlayer).side

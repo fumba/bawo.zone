@@ -189,7 +189,7 @@ describe("Board", () => {
     });
   });
 
-  describe("#getOppossingEnemyHole", () => {
+  describe("#getOpposingEnemyHole", () => {
     /*
      *    TOP PLAYER sitting position (facing down)
      *    00	01	02	03	04	05	06	07
@@ -202,26 +202,26 @@ describe("Board", () => {
     test("should return correct id for opposing enemy holes", () => {
       const topPlayerHoles = board.topPlayer.boardHoles;
       expect(() => {
-        board.getOppossingEnemyHole(topPlayerHoles.getHoleWithID(0));
+        board.getOpposingEnemyHole(topPlayerHoles.getHoleWithID(0));
       }).toThrowError("Could not retrieve opposing enemy hole");
       expect(
-        board.getOppossingEnemyHole(topPlayerHoles.getHoleWithID(8)).id
+        board.getOpposingEnemyHole(topPlayerHoles.getHoleWithID(8)).id
       ).toBe(7);
       expect(
-        board.getOppossingEnemyHole(topPlayerHoles.getHoleWithID(11)).id
+        board.getOpposingEnemyHole(topPlayerHoles.getHoleWithID(11)).id
       ).toBe(4);
       expect(
-        board.getOppossingEnemyHole(topPlayerHoles.getHoleWithID(15)).id
+        board.getOpposingEnemyHole(topPlayerHoles.getHoleWithID(15)).id
       ).toBe(0);
       const bottomPlayerHoles = board.bottomPlayer.boardHoles;
       expect(() => {
-        board.getOppossingEnemyHole(bottomPlayerHoles.getHoleWithID(15));
+        board.getOpposingEnemyHole(bottomPlayerHoles.getHoleWithID(15));
       }).toThrowError("Could not retrieve opposing enemy hole");
       expect(
-        board.getOppossingEnemyHole(bottomPlayerHoles.getHoleWithID(7)).id
+        board.getOpposingEnemyHole(bottomPlayerHoles.getHoleWithID(7)).id
       ).toBe(8);
       expect(
-        board.getOppossingEnemyHole(bottomPlayerHoles.getHoleWithID(4)).id
+        board.getOpposingEnemyHole(bottomPlayerHoles.getHoleWithID(4)).id
       ).toBe(11);
     });
   });
@@ -517,11 +517,11 @@ describe("Board", () => {
         MoveDirection.Clockwise
       );
       expect(() => board.executeMove(move)).toThrowError(
-        "Player is unathorised to make move"
+        "Player is unauthorised to make move"
       );
     });
 
-    test("should detect when the game falls into a continous loop", () => {
+    test("should detect when the game falls into a continuous loop", () => {
       const board = new Board();
       const move = new Move(
         board.topPlayer.boardHoles.getHoleWithID(1),

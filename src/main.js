@@ -46,7 +46,7 @@ app.on("ready", () => {
   initIpc();
 
   const mainWindow = createWindow("app", {
-    width: 800,
+    width: 1024,
     height: 600,
     webPreferences: {
       // Two properties below are here for demo purposes, and are

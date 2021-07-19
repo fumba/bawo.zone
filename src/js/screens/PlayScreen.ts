@@ -16,7 +16,7 @@ class PlayScreen extends me.Stage {
   onResetEvent(): void {
     //load a level
     //me.levelDirector.loadLevel("background");
-    me.game.world.addChild(new me.ColorLayer("background", "#B7B6B5"), -1);
+    me.game.world.addChild(new me.ColorLayer("background", "#b7b6b5"), -1);
 
     // reset the score
     game.data.score = 0;
@@ -35,13 +35,10 @@ class PlayScreen extends me.Stage {
     // CPU player should always be on the top side
     let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? true : false;
     if (!isCpuTopPlayerTurn) {
-      this.board.switchPlayers(); //go to bottom side of board for human player
+      //go to bottom side of board for human player
+      this.board.switchPlayers();
       // re-render all holes on board
-      UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
-        hole.ui.label.setText(hole.ui.seedCount());
-        hole.ui.sleepStateUI();
-        hole.seedGroupUI.updateContainerStatus();
-      });
+      this.board.refreshUiState();
     }
 
     //update GUI elements state
@@ -97,16 +94,10 @@ class PlayScreen extends me.Stage {
       } else {
         const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
         if (!draggingSeedGroup && refreshHoleSleepingState == true) {
+          // game is currently in sleep state (waiting for next player move)
           // re-render all holes on board
-          UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
-            hole.ui.label.setText(hole.ui.seedCount());
-            hole.ui.sleepStateUI();
-            hole.seedGroupUI.updateContainerStatus();
-          });
+          this.board.refreshUiState();
           refreshHoleSleepingState = false;
-
-          // ui and non-ui game board should always be in sync
-          this.validateUiState();
           // switch to CPU player if its the top players turn
           isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
         }
@@ -122,19 +113,7 @@ class PlayScreen extends me.Stage {
         const move = moves[Utility.getRandomInt(moves.length)];
         this.board.executeMove(move);
       }
-    }, 100);
-  }
-
-  public validateUiState(): void {
-    UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
-      if (hole.numSeeds != hole.ui.seedCount()) {
-        throw new Error(
-          `UI (${hole.ui.seedCount()}) and non-UI (${
-            hole.numSeeds
-          }) board not in sync : ${hole.toString()}`
-        );
-      }
-    });
+    }, gameSpeed);
   }
 
   onDestroyEvent(): void {
