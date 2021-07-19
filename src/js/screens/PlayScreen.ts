@@ -7,16 +7,35 @@ import SeedGroupUI from "../ui_entities/SeedGroupUI";
 import UiHelper from "../ui_entities/UiHelper";
 import UiTaskActions from "../core/UiTaskActions";
 import Hole from "../core/Hole";
+import AI from "../core/AI";
 import Utility from "../Utility";
-import Move from "../core/Move";
 
+/*
+ * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
+ * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 class PlayScreen extends me.Stage {
   private board: Board;
 
   onResetEvent(): void {
     //load a level
     //me.levelDirector.loadLevel("background");
-    me.game.world.addChild(new me.ColorLayer("background", "#B7B6B5"), -1);
+    me.game.world.addChild(new me.ColorLayer("background", "#b7b6b5"), -1);
 
     // reset the score
     game.data.score = 0;
@@ -35,13 +54,10 @@ class PlayScreen extends me.Stage {
     // CPU player should always be on the top side
     let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? true : false;
     if (!isCpuTopPlayerTurn) {
-      this.board.switchPlayers(); //go to bottom side of board for human player
+      //go to bottom side of board for human player
+      this.board.switchPlayers();
       // re-render all holes on board
-      UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
-        hole.ui.label.setText(hole.ui.seedCount());
-        hole.ui.sleepStateUI();
-        hole.seedGroupUI.updateContainerStatus();
-      });
+      this.board.refreshUiState();
     }
 
     //update GUI elements state
@@ -97,16 +113,10 @@ class PlayScreen extends me.Stage {
       } else {
         const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
         if (!draggingSeedGroup && refreshHoleSleepingState == true) {
+          // game is currently in sleep state (waiting for next player move)
           // re-render all holes on board
-          UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
-            hole.ui.label.setText(hole.ui.seedCount());
-            hole.ui.sleepStateUI();
-            hole.seedGroupUI.updateContainerStatus();
-          });
+          this.board.refreshUiState();
           refreshHoleSleepingState = false;
-
-          // ui and non-ui game board should always be in sync
-          this.validateUiState();
           // switch to CPU player if its the top players turn
           isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
         }
@@ -116,25 +126,10 @@ class PlayScreen extends me.Stage {
     me.timer.setInterval(() => {
       if (isCpuTopPlayerTurn) {
         isCpuTopPlayerTurn = false;
-        const moves: Array<Move> = this.board.getAllAvailableValidMoves(
-          this.board.getCurrentPlayer()
-        );
-        const move = moves[Utility.getRandomInt(moves.length)];
+        const move = AI.computeBestMove(this.board);
         this.board.executeMove(move);
       }
-    }, 100);
-  }
-
-  public validateUiState(): void {
-    UiHelper.forEachBoardHole(this.board, (hole: Hole) => {
-      if (hole.numSeeds != hole.ui.seedCount()) {
-        throw new Error(
-          `UI (${hole.ui.seedCount()}) and non-UI (${
-            hole.numSeeds
-          }) board not in sync : ${hole.toString()}`
-        );
-      }
-    });
+    }, gameSpeed);
   }
 
   onDestroyEvent(): void {

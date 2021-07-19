@@ -15,9 +15,9 @@ class Bootstrap {
   constructor() {
     // Initialize the video.
     if (
-      !me.video.init(800, 600, {
+      !me.video.init(1024, 600, {
         parent: "screen",
-        scale: "flex-width",
+        scale: "flex",
         renderer: me.video.CANVAS,
       })
     ) {
