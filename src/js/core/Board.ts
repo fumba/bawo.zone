@@ -256,12 +256,40 @@ class Board {
     );
   }
 
+  /**
+   * Clones a board
+   *
+   * @returns {Board} a clone of the board
+   */
+  public clone(): Board {
+    const topPlayerSeedArrangement: Array<number> = [];
+    const btmPlayerSeedArrangement: Array<number> = [];
+    for (const hole of this.topPlayer.boardHoles) {
+      topPlayerSeedArrangement.push(hole.numSeeds);
+    }
+    for (const hole of this.bottomPlayer.boardHoles) {
+      btmPlayerSeedArrangement.push(hole.numSeeds);
+    }
+    return Board.loadState(
+      topPlayerSeedArrangement,
+      btmPlayerSeedArrangement,
+      this.currentPlayer
+    );
+  }
+
   //TODO
   public static loadState(
     topPlayerSeedArrangement: Array<number>,
-    btmPlayerSeedArrangement: Array<number>
+    btmPlayerSeedArrangement: Array<number>,
+    currentPlayer: Player
   ): Board {
     const board: Board = new Board(null);
+    if (
+      currentPlayer != null &&
+      board.currentPlayer.side != currentPlayer.side
+    ) {
+      board.switchPlayers();
+    }
     //update hole seed counts for top player
     if (topPlayerSeedArrangement) {
       //TODO validate length - 16
@@ -284,6 +312,7 @@ class Board {
           btmPlayerSeedArrangement[id];
       }
     }
+    board.updateMovesStatus();
     return board;
   }
 

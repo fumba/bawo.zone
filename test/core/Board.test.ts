@@ -446,7 +446,7 @@ describe("Board", () => {
   });
 
   describe("#isGameOver", () => {
-    test("should be false when the game hasnt ended yet", () => {
+    test("should be false when the game hasn't ended yet", () => {
       expect(board.isGameOver()).toBe(false);
     });
 
@@ -454,13 +454,28 @@ describe("Board", () => {
   });
 
   describe("#getWinningPlayer", () => {
-    test("should throw error when invoked while the game hasnt ended yet", () => {
+    test("should throw error when invoked while the game hasn't ended yet", () => {
       expect(() => board.getWinningPlayer()).toThrowError(
         "The game is still in play. There is no winning player yet."
       );
     });
 
     //determining winning player happy path is tested in #executeMove - simulation
+  });
+
+  describe("#clone", () => {
+    test("should correctly clone seed placement on a board", () => {
+      const board: Board = new Board();
+      expect(board.clone().toString()).toBe(board.toString());
+    });
+
+    test("should assign correct current player", () => {
+      const board: Board = new Board();
+      board.switchPlayers();
+      expect(board.clone().getCurrentPlayer().side).toBe(
+        board.getCurrentPlayer().side
+      );
+    });
   });
 
   describe("#getScore", () => {
@@ -991,7 +1006,11 @@ describe("Board", () => {
       const btmPlayerSeedConfig = [
         1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 5, 6, 6, 7, 7,
       ];
-      const board = Board.loadState(topPlayerSeedConfig, btmPlayerSeedConfig);
+      const board = Board.loadState(
+        topPlayerSeedConfig,
+        btmPlayerSeedConfig,
+        null
+      );
       //check player seed placement
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         expect(board.topPlayer.boardHoles.getHoleWithID(index).numSeeds).toBe(
