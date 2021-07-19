@@ -192,6 +192,7 @@ describe("MtajiModeRules", () => {
     test("should accept move that sows in the front row", () => {
       const board = Board.loadState(
         [0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0],
+        null,
         null
       );
       const topPlayerHoles = board.topPlayer.boardHoles;
@@ -206,6 +207,7 @@ describe("MtajiModeRules", () => {
     test("should not accept move that does not sow in the front row", () => {
       const board = Board.loadState(
         [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
+        null,
         null
       );
       const topPlayerHoles = board.topPlayer.boardHoles;

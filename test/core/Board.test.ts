@@ -465,12 +465,12 @@ describe("Board", () => {
 
   describe("#clone", () => {
     test("should correctly clone seed placement on a board", () => {
-      const board: Board = new Board(me);
+      const board: Board = new Board();
       expect(board.clone().toString()).toBe(board.toString());
     });
 
     test("should assign correct current player", () => {
-      const board: Board = new Board(me);
+      const board: Board = new Board();
       board.switchPlayers();
       expect(board.clone().getCurrentPlayer().side).toBe(
         board.getCurrentPlayer().side

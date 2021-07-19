@@ -284,7 +284,10 @@ class Board {
     currentPlayer: Player
   ): Board {
     const board: Board = new Board(null);
-    if (board.currentPlayer.side != currentPlayer.side) {
+    if (
+      currentPlayer != null &&
+      board.currentPlayer.side != currentPlayer.side
+    ) {
       board.switchPlayers();
     }
     //update hole seed counts for top player
