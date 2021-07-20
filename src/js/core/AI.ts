@@ -36,6 +36,78 @@ class AI {
     const move = moves[Utility.getRandomInt(moves.length)];
     return move;
   }
+
+  // compute optimal move for current player
+  public static minimax(
+    depth: number,
+    nodeIndex: number,
+    maximizingPlayer: boolean,
+    values: Array<number>,
+    alpha: number,
+    beta: number
+  ): number {
+    // Terminating condition. i.e
+    // leaf node is reached
+    if (depth == 0) return values[nodeIndex];
+
+    if (maximizingPlayer) {
+      let best = Number.NEGATIVE_INFINITY;
+
+      // Recur for left and
+      // right children
+      for (let i = 0; i < 2; i++) {
+        const score = AI.minimax(
+          depth - 1,
+          nodeIndex * 2 + i,
+          false,
+          values,
+          alpha,
+          beta
+        );
+        best = Math.max(best, score);
+        alpha = Math.max(alpha, best);
+
+        // Alpha Beta Pruning
+        if (beta <= alpha) break;
+      }
+      return best;
+    } else {
+      let best = Number.POSITIVE_INFINITY;
+
+      // Recur for left and
+      // right children
+      for (let i = 0; i < 2; i++) {
+        const score = AI.minimax(
+          depth - 1,
+          nodeIndex * 2 + i,
+          true,
+          values,
+          alpha,
+          beta
+        );
+        best = Math.min(best, score);
+        beta = Math.min(beta, best);
+
+        // Alpha Beta Pruning
+        if (beta <= alpha) break;
+      }
+      return best;
+    }
+  }
 }
+
+// Driver Code
+const values = [3, 5, 6, 9, 1, 2, 0, -1];
+console.log(
+  "The optimal value is : " +
+    AI.minimax(
+      3,
+      0,
+      true,
+      values,
+      Number.NEGATIVE_INFINITY,
+      Number.POSITIVE_INFINITY
+    )
+);
 
 export default AI;
