@@ -531,9 +531,7 @@ describe("Board", () => {
         board.bottomPlayer.boardHoles.getHoleWithID(1),
         MoveDirection.Clockwise
       );
-      expect(() => board.executeMove(move)).toThrowError(
-        "Player is unauthorised to make move"
-      );
+      expect(() => board.executeMove(move)).toThrow();
     });
 
     test("should detect when the game falls into a continuous loop", () => {
