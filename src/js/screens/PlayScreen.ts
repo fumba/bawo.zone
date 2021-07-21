@@ -52,9 +52,12 @@ class PlayScreen extends me.Stage {
 
     const gameSpeed = 300;
 
+    const vsHuman = true;
     // CPU player should always be on the top side
     let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? false : true;
-    if (!isCpuTopPlayerTurn) {
+    let isCpuBottomPlayerTurn = !vsHuman && !isCpuTopPlayerTurn;
+
+    if (!isCpuTopPlayerTurn && vsHuman) {
       //go to bottom side of board for human player
       this.board.switchPlayers();
       // re-render all holes on board
@@ -116,6 +119,7 @@ class PlayScreen extends me.Stage {
           refreshHoleSleepingState = false;
           // switch to CPU player if its the top players turn
           isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
+          isCpuBottomPlayerTurn = !vsHuman && !isCpuTopPlayerTurn;
         }
       }
     }, gameSpeed);
@@ -124,7 +128,13 @@ class PlayScreen extends me.Stage {
       if (isCpuTopPlayerTurn) {
         isCpuTopPlayerTurn = false;
         const move = AI.computeBestMove(this.board);
-        console.info("CPU-AI BEST MOVE", move);
+        console.log("TOP CPU-AI BEST MOVE", move);
+        this.board.executeMove(move);
+      }
+      if (isCpuBottomPlayerTurn) {
+        isCpuBottomPlayerTurn = false;
+        const move = AI.computeBestMove(this.board);
+        console.log("BOTTOM CPU-AI BEST MOVE", move);
         this.board.executeMove(move);
       }
     }, gameSpeed);
