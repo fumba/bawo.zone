@@ -53,7 +53,7 @@ class PlayScreen extends me.Stage {
     const gameSpeed = 300;
 
     // CPU player should always be on the top side
-    let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? true : true;
+    let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? false : true;
     if (!isCpuTopPlayerTurn) {
       //go to bottom side of board for human player
       this.board.switchPlayers();
