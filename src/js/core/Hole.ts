@@ -47,7 +47,7 @@ class Hole {
   // Whether the player is allowed to make moves on this hole.
   public moveStatus: MoveDirection;
   // the board on which the hole is placed
-  public readonly board: Board;
+  public board: Board;
   // Hole UI corresponding to this hole
   public ui: HoleUI;
   // Seed Group UI corresponding to this hole

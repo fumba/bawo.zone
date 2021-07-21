@@ -124,6 +124,7 @@ class PlayScreen extends me.Stage {
       if (isCpuTopPlayerTurn) {
         isCpuTopPlayerTurn = false;
         const move = AI.computeBestMove(this.board);
+        console.info("CPU-AI BEST MOVE", move);
         this.board.executeMove(move);
       }
     }, gameSpeed);

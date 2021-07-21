@@ -1,6 +1,7 @@
-import Utility from "../Utility";
+import ScoreMovePair from "./ScoreMovePair";
 import Board from "./Board";
 import Move from "./Move";
+import Player from "./Player";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -29,12 +30,114 @@ class AI {
    * @returns {Move} the best move that the CPU can make
    */
   public static computeBestMove(board: Board): Move {
-    const boardClone: Board = board.clone();
-    const moves: Array<Move> = boardClone.getAllAvailableValidMoves(
-      board.getCurrentPlayer()
-    );
-    const move = moves[Utility.getRandomInt(moves.length)];
-    return move;
+    const clonedBoard: Board = board.clone();
+    const depth = 3;
+    const player = board.getCurrentPlayer(); //cpu player
+    const bestMove = AI.minimax(
+      player,
+      depth,
+      null, //todo ?
+      clonedBoard,
+      Number.NEGATIVE_INFINITY,
+      Number.POSITIVE_INFINITY
+    ).move;
+
+    // move will be performed on board (not cloned board)
+    bestMove.hole = board
+      .getCurrentPlayer()
+      .boardHoles.getHoleWithID(bestMove.hole.id);
+    return bestMove;
+  }
+
+  // compute optimal move for current player
+  public static minimax(
+    player: Player,
+    depth: number,
+    currentMove: ScoreMovePair,
+    board: Board,
+    alpha: number,
+    beta: number
+  ): ScoreMovePair {
+    console.info("MINMAX ENTER ---- ");
+    console.info("CPU PLAYER ", player);
+    console.info("BOARD ON MINMAX ENTER ", board.toString());
+    // Terminating condition. i.e
+    // leaf node is reached
+    if (depth == 0) return currentMove;
+
+    // maximizing player
+    if (player.side == board.getCurrentPlayer().side) {
+      console.info("> current: MAXIMIZING PLAYER");
+      let best = new ScoreMovePair(Number.NEGATIVE_INFINITY, null);
+      const moves: Array<Move> = board.getAllAvailableValidMoves(
+        board.getCurrentPlayer()
+      );
+      for (const move of moves) {
+        const clonedBoard: Board = board.clone();
+        // move will be performed on cloned board
+        move.hole = clonedBoard
+          .getCurrentPlayer()
+          .boardHoles.getHoleWithID(move.hole.id);
+
+        console.info("> MAXIMIZING MOVE ", move);
+        console.info("> CLONED-BOARD ", clonedBoard.toString());
+        console.info("> CLONED-BOARD PLAYER ", clonedBoard.getCurrentPlayer());
+        clonedBoard.executeMove(move); //players are switched after every move execution
+        const score = clonedBoard.getScore().get(player.side);
+        const scoreMovePair = AI.minimax(
+          player,
+          depth - 1,
+          new ScoreMovePair(score, move),
+          clonedBoard,
+          alpha,
+          beta
+        );
+        if (best.score < scoreMovePair.score) {
+          best = new ScoreMovePair(score, move); //maximize score
+        }
+        alpha = Math.max(alpha, best.score);
+
+        // Alpha Beta Pruning
+        if (beta <= alpha) break;
+      }
+      return best;
+    } else {
+      //minimizing player
+      console.info("> current: MINIMIZING PLAYER");
+      let best = new ScoreMovePair(Number.POSITIVE_INFINITY, null);
+      const moves: Array<Move> = board.getAllAvailableValidMoves(
+        board.getCurrentPlayer()
+      );
+      for (const move of moves) {
+        const clonedBoard: Board = board.clone();
+        // move will be performed on cloned board
+        move.hole = clonedBoard
+          .getCurrentPlayer()
+          .boardHoles.getHoleWithID(move.hole.id);
+
+        console.info("> MINIMIZING MOVE ", move);
+        console.info("> CLONED-BOARD ", clonedBoard.toString());
+        console.info("> CLONED-BOARD PLAYER ", clonedBoard.getCurrentPlayer());
+        clonedBoard.executeMove(move); //players are switched after every move execution
+        const score = clonedBoard.getScore().get(player.side);
+        const scoreMovePair = AI.minimax(
+          player,
+          depth - 1,
+          new ScoreMovePair(score, move),
+          clonedBoard,
+          alpha,
+          beta
+        );
+        if (best.score > scoreMovePair.score) {
+          best = new ScoreMovePair(score, move); //minimize score
+        }
+        beta = Math.min(beta, best.score);
+
+        // Alpha Beta Pruning
+        if (beta <= alpha) break;
+      }
+      return best;
+    }
   }
 }
 
