@@ -34,8 +34,6 @@ class PlayScreen extends me.Stage {
   private board: Board;
 
   onResetEvent(): void {
-    //load a level
-    //me.levelDirector.loadLevel("background");
     me.game.world.addChild(new me.ColorLayer("background", "#b7b6b5"), -1);
 
     // reset the score
