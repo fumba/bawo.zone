@@ -53,7 +53,7 @@ class PlayScreen extends me.Stage {
     const gameSpeed = 300;
 
     // CPU player should always be on the top side
-    let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? false : true;
+    let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? true : true;
     if (!isCpuTopPlayerTurn) {
       //go to bottom side of board for human player
       this.board.switchPlayers();
@@ -124,6 +124,7 @@ class PlayScreen extends me.Stage {
       if (isCpuTopPlayerTurn) {
         isCpuTopPlayerTurn = false;
         const move = AI.computeBestMove(this.board);
+        console.info("CPU-AI BEST MOVE", move);
         this.board.executeMove(move);
       }
     }, gameSpeed);

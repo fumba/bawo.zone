@@ -220,7 +220,7 @@ class Board {
     if (move.direction == null) {
       throw new Error("Move is required to have its direction specified.");
     }
-    if (this.currentPlayer != move.hole.player) {
+    if (this.currentPlayer.side != move.hole.player.side) {
       throw new Error(
         "Player " +
           this.currentPlayer.toString() +
@@ -295,7 +295,7 @@ class Board {
     if (topPlayerSeedArrangement) {
       //TODO validate length - 16
       console.info(
-        `Updating seed configuration for bottom player to ${topPlayerSeedArrangement}`
+        `Cloning seed configuration for TOP player to ${topPlayerSeedArrangement}`
       );
       for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
         board.topPlayer.boardHoles.getHoleWithID(id).numSeeds =
@@ -306,7 +306,7 @@ class Board {
     if (btmPlayerSeedArrangement) {
       //TODO validate length - 16
       console.info(
-        `Updating seed configuration for bottom player to ${btmPlayerSeedArrangement}`
+        `Cloning seed configuration for BOTTOM player to ${btmPlayerSeedArrangement}`
       );
       for (let id = 0; id < AppConstants.NUM_PLAYER_HOLES; id++) {
         board.bottomPlayer.boardHoles.getHoleWithID(id).numSeeds =
@@ -342,12 +342,13 @@ class Board {
    * @returns {boolean} A boolean value representing whether or not the move was successful.
    */
   public executeMove(move: Move): boolean {
-    console.info(`Received move : ${move.toString()}`);
+    console.info("Board#executeMove- Received move", move);
     this.validateUiState();
-    if (move.hole.player != this.currentPlayer) {
-      throw new Error("Player is unauthorised to make move");
+    if (move.hole.player.side != this.currentPlayer.side) {
+      throw new Error(
+        `${this.currentPlayer} is unauthorised to perform ${move.toString()}`
+      );
     }
-    console.info("Board Status before executing move : \n" + this.toString());
     if (move.prevContinuedMovesCount > AppConstants.INFINITE_LOOP_THRESHOLD) {
       // The player has made more than the allowed amount of moves. They
       // are now regarded to be in infinite move status. The game will end and the player who got themselves into an infinite loop will loose.
@@ -360,7 +361,11 @@ class Board {
       return true;
     }
     if (!this.isValidMove(move)) {
-      console.info("Requested move is not valid.");
+      console.info(
+        "Requested move is not valid.",
+        move.toString(),
+        move.hole.board.toString()
+      );
       return false;
     }
 
@@ -370,15 +375,12 @@ class Board {
     // Continuing moves already have seeds in the player hands
     // Initial moves need to get the seeds from the hole into the players hand
     if (!move.isContinuing()) {
+      console.info("detected new move - transferring seeds to players hand");
       currentHole.transferAllSeedsToCurrPlayer();
-      //TODO-GUI: add seeds to animated hand
     }
 
-    console.info(
-      `Player is ready to start sowing seeds: \n ${this.toString()}`
-    );
-    console.info(`Current Player Status: \n ${this.currentPlayer.toString()}`);
-    //TODO update GUI state
+    console.info(`Board before seeds are moved: ${this.toString()}`);
+    console.info("Current player before seeds are moved", this.currentPlayer);
     while (this.currentPlayer.numSeedsInHand > 0) {
       // Find out which hole the player should move to next
       if (this.currentPlayer.capturedOnPrevMove) {
@@ -402,7 +404,8 @@ class Board {
       //TODO update GUI state
       console.info("Board Status after sowing one seed: \n" + this.toString());
       console.info(
-        `Current Player status  after sowing one seed: \n\t ${this.currentPlayer.toString()}`
+        "Current Player status  after sowing one seed",
+        this.currentPlayer
       );
     }
 
@@ -701,6 +704,7 @@ class Board {
       );
     }
     if (topPlayerScore + btmPlayerScore != AppConstants.MAX_SEED_COUNT) {
+      console.info(this.toString());
       throw new Error(
         `Total score is not 64. Got : ${topPlayerScore + btmPlayerScore}`
       );

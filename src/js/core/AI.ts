@@ -1,6 +1,7 @@
-import Utility from "../Utility";
+import ScoreMovePair from "./ScoreMovePair";
 import Board from "./Board";
 import Move from "./Move";
+import Player from "./Player";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -29,64 +30,108 @@ class AI {
    * @returns {Move} the best move that the CPU can make
    */
   public static computeBestMove(board: Board): Move {
-    const boardClone: Board = board.clone();
-    const moves: Array<Move> = boardClone.getAllAvailableValidMoves(
-      board.getCurrentPlayer()
-    );
-    const move = moves[Utility.getRandomInt(moves.length)];
-    return move;
+    const clonedBoard: Board = board.clone();
+    const depth = 3;
+    const player = board.getCurrentPlayer(); //cpu player
+    const bestMove = AI.minimax(
+      player,
+      depth,
+      null, //todo ?
+      clonedBoard,
+      Number.NEGATIVE_INFINITY,
+      Number.POSITIVE_INFINITY
+    ).move;
+
+    // move will be performed on board (not cloned board)
+    bestMove.hole = board
+      .getCurrentPlayer()
+      .boardHoles.getHoleWithID(bestMove.hole.id);
+    return bestMove;
   }
 
   // compute optimal move for current player
   public static minimax(
+    player: Player,
     depth: number,
-    nodeIndex: number,
-    maximizingPlayer: boolean,
-    values: Array<number>,
+    currentMove: ScoreMovePair,
+    board: Board,
     alpha: number,
     beta: number
-  ): number {
+  ): ScoreMovePair {
+    console.info("MINMAX ENTER ---- ");
+    console.info("CPU PLAYER ", player);
+    console.info("BOARD ON MINMAX ENTER ", board.toString());
     // Terminating condition. i.e
     // leaf node is reached
-    if (depth == 0) return values[nodeIndex];
+    if (depth == 0) return currentMove;
 
-    if (maximizingPlayer) {
-      let best = Number.NEGATIVE_INFINITY;
+    // maximizing player
+    if (player.side == board.getCurrentPlayer().side) {
+      console.info("> current: MAXIMIZING PLAYER");
+      let best = new ScoreMovePair(Number.NEGATIVE_INFINITY, null);
+      const moves: Array<Move> = board.getAllAvailableValidMoves(
+        board.getCurrentPlayer()
+      );
+      for (const move of moves) {
+        const clonedBoard: Board = board.clone();
+        // move will be performed on cloned board
+        move.hole = clonedBoard
+          .getCurrentPlayer()
+          .boardHoles.getHoleWithID(move.hole.id);
 
-      // Recur for left and
-      // right children
-      for (let i = 0; i < 2; i++) {
-        const score = AI.minimax(
+        console.info("> MAXIMIZING MOVE ", move);
+        console.info("> CLONED-BOARD ", clonedBoard.toString());
+        console.info("> CLONED-BOARD PLAYER ", clonedBoard.getCurrentPlayer());
+        clonedBoard.executeMove(move); //players are switched after every move execution
+        const score = clonedBoard.getScore().get(player.side);
+        const scoreMovePair = AI.minimax(
+          player,
           depth - 1,
-          nodeIndex * 2 + i,
-          false,
-          values,
+          new ScoreMovePair(score, move),
+          clonedBoard,
           alpha,
           beta
         );
-        best = Math.max(best, score);
-        alpha = Math.max(alpha, best);
+        if (best.score < scoreMovePair.score) {
+          best = new ScoreMovePair(score, move); //maximize score
+        }
+        alpha = Math.max(alpha, best.score);
 
         // Alpha Beta Pruning
         if (beta <= alpha) break;
       }
       return best;
     } else {
-      let best = Number.POSITIVE_INFINITY;
+      //minimizing player
+      console.info("> current: MINIMIZING PLAYER");
+      let best = new ScoreMovePair(Number.POSITIVE_INFINITY, null);
+      const moves: Array<Move> = board.getAllAvailableValidMoves(
+        board.getCurrentPlayer()
+      );
+      for (const move of moves) {
+        const clonedBoard: Board = board.clone();
+        // move will be performed on cloned board
+        move.hole = clonedBoard
+          .getCurrentPlayer()
+          .boardHoles.getHoleWithID(move.hole.id);
 
-      // Recur for left and
-      // right children
-      for (let i = 0; i < 2; i++) {
-        const score = AI.minimax(
+        console.info("> MINIMIZING MOVE ", move);
+        console.info("> CLONED-BOARD ", clonedBoard.toString());
+        console.info("> CLONED-BOARD PLAYER ", clonedBoard.getCurrentPlayer());
+        clonedBoard.executeMove(move); //players are switched after every move execution
+        const score = clonedBoard.getScore().get(player.side);
+        const scoreMovePair = AI.minimax(
+          player,
           depth - 1,
-          nodeIndex * 2 + i,
-          true,
-          values,
+          new ScoreMovePair(score, move),
+          clonedBoard,
           alpha,
           beta
         );
-        best = Math.min(best, score);
-        beta = Math.min(beta, best);
+        if (best.score > scoreMovePair.score) {
+          best = new ScoreMovePair(score, move); //minimize score
+        }
+        beta = Math.min(beta, best.score);
 
         // Alpha Beta Pruning
         if (beta <= alpha) break;
@@ -95,19 +140,5 @@ class AI {
     }
   }
 }
-
-// Driver Code
-const values = [3, 5, 6, 9, 1, 2, 0, -1];
-console.log(
-  "The optimal value is : " +
-    AI.minimax(
-      3,
-      0,
-      true,
-      values,
-      Number.NEGATIVE_INFINITY,
-      Number.POSITIVE_INFINITY
-    )
-);
 
 export default AI;
