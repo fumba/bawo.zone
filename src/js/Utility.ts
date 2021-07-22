@@ -63,6 +63,18 @@ class Utility {
   public static getRandomInt(max: number): number {
     return Math.floor(Math.random() * max);
   }
+
+  /**
+   * Sleep function
+   *
+   * @param {number} ms  time in milliseconds to pause code execution
+   * @returns {Promise<void>} void
+   */
+  /* istanbul ignore next */
+  public static sleep(ms: number): Promise<void> {
+    console.info(`Sleeping for ${ms} ms`);
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 }
 
 export default Utility;

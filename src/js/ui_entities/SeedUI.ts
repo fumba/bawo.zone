@@ -59,13 +59,13 @@ class SeedUI extends me.Entity {
     this.originalPos = new Vector(this.pos.x, this.pos.y, this.pos.z);
     this.group = seedGroup;
     this.board = seedGroup.hole.board;
-    this.randomisePosition();
+    this.randomizePosition();
   }
 
   /**
    * Randomizes the position of the seed in the hole - seed group container
    */
-  public randomisePosition(): void {
+  public randomizePosition(): void {
     const location = isEmpty(this.group)
       ? this.board.getCurrentPlayer().ui
       : this.group;

@@ -10,6 +10,7 @@ import Hole from "../core/Hole";
 import AI from "../core/AI";
 import Utility from "../Utility";
 import BoardUiState from "../core/BoardUiState";
+import AppConstants from "../core/AppConstants";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -70,24 +71,25 @@ class PlayScreen extends me.Stage {
       if (task) {
         // refresh all holes status after the task is complete
         refreshHoleSleepingState = true;
-        //initially set all hole UI as inactive during gameplay animation
+        //initially set all hole UI as inactive during game play animation
         this.board.draw(BoardUiState.PLAY_IN_PROGRESS);
         switch (task.name) {
           case UiTaskActions.SOW_SEED_INTO_HOLE: {
             const seedGroupUI: SeedGroupUI = task.seedGroupUI as SeedGroupUI;
             console.info(`UI - Sowing seed into ${seedGroupUI.hole.UID}`);
+            me.audio.play(AppConstants.SOW_NORMAL_SOUND_1);
             const seedUI: SeedUI = this.board
               .getCurrentPlayer()
               .ui.removeSeed(seedGroupUI);
             seedUI.group = seedGroupUI;
             seedUI.id = task.seedId;
-            seedUI.randomisePosition();
+            seedUI.randomizePosition();
 
             UiHelper.forEachUiSeedInHole(seedGroupUI.hole, (seedUI: SeedUI) => {
               seedUI.putOnTopOfContainer();
             });
             for (const seedUI of this.board.getCurrentPlayer().ui.seedsInHand) {
-              seedUI.randomisePosition();
+              seedUI.randomizePosition();
             }
             seedGroupUI.hole.ui.renderable =
               seedGroupUI.hole.ui.startHoleSprite;
@@ -95,14 +97,18 @@ class PlayScreen extends me.Stage {
           }
           case UiTaskActions.GRAB_ALL_SEEDS_FROM_HOLE: {
             const hole: Hole = task.hole as Hole;
+            const isCapture: boolean = task.isCapture as boolean;
             console.info(`UI - getting all seeds from hole ${hole.UID}`);
+            isCapture
+              ? me.audio.play(AppConstants.SEED_STEAL)
+              : me.audio.play(AppConstants.SEED_GRAB);
             //remove all ui seeds from hole
             UiHelper.forEachUiSeedInHole(hole, (seedUI: SeedUI) => {
               const currentPlayerHandUI = this.board.getCurrentPlayer();
               currentPlayerHandUI.ui.addSeed(seedUI);
               seedUI.group = null;
               seedUI.id = null;
-              seedUI.randomisePosition();
+              seedUI.randomizePosition();
             });
             hole.ui.renderable = hole.ui.startHoleSprite;
             break;
@@ -111,13 +117,17 @@ class PlayScreen extends me.Stage {
       } else {
         const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
         if (!draggingSeedGroup && refreshHoleSleepingState == true) {
-          // game is currently in sleep state (waiting for next player move)
-          // re-render all holes on board
-          this.board.draw(BoardUiState.RESTING);
           refreshHoleSleepingState = false;
-          // switch to CPU player if its the top players turn
-          isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
-          isCpuBottomPlayerTurn = !vsHuman && !isCpuTopPlayerTurn;
+          me.audio.play(AppConstants.MOVE_END);
+
+          Utility.sleep(gameSpeed).then(() => {
+            // game is currently in sleep state (waiting for next player move)
+            // re-render all holes on board
+            this.board.draw(BoardUiState.RESTING);
+            // switch to CPU player if its the top players turn
+            isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
+            isCpuBottomPlayerTurn = !vsHuman && !isCpuTopPlayerTurn;
+          });
         }
       }
     }, gameSpeed);
@@ -126,13 +136,13 @@ class PlayScreen extends me.Stage {
       if (isCpuTopPlayerTurn) {
         isCpuTopPlayerTurn = false;
         const move = AI.computeBestMove(this.board);
-        console.log("TOP CPU-AI BEST MOVE", move);
+        console.info("TOP CPU-AI BEST MOVE", move);
         this.board.executeMove(move);
       }
       if (isCpuBottomPlayerTurn) {
         isCpuBottomPlayerTurn = false;
         const move = AI.computeBestMove(this.board);
-        console.log("BOTTOM CPU-AI BEST MOVE", move);
+        console.info("BOTTOM CPU-AI BEST MOVE", move);
         this.board.executeMove(move);
       }
     }, gameSpeed);

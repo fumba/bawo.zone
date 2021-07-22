@@ -57,7 +57,7 @@ class SeedGroupUI extends me.DraggableEntity {
       id: `${AppConstants.SEED_GROUP_UI}-${hole.UID}`,
     };
 
-    //Readjust x and y coordinates since they are based hole values which contains the smaller seedgroup entity
+    //Readjust x and y coordinates since they are based hole values which contains the smaller seed group entity
     const holeUI = hole.ui;
     const x_i = holeUI.pos.x + (holeUI.width - settings.width) / 2;
     const y_i = holeUI.pos.y + (holeUI.height - settings.height) / 2;
@@ -188,7 +188,7 @@ class SeedGroupUI extends me.DraggableEntity {
   dragEnd(event: unknown): void {
     super.dragEnd(event);
     UiHelper.forEachUiSeedInHole(this.hole, (seedUI: SeedUI) => {
-      seedUI.randomisePosition();
+      seedUI.randomizePosition();
     });
 
     UiHelper.forEachUiHole(

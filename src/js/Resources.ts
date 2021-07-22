@@ -1,3 +1,4 @@
+import { Resolver } from "dns/promises";
 import AppConstants from "./core/AppConstants";
 
 /*
@@ -63,12 +64,20 @@ class Resources {
       src: "data/img/hand.png",
     },
   ];
+  // audio clips
+  private static sounds: Array<Record<string, unknown>> = [
+    { name: AppConstants.SOW_NORMAL_SOUND_1, type: "audio", src: "data/sfx/" },
+    { name: AppConstants.MOVE_END, type: "audio", src: "data/sfx/" },
+    { name: AppConstants.SEED_GRAB, type: "audio", src: "data/sfx/" },
+    { name: AppConstants.SEED_STEAL, type: "audio", src: "data/sfx/" },
+  ];
 
   public static assets: Array<Record<string, unknown>> = [
     ...Resources.seedImage,
     ...Resources.holeImage,
     ...Resources.seedCollection,
     ...Resources.hand,
+    ...Resources.sounds,
   ];
 }
 
