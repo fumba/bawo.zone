@@ -128,7 +128,11 @@ class Hole {
     this.numSeeds = 0;
 
     if (this.board.isInGraphicsMode()) {
-      const task = { name: UiTaskActions.GRAB_ALL_SEEDS_FROM_HOLE, hole: this };
+      const task = {
+        name: UiTaskActions.GRAB_ALL_SEEDS_FROM_HOLE,
+        hole: this,
+        isCapture: this.player.side != this.board.getCurrentPlayer().side,
+      };
       this.board.uiTaskQueue.enqueue(task);
     }
     if (numSeedsTemp > 0) {

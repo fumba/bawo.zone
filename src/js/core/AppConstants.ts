@@ -101,6 +101,26 @@ class AppConstants {
    * Player UI
    */
   public static readonly PLAYER_UI = "player-ui";
+
+  /**
+   * Sow normal sound - variant 1
+   */
+  public static readonly SOW_NORMAL_SOUND_1 = "sow_normal_sound_1";
+
+  /**
+   * Move end - audio
+   */
+  public static readonly MOVE_END = "move_end";
+
+  /**
+   * Seed grab -audio
+   */
+  public static readonly SEED_GRAB = "seed_grab";
+
+  /**
+   * Seed steal - audio
+   */
+  public static readonly SEED_STEAL = "seed_steal";
 }
 
 export default AppConstants;
