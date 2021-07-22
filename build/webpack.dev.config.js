@@ -64,7 +64,7 @@ module.exports = {
       template: "./app/index.html",
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: "src/data", to: "data" }],
+      patterns: [{ from: "src/data", to: "data" }, {from: "app/styles.css", to: "./"}],
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),

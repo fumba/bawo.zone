@@ -1,0 +1,10 @@
+html,
+body {
+  background-color: #b7b6b5 !important;
+}
+
+canvas {
+  max-width: 1024px;
+  border: solid 1px gray;
+  margin-top: 2px !important;
+}
