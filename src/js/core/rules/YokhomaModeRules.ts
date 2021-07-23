@@ -69,6 +69,8 @@ class YokhomaModeRules extends Rules {
    *         always be a continuing move.
    */
   public nextContinuingMoveAfterCapture(move: Move): Move {
+    //TODO : remove this after implementation
+    /* istanbul ignore next */
     return move && null;
   }
 }
