@@ -2,8 +2,7 @@ import Hole from "./Hole";
 import Player from "./Player";
 import PlayerSide from "./PlayerSide";
 import Rules from "./Rules";
-//import MtajiModeRules from "./rules/MtajiModeRules";
-import YokhomaModeRules from "./rules/YokhomaModeRules";
+import MtajiModeRules from "./rules/MtajiModeRules";
 import PlayerBoardHoles from "./PlayerBoardHoles";
 import AppConstants from "./AppConstants";
 import Move from "./Move";
@@ -79,7 +78,7 @@ class Board {
    * @param {any} me melonjs instance
    * @param {Rules} rules game rules - default is MtajiModeRules
    */
-  constructor(me?: typeof Me, rules = new YokhomaModeRules()) {
+  constructor(me?: typeof Me, rules = new MtajiModeRules()) {
     this.me = me;
     this.bottomPlayer = new Player(PlayerSide.Bottom, this);
     this.topPlayer = new Player(PlayerSide.Top, this);
