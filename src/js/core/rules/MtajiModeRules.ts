@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-import Rules from "./Rules";
-import PlayerSide from "./PlayerSide";
-import AppConstants from "./AppConstants";
-import Move from "./Move";
-import MoveDirection from "./MoveDirection";
-import Hole from "./Hole";
+import Rules from "../Rules";
+import PlayerSide from "../PlayerSide";
+import AppConstants from "../AppConstants";
+import Move from "../Move";
+import MoveDirection from "../MoveDirection";
+import Hole from "../Hole";
 
 class MtajiModeRules extends Rules {
   constructor() {

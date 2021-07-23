@@ -83,7 +83,7 @@ class Hole {
     this.board = board;
 
     // initialize move status as unauthorized
-    this.moveStatus = MoveDirection.UnAuthorised;
+    this.moveStatus = MoveDirection.UnAuthorized;
   }
 
   /**

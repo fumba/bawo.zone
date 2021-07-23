@@ -46,7 +46,7 @@ class AppConstants {
 
   /**
    * Minimum Hole ID. Note that {@link DUMMY_HOLE_ID} is not a Hole that is used
-   * during gameplay.
+   * during game play.
    */
   public static readonly MIN_HOLE_ID: number = 0;
 
@@ -121,6 +121,11 @@ class AppConstants {
    * Seed steal - audio
    */
   public static readonly SEED_STEAL = "seed_steal";
+
+  /**
+   * Nyumba hole id
+   */
+  public static readonly NYUMBA_HOLE_ID = 17;
 }
 
 export default AppConstants;

@@ -57,10 +57,21 @@ class HoleUI extends me.DroptargetEntity {
       id: `${AppConstants.HOLE_UI}-${hole.UID}`,
     };
 
-    const xOffSet = 40;
+    let xOffSet = 40;
     const newRowOffset = hole.id <= 7 ? 0 : 100;
-    const x = (hole.id < 8 ? hole.id : 15 - hole.id) * 90 + xOffSet;
-    const y = (hole.player.isOnTopSide() ? 150 : 380) + newRowOffset;
+    let xFactor = hole.id < 8 ? hole.id : 15 - hole.id;
+    let yFactor = 0;
+
+    // nyumba hole x-location
+    if (hole.id == AppConstants.NYUMBA_HOLE_ID) {
+      xFactor = 8;
+      xOffSet = xOffSet + 20;
+      yFactor = 50;
+    }
+
+    const x = xFactor * 90 + xOffSet;
+    const y = (hole.player.isOnTopSide() ? 150 : 380) - yFactor + newRowOffset;
+
     super(x, y, settings);
     // overlaps are not valid drops
     // draggable seed container UI (SeedGroupUI) has a smaller radius so all drops are expected

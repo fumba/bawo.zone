@@ -507,7 +507,7 @@ describe("Board", () => {
       expect(board.getScore()).toStrictEqual(expectedScores);
     });
 
-    test("should compute correct score during normal gameplay", () => {
+    test("should compute correct score during normal game play", () => {
       const board = new Board();
       const expectedScores = new Map<PlayerSide, number>();
       expectedScores.set(PlayerSide.Bottom, 32);
@@ -575,7 +575,7 @@ describe("Board", () => {
 
       move = new Move(
         board.topPlayer.boardHoles.getHoleWithID(4),
-        MoveDirection.UnAuthorised
+        MoveDirection.UnAuthorized
       );
       expect(() => board.executeMove(move)).toThrowError(
         "Only Clockwise and Anticlockwise moves are allowed. Input : X"
@@ -583,8 +583,8 @@ describe("Board", () => {
     });
   });
 
-  test("#executeMove - Game play simuation", () => {
-    /** This is a simulation of an actual gameplay */
+  test("#executeMove - Game play simulation", () => {
+    /** This is a simulation of an actual game play */
 
     // The Top Player is the current player by default but in this simulation they wont be starting the game.
     // This is done by switching players to the bottom player
@@ -904,13 +904,11 @@ describe("Board", () => {
       MoveDirection.Clockwise
     );
     board.executeMove(move);
-    // topPlayerSeedConfig doesnt change becuase move is non-capturing
+    // topPlayerSeedConfig doesn't change because move is non-capturing
     btmPlayerSeedConfig = [1, 2, 1, 0, 0, 0, 0, 0, 1, 0, 1, 4, 0, 1, 0, 2];
     checkSeedConfiguration(topPlayerSeedConfig, board.topPlayer);
     checkSeedConfiguration(btmPlayerSeedConfig, board.bottomPlayer);
-    // Important: Non-capturing moves at the front lines only... takata is not
-    // allowed
-    // the bottom
+    // Important: Non-capturing moves at the front lines only... takata is not allowed on the bottom
     topPlayerMoveStatus = [
       "L",
       "L",

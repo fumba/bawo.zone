@@ -46,6 +46,8 @@ class PlayerBoardHoles implements Iterable<Hole> {
   private player: Player;
   // the board on which holes will be placed
   public readonly board: Board;
+  // nyumba hole
+  public readonly nyumba: Hole;
 
   /**
    * Constructor
@@ -60,6 +62,14 @@ class PlayerBoardHoles implements Iterable<Hole> {
     this.startHolePointer = null;
     this.player = player;
     this.board = board;
+    this.nyumba = new Hole(
+      player,
+      board,
+      AppConstants.NYUMBA_HOLE_ID,
+      0,
+      null,
+      null
+    );
   }
 
   /**

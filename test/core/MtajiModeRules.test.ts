@@ -22,7 +22,7 @@ import Board from "../../src/js/core/Board";
 import Hole from "../../src/js/core/Hole";
 import Move from "../../src/js/core/Move";
 import MoveDirection from "../../src/js/core/MoveDirection";
-import MtajiModeRules from "../../src/js/core/MtajiModeRules";
+import MtajiModeRules from "../../src/js/core/rules/MtajiModeRules";
 import PlayerBoardHoles from "../../src/js/core/PlayerBoardHoles";
 import PlayerSide from "../../src/js/core/PlayerSide";
 import TestHelper from "../TestHelper";
