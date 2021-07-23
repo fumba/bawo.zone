@@ -52,7 +52,7 @@ enum MoveDirection {
   Clockwise = "C",
   Both = "B",
   Locked = "L",
-  UnAuthorised = "X",
+  UnAuthorized = "X",
 }
 
 export default MoveDirection;

@@ -2,7 +2,7 @@ import Hole from "./Hole";
 import Player from "./Player";
 import PlayerSide from "./PlayerSide";
 import Rules from "./Rules";
-import MtajiModeRules from "./MtajiModeRules";
+import MtajiModeRules from "./rules/MtajiModeRules";
 import PlayerBoardHoles from "./PlayerBoardHoles";
 import AppConstants from "./AppConstants";
 import Move from "./Move";
@@ -68,7 +68,7 @@ class Board {
   public uiTaskQueue: Queue<Record<string, unknown>> = new Queue();
 
   /**
-   * The gameplay is in a continuous loop if the player continues to play beyond a
+   * The game play is in a continuous loop if the player continues to play beyond a
    * threshold amount of moves.
    * The game will end and the player who got themselves into an infinite loop will lose.
    */
@@ -78,11 +78,11 @@ class Board {
    * @param {any} me melonjs instance
    * @param {Rules} rules game rules - default is MtajiModeRules
    */
-  constructor(me?: typeof Me, rules = new MtajiModeRules()) {
+  constructor(me?: typeof Me, rules?: Rules) {
     this.me = me;
     this.bottomPlayer = new Player(PlayerSide.Bottom, this);
     this.topPlayer = new Player(PlayerSide.Top, this);
-    this.rules = rules;
+    this.rules = rules ? rules : new MtajiModeRules();
     this.rules.validate();
 
     // initialize player board holes
@@ -97,6 +97,9 @@ class Board {
       for (let index = 0; index < AppConstants.NUM_PLAYER_HOLES; index++) {
         playerBoardHoles.insertAtEnd(playerInitSeedConfig[index]);
       }
+      if (this.rules.hasHomeHole()) {
+        player.boardHoles.nyumba.numSeeds = playerInitSeedConfig[16];
+      }
     });
 
     //set current players
@@ -108,6 +111,9 @@ class Board {
       [this.topPlayer, this.bottomPlayer].forEach((player) => {
         for (const hole of player.boardHoles) {
           hole.renderUI();
+        }
+        if (this.rules.hasHomeHole()) {
+          player.boardHoles.nyumba.renderUI();
         }
       });
     }
@@ -155,7 +161,7 @@ class Board {
    *
    * LOCKED - A valid move cannot be made from the hole.
    *
-   * UNAUTHORISED - The hole does not belong to the current player.
+   * UNAUTHORIZED - The hole does not belong to the current player.
    */
   private updateMovesStatus(): void {
     for (const hole of this.topPlayer.boardHoles) {
@@ -198,7 +204,7 @@ class Board {
     } else {
       // holes that do not belong to the current player are set as
       // unauthorized.
-      hole.moveStatus = MoveDirection.UnAuthorised;
+      hole.moveStatus = MoveDirection.UnAuthorized;
     }
   }
 
@@ -346,7 +352,7 @@ class Board {
     this.validateUiState();
     if (move.hole.player.side != this.currentPlayer.side) {
       throw new Error(
-        `${this.currentPlayer} is unauthorised to perform ${move.toString()}`
+        `${this.currentPlayer} is unauthorized to perform ${move.toString()}`
       );
     }
     if (move.prevContinuedMovesCount > AppConstants.INFINITE_LOOP_THRESHOLD) {
@@ -559,16 +565,16 @@ class Board {
   }
 
   /* istanbul ignore next */
-  public runSimulation(randomise: boolean): void {
+  public runSimulation(randomize: boolean): void {
     const moves: Array<Move> = this.getAllAvailableValidMoves(
       this.currentPlayer
     );
-    // either always pick first move or randomise
-    const move = moves[randomise ? Utility.getRandomInt(moves.length) : 0];
+    // either always pick first move or randomize
+    const move = moves[randomize ? Utility.getRandomInt(moves.length) : 0];
     this.executeMove(move);
     if (!this.isGameOver()) {
       // recursively run the simulation
-      this.runSimulation(randomise);
+      this.runSimulation(randomize);
     } else {
       console.info(
         `GAME OVER ::: Winner is : \n ${this.getWinningPlayer().toString()}`
@@ -586,7 +592,7 @@ class Board {
    * Checks if the game is over. The game is over if the current player is left
    * with no valid moves (ie. all the moves are locked).
    *
-   * When the gameplay gets in an infinite loop, the game is also considered be
+   * When the game play gets in an infinite loop, the game is also considered be
    * over. The player who gets themselves into the loop is considered to have lost
    * the game in this case.
    *

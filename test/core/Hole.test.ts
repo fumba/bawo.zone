@@ -47,15 +47,15 @@ describe("Hole", () => {
     expect(hole_04.id).toBe(4);
   });
 
-  test("should initialise hole with move status - unathorized", () => {
-    expect(hole_04.moveStatus).toBe(MoveDirection.UnAuthorised);
+  test("should initialize hole with move status - unauthorized", () => {
+    expect(hole_04.moveStatus).toBe(MoveDirection.UnAuthorized);
   });
 
-  test("should initialise hole with move status - unathorized", () => {
+  test("should initialize hole with move status - unauthorized", () => {
     expect(hole_04.prevHole).toBe(hole_03);
   });
 
-  test("should initialise hole with move status - unathorized", () => {
+  test("should initialize hole with move status - unauthorized", () => {
     expect(hole_04.nextHole).toBe(hole_05);
   });
 
