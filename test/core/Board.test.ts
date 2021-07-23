@@ -26,6 +26,7 @@ import MoveDirection from "../../src/js/core/MoveDirection";
 import Player from "../../src/js/core/Player";
 import PlayerSide from "../../src/js/core/PlayerSide";
 import TestHelper from "../TestHelper";
+import YokhomaModeRules from "../../src/js/core/rules/YokhomaModeRules";
 
 TestHelper.disableLogging();
 
@@ -102,6 +103,14 @@ describe("Board", () => {
     expect(
       board.adjacentOpponentHole(bottomPlayerHoles.getHoleWithID(7)).id
     ).toBe(8);
+  });
+
+  describe("initialize game with yokhoma rules", () => {
+    test("should correctly initialize game", () => {
+      expect(() =>
+        new Board(me, new YokhomaModeRules()).validateUiState()
+      ).not.toThrowError();
+    });
   });
 
   describe("moves status", () => {

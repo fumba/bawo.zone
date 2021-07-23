@@ -78,11 +78,11 @@ class Board {
    * @param {any} me melonjs instance
    * @param {Rules} rules game rules - default is MtajiModeRules
    */
-  constructor(me?: typeof Me, rules = new MtajiModeRules()) {
+  constructor(me?: typeof Me, rules?: Rules) {
     this.me = me;
     this.bottomPlayer = new Player(PlayerSide.Bottom, this);
     this.topPlayer = new Player(PlayerSide.Top, this);
-    this.rules = rules;
+    this.rules = rules ? rules : new MtajiModeRules();
     this.rules.validate();
 
     // initialize player board holes
