@@ -58,7 +58,7 @@ class Bootstrap {
     me.pool.register(AppConstants.PLAYER_UI, PlayerUI);
 
     // Start the game.
-    me.state.change(me.state.PLAY);
+    me.state.change(me.state.MENU);
   }
 
   static boot() {
