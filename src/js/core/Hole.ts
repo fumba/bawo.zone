@@ -254,13 +254,13 @@ class Hole {
   public renderUI(): void {
     //render hole
     const holeUI = this.board.me.pool.pull(AppConstants.HOLE_UI, this);
-    this.board.me.game.world.addChild(holeUI);
+    this.board.ui.addChild(holeUI);
     this.ui = holeUI;
 
     // invisible draggable collection that contains seeds
     const seedGroup = this.board.me.pool.pull(AppConstants.SEED_GROUP_UI, this);
     this.seedGroupUI = seedGroup;
-    this.board.me.game.world.addChild(seedGroup);
+    this.board.ui.addChild(seedGroup);
 
     for (let i = 0; i < this.numSeeds; i++) {
       // render seeds that belong to hole
@@ -269,7 +269,7 @@ class Hole {
         this.seedGroupUI,
         this.UID
       );
-      this.board.me.game.world.addChild(seedUI);
+      this.board.ui.addChild(seedUI);
     }
   }
 }

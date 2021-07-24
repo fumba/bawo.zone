@@ -1,8 +1,5 @@
-import Button from "./Button";
 import game from "../Game";
 import me from "../me";
-import Board from "../core/Board";
-import YokhomaMode from "../core/rules/YokhomaModeRules";
 
 /**
  * a basic HUD (Heads Up Display) item to display score

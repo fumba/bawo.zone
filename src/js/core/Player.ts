@@ -58,7 +58,7 @@ class Player {
     if (!isEmpty(board)) {
       if (board.isInGraphicsMode()) {
         this.ui = board.me.pool.pull(AppConstants.PLAYER_UI, this);
-        board.me.game.world.addChild(this.ui);
+        board.ui.addChild(this.ui);
       }
     }
   }

@@ -55,23 +55,26 @@ class PlayScreen extends me.Stage {
     this.board = new Board(me, new MtajiModeRules());
 
     const yamtajiModeBtn = new Button(50, 50, "yellow", "Yamtaji", () => {
+      this.board.ui.reset();
       this.board = new Board(me, new MtajiModeRules());
     });
     me.game.world.addChild(yamtajiModeBtn);
 
     const yokhomaModeBtn = new Button(300, 50, "yellow", "Yokhoma", () => {
+      this.board.ui.reset();
       this.board = new Board(me, new YokhomaModeRules());
     });
     me.game.world.addChild(yokhomaModeBtn);
 
     const gameSpeed = 300;
 
-    const vsHuman = false;
+    const humanVsHuman = true;
+    const computerVsHuman = false;
     // CPU player should always be on the top side
     let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? false : true;
-    let isCpuBottomPlayerTurn = !vsHuman && !isCpuTopPlayerTurn;
+    let isCpuBottomPlayerTurn = !computerVsHuman && !isCpuTopPlayerTurn;
 
-    if (!isCpuTopPlayerTurn && vsHuman) {
+    if (!humanVsHuman && !isCpuTopPlayerTurn && computerVsHuman) {
       //go to bottom side of board for human player
       this.board.switchPlayers();
       // re-render all holes on board
@@ -141,24 +144,26 @@ class PlayScreen extends me.Stage {
             this.board.draw(BoardUiState.RESTING);
             // switch to CPU player if its the top players turn
             isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
-            isCpuBottomPlayerTurn = !vsHuman && !isCpuTopPlayerTurn;
+            isCpuBottomPlayerTurn = !computerVsHuman && !isCpuTopPlayerTurn;
           });
         }
       }
     }, gameSpeed);
 
     me.timer.setInterval(() => {
-      if (isCpuTopPlayerTurn) {
-        isCpuTopPlayerTurn = false;
-        const move = AI.computeBestMove(this.board);
-        console.info("TOP CPU-AI BEST MOVE", move);
-        this.board.executeMove(move);
-      }
-      if (isCpuBottomPlayerTurn) {
-        isCpuBottomPlayerTurn = false;
-        const move = AI.computeBestMove(this.board);
-        console.info("BOTTOM CPU-AI BEST MOVE", move);
-        this.board.executeMove(move);
+      if (!humanVsHuman) {
+        if (isCpuTopPlayerTurn) {
+          isCpuTopPlayerTurn = false;
+          const move = AI.computeBestMove(this.board);
+          console.info("TOP CPU-AI BEST MOVE", move);
+          this.board.executeMove(move);
+        }
+        if (isCpuBottomPlayerTurn) {
+          isCpuBottomPlayerTurn = false;
+          const move = AI.computeBestMove(this.board);
+          console.info("BOTTOM CPU-AI BEST MOVE", move);
+          this.board.executeMove(move);
+        }
       }
     }, gameSpeed);
   }
