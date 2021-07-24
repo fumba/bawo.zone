@@ -63,7 +63,7 @@ class Board {
   private currentPlayer: Player;
   public readonly bottomPlayer: Player;
   public readonly topPlayer: Player;
-  private readonly rules: Rules;
+  public readonly rules: Rules;
   public readonly me: typeof Me;
   public uiTaskQueue: Queue<Record<string, unknown>> = new Queue();
 

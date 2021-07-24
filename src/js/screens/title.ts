@@ -22,7 +22,7 @@ class TitleScreen extends me.Stage {
     );
     me.game.world.addChild(this.betaLabel);
 
-    Utility.sleep(4000).then(() => {
+    Utility.sleep(1000).then(() => {
       me.state.change(me.state.PLAY);
     });
   }

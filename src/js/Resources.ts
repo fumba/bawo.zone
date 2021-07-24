@@ -71,6 +71,19 @@ class Resources {
     { name: AppConstants.SEED_GRAB, type: "audio", src: "data/sfx/" },
     { name: AppConstants.SEED_STEAL, type: "audio", src: "data/sfx/" },
   ];
+  //buttons
+  private static buttons: Array<Record<string, unknown>> = [
+    {
+      name: "yellow_button04",
+      type: "image",
+      src: "data/img/yellow_button04.png",
+    },
+    {
+      name: "yellow_button05",
+      type: "image",
+      src: "data/img/yellow_button05.png",
+    },
+  ];
 
   public static assets: Array<Record<string, unknown>> = [
     ...Resources.seedImage,
@@ -78,6 +91,7 @@ class Resources {
     ...Resources.seedCollection,
     ...Resources.hand,
     ...Resources.sounds,
+    ...Resources.buttons,
   ];
 }
 

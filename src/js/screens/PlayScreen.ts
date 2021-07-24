@@ -11,6 +11,11 @@ import AI from "../core/AI";
 import Utility from "../Utility";
 import BoardUiState from "../core/BoardUiState";
 import AppConstants from "../core/AppConstants";
+import HoleUI from "../ui_entities/HoleUI";
+import Button from "../ui_entities/Button";
+import YokhomaModeRules from "../core/rules/YokhomaModeRules";
+import MtajiModeRules from "../core/rules/MtajiModeRules";
+import PlayerUI from "../ui_entities/PlayerUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -35,12 +40,11 @@ class PlayScreen extends me.Stage {
   private board: Board;
 
   onResetEvent(): void {
-    me.game.world.addChild(new me.ColorLayer("background", "#b7b6b5"), -1);
+    this.colorLayer = new me.ColorLayer("background", "#b7b6b5");
+    me.game.world.addChild(this.colorLayer, -1);
 
     // reset the score
     game.data.score = 0;
-
-    this.board = new Board(me);
 
     console.info("Show play screen");
 
@@ -48,6 +52,17 @@ class PlayScreen extends me.Stage {
     // Can also be forced by specifying a "Infinity" z value to the addChild function.
     this.HUD = new HUD();
     me.game.world.addChild(this.HUD);
+    this.board = new Board(me, new MtajiModeRules());
+
+    const yamtajiModeBtn = new Button(50, 50, "yellow", "Yamtaji", () => {
+      this.board = new Board(me, new MtajiModeRules());
+    });
+    me.game.world.addChild(yamtajiModeBtn);
+
+    const yokhomaModeBtn = new Button(300, 50, "yellow", "Yokhoma", () => {
+      this.board = new Board(me, new YokhomaModeRules());
+    });
+    me.game.world.addChild(yokhomaModeBtn);
 
     const gameSpeed = 300;
 
