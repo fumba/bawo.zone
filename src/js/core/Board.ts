@@ -81,8 +81,10 @@ class Board {
    * @param {Rules} rules game rules - default is MtajiModeRules
    */
   constructor(me?: typeof Me, rules?: Rules) {
-    this.ui = new BoardUI();
     this.me = me;
+    if (this.isInGraphicsMode()) {
+      this.ui = new BoardUI();
+    }
     this.bottomPlayer = new Player(PlayerSide.Bottom, this);
     this.topPlayer = new Player(PlayerSide.Top, this);
     this.rules = rules ? rules : new MtajiModeRules();
