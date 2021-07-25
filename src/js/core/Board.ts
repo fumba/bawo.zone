@@ -82,6 +82,7 @@ class Board {
    */
   constructor(me?: typeof Me, rules?: Rules) {
     this.me = me;
+    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       this.ui = new BoardUI();
     }
@@ -110,6 +111,7 @@ class Board {
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
 
+    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       //render holes on board
       [this.topPlayer, this.bottomPlayer].forEach((player) => {
@@ -475,6 +477,7 @@ class Board {
    * 1. There should always be 64 seeds in play (before move and after move)
    */
   public validateUiState(): void {
+    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       const seedUiCount = this.me.game.world.getChildByType(SeedUI).length;
       if (seedUiCount != AppConstants.MAX_SEED_COUNT) {

@@ -20,6 +20,7 @@
 
 import AppConstants from "../src/js/core/AppConstants";
 
+/* istanbul ignore next */
 class TestHelper {
   public static disableLogging(): void {
     //disable console log when running tests
@@ -79,6 +80,7 @@ class TestHelper {
     }
   }
 
+  /* istanbul ignore next */
   public static me = {
     game: {
       world: {

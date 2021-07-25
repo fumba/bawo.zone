@@ -20,6 +20,7 @@ import me from "../me";
  * limitations under the License.
  */
 
+/* istanbul ignore next */
 class BoardUI extends me.Container {
   constructor() {
     super();

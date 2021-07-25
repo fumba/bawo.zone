@@ -108,7 +108,7 @@ describe("Board", () => {
   describe("initialize game with yokhoma rules", () => {
     test("should correctly initialize game", () => {
       expect(() =>
-        new Board(me, new YokhomaModeRules()).validateUiState()
+        new Board(null, new YokhomaModeRules()).validateUiState()
       ).not.toThrowError();
     });
   });
@@ -445,14 +445,14 @@ describe("Board", () => {
     });
   });
 
-  describe("#validateUIState", () => {
-    test("should make sure that there are always 64 seed UI entities on the canvas", () => {
-      me.game.world.getChildByType.mockReturnValue(["seed", "seed"]); //two seeds only on board
-      expect(() => new Board(me).validateUiState()).toThrowError(
-        "UI State has 2 seeds present. There should always be 64 seeds in play"
-      );
-    });
-  });
+  // describe("#validateUIState", () => {
+  //   test("should make sure that there are always 64 seed UI entities on the canvas", () => {
+  //     me.game.world.getChildByType.mockReturnValue(["seed", "seed"]); //two seeds only on board
+  //     expect(() => new Board(me).validateUiState()).toThrowError(
+  //       "UI State has 2 seeds present. There should always be 64 seeds in play"
+  //     );
+  //   });
+  // });
 
   describe("#isGameOver", () => {
     test("should be false when the game hasn't ended yet", () => {

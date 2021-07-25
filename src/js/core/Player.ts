@@ -56,6 +56,7 @@ class Player {
     this.numSeedsInHand = 0;
     this.capturedOnPrevMove = false;
     if (!isEmpty(board)) {
+      /* istanbul ignore next */
       if (board.isInGraphicsMode()) {
         this.ui = board.me.pool.pull(AppConstants.PLAYER_UI, this);
         board.ui.addChild(this.ui);
