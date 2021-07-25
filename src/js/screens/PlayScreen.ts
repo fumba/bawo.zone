@@ -11,6 +11,11 @@ import AI from "../core/AI";
 import Utility from "../Utility";
 import BoardUiState from "../core/BoardUiState";
 import AppConstants from "../core/AppConstants";
+import HoleUI from "../ui_entities/HoleUI";
+import Button from "../ui_entities/Button";
+import YokhomaModeRules from "../core/rules/YokhomaModeRules";
+import MtajiModeRules from "../core/rules/MtajiModeRules";
+import PlayerUI from "../ui_entities/PlayerUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -35,12 +40,11 @@ class PlayScreen extends me.Stage {
   private board: Board;
 
   onResetEvent(): void {
-    me.game.world.addChild(new me.ColorLayer("background", "#b7b6b5"), -1);
+    this.colorLayer = new me.ColorLayer("background", "#b7b6b5");
+    me.game.world.addChild(this.colorLayer, -1);
 
     // reset the score
     game.data.score = 0;
-
-    this.board = new Board(me);
 
     console.info("Show play screen");
 
@@ -48,15 +52,29 @@ class PlayScreen extends me.Stage {
     // Can also be forced by specifying a "Infinity" z value to the addChild function.
     this.HUD = new HUD();
     me.game.world.addChild(this.HUD);
+    this.board = new Board(me, new MtajiModeRules());
+
+    const yamtajiModeBtn = new Button(50, 50, "yellow", "Yamtaji", () => {
+      this.board.ui.reset();
+      this.board = new Board(me, new MtajiModeRules());
+    });
+    me.game.world.addChild(yamtajiModeBtn);
+
+    const yokhomaModeBtn = new Button(300, 50, "yellow", "Yokhoma", () => {
+      this.board.ui.reset();
+      this.board = new Board(me, new YokhomaModeRules());
+    });
+    me.game.world.addChild(yokhomaModeBtn);
 
     const gameSpeed = 300;
 
-    const vsHuman = false;
+    const humanVsHuman = true;
+    const computerVsHuman = false;
     // CPU player should always be on the top side
     let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? false : true;
-    let isCpuBottomPlayerTurn = !vsHuman && !isCpuTopPlayerTurn;
+    let isCpuBottomPlayerTurn = !computerVsHuman && !isCpuTopPlayerTurn;
 
-    if (!isCpuTopPlayerTurn && vsHuman) {
+    if (!humanVsHuman && !isCpuTopPlayerTurn && computerVsHuman) {
       //go to bottom side of board for human player
       this.board.switchPlayers();
       // re-render all holes on board
@@ -126,24 +144,26 @@ class PlayScreen extends me.Stage {
             this.board.draw(BoardUiState.RESTING);
             // switch to CPU player if its the top players turn
             isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
-            isCpuBottomPlayerTurn = !vsHuman && !isCpuTopPlayerTurn;
+            isCpuBottomPlayerTurn = !computerVsHuman && !isCpuTopPlayerTurn;
           });
         }
       }
     }, gameSpeed);
 
     me.timer.setInterval(() => {
-      if (isCpuTopPlayerTurn) {
-        isCpuTopPlayerTurn = false;
-        const move = AI.computeBestMove(this.board);
-        console.info("TOP CPU-AI BEST MOVE", move);
-        this.board.executeMove(move);
-      }
-      if (isCpuBottomPlayerTurn) {
-        isCpuBottomPlayerTurn = false;
-        const move = AI.computeBestMove(this.board);
-        console.info("BOTTOM CPU-AI BEST MOVE", move);
-        this.board.executeMove(move);
+      if (!humanVsHuman) {
+        if (isCpuTopPlayerTurn) {
+          isCpuTopPlayerTurn = false;
+          const move = AI.computeBestMove(this.board);
+          console.info("TOP CPU-AI BEST MOVE", move);
+          this.board.executeMove(move);
+        }
+        if (isCpuBottomPlayerTurn) {
+          isCpuBottomPlayerTurn = false;
+          const move = AI.computeBestMove(this.board);
+          console.info("BOTTOM CPU-AI BEST MOVE", move);
+          this.board.executeMove(move);
+        }
       }
     }, gameSpeed);
   }

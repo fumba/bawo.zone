@@ -58,6 +58,9 @@ class UiHelper {
       for (const hole of player.boardHoles) {
         callback(hole);
       }
+      if (board.rules.hasHomeHole()) {
+        callback(player.boardHoles.nyumba);
+      }
     });
   }
 }

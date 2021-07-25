@@ -102,7 +102,7 @@ class HoleUI extends me.DroptargetEntity {
       fillStyle: this.color,
     });
     this.label.setText(this.seedCount());
-    me.game.world.addChild(this.label);
+    hole.board.ui.addChild(this.label);
   }
 
   public sleepStateUI(): void {

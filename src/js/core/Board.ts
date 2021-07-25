@@ -15,6 +15,7 @@ import { Queue } from "queue-typescript";
 import PlayerUI from "../ui_entities/PlayerUI";
 import UiHelper from "../ui_entities/UiHelper";
 import BoardUiState from "./BoardUiState";
+import BoardUI from "../ui_entities/BoardUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -63,9 +64,10 @@ class Board {
   private currentPlayer: Player;
   public readonly bottomPlayer: Player;
   public readonly topPlayer: Player;
-  private readonly rules: Rules;
+  public readonly rules: Rules;
   public readonly me: typeof Me;
   public uiTaskQueue: Queue<Record<string, unknown>> = new Queue();
+  public readonly ui: BoardUI;
 
   /**
    * The game play is in a continuous loop if the player continues to play beyond a
@@ -80,11 +82,14 @@ class Board {
    */
   constructor(me?: typeof Me, rules?: Rules) {
     this.me = me;
+    /* istanbul ignore next */
+    if (this.isInGraphicsMode()) {
+      this.ui = new BoardUI();
+    }
     this.bottomPlayer = new Player(PlayerSide.Bottom, this);
     this.topPlayer = new Player(PlayerSide.Top, this);
     this.rules = rules ? rules : new MtajiModeRules();
     this.rules.validate();
-
     // initialize player board holes
     [this.topPlayer, this.bottomPlayer].forEach((player) => {
       const playerInitSeedConfig: Array<number> = this.rules
@@ -106,6 +111,7 @@ class Board {
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
 
+    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       //render holes on board
       [this.topPlayer, this.bottomPlayer].forEach((player) => {
@@ -116,6 +122,9 @@ class Board {
           player.boardHoles.nyumba.renderUI();
         }
       });
+      //add board ui container to game world
+      this.me.game.world.addChild(this.ui);
+      this.draw(BoardUiState.RESTING);
     }
 
     this.validateUiState();
@@ -468,6 +477,7 @@ class Board {
    * 1. There should always be 64 seeds in play (before move and after move)
    */
   public validateUiState(): void {
+    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       const seedUiCount = this.me.game.world.getChildByType(SeedUI).length;
       if (seedUiCount != AppConstants.MAX_SEED_COUNT) {

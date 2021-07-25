@@ -127,6 +127,7 @@ class Hole {
     const numSeedsTemp = this.numSeeds;
     this.numSeeds = 0;
 
+    /* istanbul ignore next */
     if (this.board.isInGraphicsMode()) {
       const task = {
         name: UiTaskActions.GRAB_ALL_SEEDS_FROM_HOLE,
@@ -153,6 +154,7 @@ class Hole {
     this.board.getCurrentPlayer().numSeedsInHand -= numSeeds;
 
     this.numSeeds += numSeeds;
+    /* istanbul ignore next */
     if (this.board.isInGraphicsMode()) {
       //add seeds to hole ui
       for (let i = 0; i < numSeeds; i++) {
@@ -251,16 +253,17 @@ class Hole {
   /**
    * Renders the hole and its contents (seeds)
    */
+  /* istanbul ignore next */
   public renderUI(): void {
     //render hole
     const holeUI = this.board.me.pool.pull(AppConstants.HOLE_UI, this);
-    this.board.me.game.world.addChild(holeUI);
+    this.board.ui.addChild(holeUI);
     this.ui = holeUI;
 
     // invisible draggable collection that contains seeds
     const seedGroup = this.board.me.pool.pull(AppConstants.SEED_GROUP_UI, this);
     this.seedGroupUI = seedGroup;
-    this.board.me.game.world.addChild(seedGroup);
+    this.board.ui.addChild(seedGroup);
 
     for (let i = 0; i < this.numSeeds; i++) {
       // render seeds that belong to hole
@@ -269,7 +272,7 @@ class Hole {
         this.seedGroupUI,
         this.UID
       );
-      this.board.me.game.world.addChild(seedUI);
+      this.board.ui.addChild(seedUI);
     }
   }
 }

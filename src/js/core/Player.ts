@@ -56,9 +56,10 @@ class Player {
     this.numSeedsInHand = 0;
     this.capturedOnPrevMove = false;
     if (!isEmpty(board)) {
+      /* istanbul ignore next */
       if (board.isInGraphicsMode()) {
         this.ui = board.me.pool.pull(AppConstants.PLAYER_UI, this);
-        board.me.game.world.addChild(this.ui);
+        board.ui.addChild(this.ui);
       }
     }
   }
