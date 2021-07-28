@@ -42,11 +42,11 @@ class YokhomaModeRules extends Rules {
     const map: Map<PlayerSide, Array<number>> = new Map();
     map.set(
       PlayerSide.Top,
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32]
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 2, 2, 0, 18]
     );
     map.set(
       PlayerSide.Bottom,
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32]
+      [0, 0, 0, 0, 10, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18]
     );
     return map;
   }
