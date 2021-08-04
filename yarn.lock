@@ -2195,10 +2195,10 @@ available-typed-arrays@^1.0.2:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.4.tgz#9e0ae84ecff20caae6a94a1c3bc39b955649b7a9"
   integrity sha512-SA5mXJWrId1TaQjfxUYghbqQ/hYioKmLJvPJyDuYRtXXenFNMjj4hSSt1Cf1xsuXSXrtxrVC5Ot4eU6cOtBDdA==
 
-aws-sdk@^2.957.0:
-  version "2.957.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.957.0.tgz#579fbb5310f918ebcba6b968e0c43903180bad35"
-  integrity sha512-TtRv/ebZL7gWgAW8XGlRizs5xhyzlDt2KbrxoPcHcxPTH8KHlbEyOmAXafyB7K/Jf3En5TDdJN1daJ4idSKWSg==
+aws-sdk@^2.960.0:
+  version "2.960.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.960.0.tgz#7f5fba5de9b284c0d7e77c11ae7e64a4bf085de7"
+  integrity sha512-e3KNZ5x0uzBNbVLbGUO2xrMRonUPpmXxgyZ/MaHx5yOQIv9G2a7dei/TvrMa9rl4MFCScGLw1LjbYb7CrdbMBQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -9687,10 +9687,10 @@ ts-jest@^27.0.4:
     semver "7.x"
     yargs-parser "20.x"
 
-ts-loader@^9.2.4:
-  version "9.2.4"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-9.2.4.tgz#55fe7e5eab29fe4bdfb01c1f941c2bab928b7f92"
-  integrity sha512-Ats2BCqPFBkgsoZUmmYMjuQu+iBNExt4o3QDsJqRMuPdStWlnOthdqX/GHHJnxSSgw7Gu6Hll/MD5b4usgKFOg==
+ts-loader@^9.2.5:
+  version "9.2.5"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-9.2.5.tgz#127733a5e9243bf6dafcb8aa3b8a266d8041dca9"
+  integrity sha512-al/ATFEffybdRMUIr5zMEWQdVnCGMUA9d3fXJ8dBVvBlzytPvIszoG9kZoR+94k6/i293RnVOXwMaWbXhNy9pQ==
   dependencies:
     chalk "^4.1.0"
     enhanced-resolve "^5.0.0"
