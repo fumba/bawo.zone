@@ -1,48 +1,34 @@
-import game from "../Game";
+import Board from "../core/Board";
 import me from "../me";
 
 /**
  * a basic HUD (Heads Up Display) item to display score
  */
-/* istanbul ignore next */
-class ScoreItem extends me.Renderable {
-  constructor(x: number, y: number) {
-    super(x, y, 10, 10);
-    console.info("Show HUD");
-    this.score = -1;
+
+class HUD extends me.Renderable {
+  private board: Board;
+  public status: string;
+
+  constructor(board: Board) {
+    super(0, 0, 100, 100);
+    this.board = board;
+
+    this.font = new me.Text(0, 0, {
+      font: "Arial",
+      size: 15,
+      fillStyle: this.color,
+    });
+    this.board.ui.addChild(this);
+    this.status = this.board.getCurrentPlayer().toString();
   }
 
-  update() {
-    // we don't do anything fancy here, so just
-    // return true if the score has been updated
-
-    if (this.score !== game.data.score) {
-      this.score = game.data.score;
-      return true;
-    }
-    return false;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  draw(context: unknown) {
-    // draw it baby !
-  }
-}
-
-class HUD extends me.Container {
-  constructor() {
-    super();
-    // persistent across level change
-    this.isPersistent = true;
-
-    // make sure we use screen coordinates
-    this.floating = true;
-
-    // give a name
-    this.name = "HUD";
-
-    // add our child score object at the top left corner
-    this.addChild(new ScoreItem(5, 5));
+  draw(renderer: unknown): void {
+    this.font.draw(
+      renderer,
+      this.status,
+      this.pos.x + this.width / 2,
+      this.pos.y + this.height / 2
+    );
   }
 }
 

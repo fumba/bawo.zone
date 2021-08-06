@@ -1,6 +1,5 @@
 import me from "../me";
 import game from "../Game";
-import HUD from "../ui_entities/HUD";
 import Board from "../core/Board";
 import SeedUI from "../ui_entities/SeedUI";
 import SeedGroupUI from "../ui_entities/SeedGroupUI";
@@ -11,11 +10,9 @@ import AI from "../core/AI";
 import Utility from "../Utility";
 import BoardUiState from "../core/BoardUiState";
 import AppConstants from "../core/AppConstants";
-import HoleUI from "../ui_entities/HoleUI";
 import Button from "../ui_entities/Button";
 import YokhomaModeRules from "../core/rules/YokhomaModeRules";
 import MtajiModeRules from "../core/rules/MtajiModeRules";
-import PlayerUI from "../ui_entities/PlayerUI";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -43,15 +40,8 @@ class PlayScreen extends me.Stage {
     this.colorLayer = new me.ColorLayer("background", "#b7b6b5");
     me.game.world.addChild(this.colorLayer, -1);
 
-    // reset the score
-    game.data.score = 0;
-
-    console.info("Show play screen");
-
     // Add our HUD to the game world, add it last so that this is on top of the rest.
     // Can also be forced by specifying a "Infinity" z value to the addChild function.
-    this.HUD = new HUD();
-    me.game.world.addChild(this.HUD);
     this.board = new Board(me, new MtajiModeRules());
 
     const yamtajiModeBtn = new Button(50, 50, "yellow", "Yamtaji", () => {
@@ -68,8 +58,8 @@ class PlayScreen extends me.Stage {
 
     const gameSpeed = 300;
 
-    const humanVsHuman = true;
-    const computerVsHuman = false;
+    const humanVsHuman = false;
+    const computerVsHuman = true;
     // CPU player should always be on the top side
     let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? false : true;
     let isCpuBottomPlayerTurn = !computerVsHuman && !isCpuTopPlayerTurn;
@@ -84,13 +74,15 @@ class PlayScreen extends me.Stage {
     //update GUI elements state
 
     let refreshHoleSleepingState = false; //initially refresh state so that the initial seed arrangement is rendered
-    me.timer.setInterval(() => {
+    const intervalId = me.timer.setInterval(() => {
       const task = this.board.uiTaskQueue.dequeue();
       if (task) {
         // refresh all holes status after the task is complete
         refreshHoleSleepingState = true;
         //initially set all hole UI as inactive during game play animation
         this.board.draw(BoardUiState.PLAY_IN_PROGRESS);
+        this.board.HUD.status = "play in progress...";
+
         switch (task.name) {
           case UiTaskActions.SOW_SEED_INTO_HOLE: {
             const seedGroupUI: SeedGroupUI = task.seedGroupUI as SeedGroupUI;
@@ -133,6 +125,12 @@ class PlayScreen extends me.Stage {
           }
         }
       } else {
+        //check if game is over
+        if (this.board.isGameOver()) {
+          this.board.HUD.status = "Game Over!!!";
+          me.timer.clearInterval(intervalId);
+          return;
+        }
         const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
         if (!draggingSeedGroup && refreshHoleSleepingState == true) {
           refreshHoleSleepingState = false;
@@ -142,15 +140,15 @@ class PlayScreen extends me.Stage {
             // game is currently in sleep state (waiting for next player move)
             // re-render all holes on board
             this.board.draw(BoardUiState.RESTING);
+            this.board.HUD.status = "Waiting for next player...";
             // switch to CPU player if its the top players turn
             isCpuTopPlayerTurn = this.board.getCurrentPlayer().isOnTopSide();
             isCpuBottomPlayerTurn = !computerVsHuman && !isCpuTopPlayerTurn;
           });
         }
       }
-    }, gameSpeed);
 
-    me.timer.setInterval(() => {
+      // computer player makes move
       if (!humanVsHuman) {
         if (isCpuTopPlayerTurn) {
           isCpuTopPlayerTurn = false;
@@ -170,7 +168,7 @@ class PlayScreen extends me.Stage {
 
   onDestroyEvent(): void {
     // remove the HUD from the game world
-    me.game.world.removeChild(this.HUD);
+    me.game.world.removeChild(this.board.ui);
   }
 }
 

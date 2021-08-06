@@ -25,9 +25,6 @@ class Game {
   public readonly resources: Resources;
 
   constructor() {
-    this.data = {
-      score: 0,
-    };
     this.resources = Resources.assets;
   }
 }

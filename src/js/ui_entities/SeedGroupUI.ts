@@ -88,6 +88,7 @@ class SeedGroupUI extends me.DraggableEntity {
 
   private isPlayableHole(): boolean {
     return (
+      !this.hole.board.isGameOver() &&
       this.hole.board.uiTaskQueue.length == 0 &&
       this.hole.availableMovesForCurrentPlayer().length > 0
     );
