@@ -17,6 +17,8 @@ import UiHelper from "../ui_entities/UiHelper";
 import BoardUiState from "./BoardUiState";
 import BoardUI from "../ui_entities/BoardUI";
 
+import HUD from "../ui_entities/HUD";
+
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
  * <a href="https://github.com/fumba/bawo.zone">https://github.com/fumba/bawo.zone</a>
@@ -68,6 +70,7 @@ class Board {
   public readonly me: typeof Me;
   public uiTaskQueue: Queue<Record<string, unknown>> = new Queue();
   public readonly ui: BoardUI;
+  public readonly HUD: HUD;
 
   /**
    * The game play is in a continuous loop if the player continues to play beyond a
@@ -122,6 +125,8 @@ class Board {
           player.boardHoles.nyumba.renderUI();
         }
       });
+
+      this.HUD = new HUD(this);
       //add board ui container to game world
       this.me.game.world.addChild(this.ui);
       this.draw(BoardUiState.RESTING);
