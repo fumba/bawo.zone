@@ -3,13 +3,13 @@ declare let require: any;
 require("../css/main.css");
 import me from "./me";
 import PlayScreen from "./screens/PlayScreen";
-import TitleScreen from "./screens/title";
-import game from "./Game";
+import TitleScreen from "./screens/TitleScreen";
 import SeedUI from "./ui_entities/SeedUI";
 import HoleUI from "./ui_entities/HoleUI";
 import SeedGroupUI from "./ui_entities/SeedGroupUI";
 import AppConstants from "./core/AppConstants";
 import PlayerUI from "./ui_entities/PlayerUI";
+import Resources from "./Resources";
 
 class Bootstrap {
   constructor() {
@@ -42,7 +42,7 @@ class Bootstrap {
     // Set a callback to run when loading is complete.
     me.loader.onload = this.loaded.bind(this);
     // Load the resources.
-    me.loader.preload(game.resources);
+    me.loader.preload(Resources.assets);
     // Initialize melonJS and display a loading screen.
     me.state.change(me.state.LOADING);
   }
