@@ -1,4 +1,3 @@
-import { Resolver } from "dns/promises";
 import AppConstants from "./core/AppConstants";
 
 /*

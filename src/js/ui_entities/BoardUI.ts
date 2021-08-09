@@ -24,6 +24,7 @@ import me from "../me";
 class BoardUI extends me.Container {
   constructor() {
     super();
+    this.isPersistent = true; //board should be persistent over level changes
   }
 }
 
