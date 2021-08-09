@@ -2,7 +2,6 @@
 declare let require: any;
 require("../css/main.css");
 import me from "./me";
-import PlayScreen from "./screens/PlayScreen";
 import TitleScreen from "./screens/TitleScreen";
 import SeedUI from "./ui_entities/SeedUI";
 import HoleUI from "./ui_entities/HoleUI";
@@ -49,7 +48,6 @@ class Bootstrap {
 
   loaded() {
     me.state.set(me.state.MENU, new TitleScreen());
-    me.state.set(me.state.PLAY, new PlayScreen());
 
     // Register game UI entities
     me.pool.register(AppConstants.SEED_UI, SeedUI);

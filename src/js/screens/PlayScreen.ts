@@ -10,8 +10,6 @@ import Utility from "../Utility";
 import BoardUiState from "../core/BoardUiState";
 import AppConstants from "../core/AppConstants";
 import Button from "../ui_entities/Button";
-import YokhomaModeRules from "../core/rules/YokhomaModeRules";
-import MtajiModeRules from "../core/rules/MtajiModeRules";
 
 /*
  * bawo.zone - <a href="https://bawo.zone">https://bawo.zone</a>
@@ -34,28 +32,21 @@ import MtajiModeRules from "../core/rules/MtajiModeRules";
  */
 class PlayScreen extends me.Stage {
   private board: Board;
+  private menuBtn: Button;
+
+  constructor(board: Board) {
+    super();
+    this.board = board;
+  }
 
   onResetEvent(): void {
-    console.log("on reset event");
     this.colorLayer = new me.ColorLayer("background", "#b7b6b5");
     me.game.world.addChild(this.colorLayer, Number.MIN_SAFE_INTEGER);
 
-    // Add our HUD to the game world, add it last so that this is on top of the rest.
-    // Can also be forced by specifying a "Infinity" z value to the addChild function.
-    this.board = new Board(me, new MtajiModeRules());
-
-    const yamtajiModeBtn = new Button(50, 50, "yellow", "Yamtaji", () => {
-      this.board.ui.reset();
-      this.board = new Board(me, new MtajiModeRules());
+    this.menuBtn = new Button(300, 50, "yellow", "Menu", () => {
+      me.state.change(me.state.MENU);
     });
-    me.game.world.addChild(yamtajiModeBtn);
-
-    const yokhomaModeBtn = new Button(300, 50, "yellow", "Yokhoma", () => {
-      this.board.ui.reset();
-      this.board = new Board(me, new YokhomaModeRules());
-      me.state.change(me.state.PLAY, true);
-    });
-    me.game.world.addChild(yokhomaModeBtn);
+    me.game.world.addChild(this.menuBtn);
 
     const gameSpeed = 300;
 
@@ -168,8 +159,9 @@ class PlayScreen extends me.Stage {
   }
 
   onDestroyEvent(): void {
-    // remove the HUD from the game world
+    this.board.ui.reset();
     me.game.world.removeChild(this.board.ui);
+    me.game.world.removeChild(this.menuBtn);
   }
 }
 
