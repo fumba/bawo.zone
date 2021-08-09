@@ -36,6 +36,7 @@ class PlayScreen extends me.Stage {
   private board: Board;
 
   onResetEvent(): void {
+    console.log("on reset event");
     this.colorLayer = new me.ColorLayer("background", "#b7b6b5");
     me.game.world.addChild(this.colorLayer, Number.MIN_SAFE_INTEGER);
 
@@ -52,15 +53,16 @@ class PlayScreen extends me.Stage {
     const yokhomaModeBtn = new Button(300, 50, "yellow", "Yokhoma", () => {
       this.board.ui.reset();
       this.board = new Board(me, new YokhomaModeRules());
+      me.state.change(me.state.PLAY, true);
     });
     me.game.world.addChild(yokhomaModeBtn);
 
     const gameSpeed = 300;
 
     const humanVsHuman = false;
-    const computerVsHuman = true;
+    const computerVsHuman = false;
     // CPU player should always be on the top side
-    let isCpuTopPlayerTurn = Utility.getRandomInt(2) == 1 ? false : true;
+    let isCpuTopPlayerTurn = false;
     let isCpuBottomPlayerTurn = !computerVsHuman && !isCpuTopPlayerTurn;
 
     if (!humanVsHuman && !isCpuTopPlayerTurn && computerVsHuman) {
