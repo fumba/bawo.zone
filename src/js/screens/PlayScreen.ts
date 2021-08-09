@@ -33,6 +33,7 @@ import Button from "../ui_entities/Button";
 class PlayScreen extends me.Stage {
   private board: Board;
   private menuBtn: Button;
+  private intervalId: number;
 
   constructor(board: Board) {
     super();
@@ -44,6 +45,7 @@ class PlayScreen extends me.Stage {
     me.game.world.addChild(this.colorLayer, Number.MIN_SAFE_INTEGER);
 
     this.menuBtn = new Button(300, 50, "yellow", "Menu", () => {
+      me.timer.clearInterval(this.intervalId);
       me.state.change(me.state.MENU);
     });
     me.game.world.addChild(this.menuBtn);
@@ -66,7 +68,7 @@ class PlayScreen extends me.Stage {
     //update GUI elements state
 
     let refreshHoleSleepingState = false; //initially refresh state so that the initial seed arrangement is rendered
-    const intervalId = me.timer.setInterval(() => {
+    this.intervalId = me.timer.setInterval(() => {
       const task = this.board.uiTaskQueue.dequeue();
       if (task) {
         // refresh all holes status after the task is complete
@@ -120,7 +122,7 @@ class PlayScreen extends me.Stage {
         //check if game is over
         if (this.board.isGameOver()) {
           this.board.HUD.status = "Game Over!!!";
-          me.timer.clearInterval(intervalId);
+          me.timer.clearInterval(this.intervalId);
           return;
         }
         const draggingSeedGroup = UiHelper.getCurrentDraggingSeedGroup(me);
