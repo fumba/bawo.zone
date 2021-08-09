@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="ScoreItem.html">ScoreItem</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -137,7 +137,7 @@ class AppConstants {
 
   /**
    * Minimum Hole ID. Note that {@link DUMMY_HOLE_ID} is not a Hole that is used
-   * during gameplay.
+   * during game play.
    */
   public static readonly MIN_HOLE_ID: number = 0;
 
@@ -156,17 +156,67 @@ class AppConstants {
   /**
    * Seed UI
    */
-  public static readonly SEED_UI = "seed";
+  public static readonly SEED_UI = "seed-ui";
 
   /**
    * Hole UI
    */
-  public static readonly HOLE_UI = "hole";
+  public static readonly HOLE_UI = "hole-ui";
+
+  /**
+   * Hole UI - Sleeping
+   */
+  public static readonly HOLE_SLEEPING_UI = "hole-sleeping-ui";
+
+  /**
+   * Hole UI - Available
+   */
+  public static readonly HOLE_AVAILABLE_UI = "hole-available-ui";
+
+  /**
+   * Hole UI - Blocked
+   */
+  public static readonly HOLE_BLOCKED_UI = "hole-blocked-ui";
+
+  /**
+   * Hole UI - Start
+   */
+  public static readonly HOLE_START_UI = "hole-start-ui";
 
   /**
    * Seed Group UI
    */
-  public static readonly SEED_GROUP_UI = "seed-group";
+  public static readonly SEED_GROUP_UI = "seed-group-ui";
+
+  /**
+   * Player UI
+   */
+  public static readonly PLAYER_UI = "player-ui";
+
+  /**
+   * Sow normal sound - variant 1
+   */
+  public static readonly SOW_NORMAL_SOUND_1 = "sow_normal_sound_1";
+
+  /**
+   * Move end - audio
+   */
+  public static readonly MOVE_END = "move_end";
+
+  /**
+   * Seed grab -audio
+   */
+  public static readonly SEED_GRAB = "seed_grab";
+
+  /**
+   * Seed steal - audio
+   */
+  public static readonly SEED_STEAL = "seed_steal";
+
+  /**
+   * Nyumba hole id
+   */
+  public static readonly NYUMBA_HOLE_ID = 17;
 }
 
 export default AppConstants;

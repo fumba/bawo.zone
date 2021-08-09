@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> HoleUI</title>
+  <title> screens/TitleScreen.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,205 +79,74 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Class</p>
-                    <h1>HoleUI</h1>
+                    <p>Source</p>
+                    <h1>screens/TitleScreen.ts</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>HoleUI<span class="signature">(hole)</span><span class="type-signature"></span></h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
-
-
-    
-    <h4 class="name" id="HoleUI">
-        <a class="href-link" href="#HoleUI">#</a>
-        
-        <span class="code-name">
-            
-                new HoleUI<span class="signature">(hole)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>hole</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type"><a href="Hole.html">Hole</a></span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">the hole to which this UI entity corresponds to</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="ui_entities_HoleUI.ts.html" class="button">View Source</a>
-            <span>
-                <a href="ui_entities_HoleUI.ts.html">ui_entities/HoleUI.ts</a>, <a href="ui_entities_HoleUI.ts.html#line33">line 33</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-        
-    
-    </div>
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Board from "../core/Board";
+import MtajiModeRules from "../core/rules/MtajiModeRules";
+import YokhomaModeRules from "../core/rules/YokhomaModeRules";
+import me from "../me";
+import Button from "../ui_entities/Button";
+import PlayScreen from "./PlayScreen";
+
+class TitleScreen extends me.Stage {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private betaLabel: any;
+  private yamtajiModeBtn: Button;
+  private yokhomaModeBtn: Button;
+  /**
+   *  action to perform on state change
+   */
+  onResetEvent(): void {
+    me.game.world.addChild(new me.ColorLayer("background", "#b7b6b5"), -1);
+
+    this.betaLabel = new me.Text(100, 100, {
+      font: "Arial",
+      size: 15,
+      fillStyle: "#8B0000",
+    });
+    this.betaLabel.setText(
+      `This game is under development by Fumba Game Labs - this is an unfinished developers build. 
+      \nPlease check www.bawo.zone for development updates.
+      \n\n\nfumba.me@gmail.com - August 2021`
+    );
+    me.game.world.addChild(this.betaLabel);
+
+    this.yamtajiModeBtn = new Button(50, 250, "yellow", "Yamtaji", () => {
+      const board = new Board(me, new MtajiModeRules());
+      me.state.set(me.state.PLAY, new PlayScreen(board));
+      me.state.change(me.state.PLAY);
+    });
+    me.game.world.addChild(this.yamtajiModeBtn);
+
+    this.yokhomaModeBtn = new Button(300, 250, "yellow", "Yokhoma", () => {
+      const board = new Board(me, new YokhomaModeRules());
+      me.state.set(me.state.PLAY, new PlayScreen(board));
+      me.state.change(me.state.PLAY);
+    });
+    me.game.world.addChild(this.yokhomaModeBtn);
+  }
+
+  /**
+   *  action to perform when leaving this screen (state change)
+   */
+  onDestroyEvent(): void {
+    me.game.world.removeChild(this.yamtajiModeBtn);
+    me.game.world.removeChild(this.yokhomaModeBtn);
+  }
+}
+
+export default TitleScreen;
+</code></pre>
+        </article>
+    </section>
 
 
 

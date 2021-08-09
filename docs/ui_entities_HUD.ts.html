@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> HoleUI</title>
+  <title> ui_entities/HUD.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,205 +79,54 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Class</p>
-                    <h1>HoleUI</h1>
+                    <p>Source</p>
+                    <h1>ui_entities/HUD.ts</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>HoleUI<span class="signature">(hole)</span><span class="type-signature"></span></h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
-
-
-    
-    <h4 class="name" id="HoleUI">
-        <a class="href-link" href="#HoleUI">#</a>
-        
-        <span class="code-name">
-            
-                new HoleUI<span class="signature">(hole)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>hole</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type"><a href="Hole.html">Hole</a></span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">the hole to which this UI entity corresponds to</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="ui_entities_HoleUI.ts.html" class="button">View Source</a>
-            <span>
-                <a href="ui_entities_HoleUI.ts.html">ui_entities/HoleUI.ts</a>, <a href="ui_entities_HoleUI.ts.html#line33">line 33</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-        
-    
-    </div>
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Board from "../core/Board";
+import me from "../me";
+
+/**
+ * a basic HUD (Heads Up Display) item to display score
+ */
+
+class HUD extends me.Renderable {
+  private board: Board;
+  public status: string;
+
+  constructor(board: Board) {
+    super(0, 0, 100, 100);
+    this.board = board;
+
+    this.font = new me.Text(0, 0, {
+      font: "Arial",
+      size: 15,
+      fillStyle: this.color,
+    });
+    this.board.ui.addChild(this);
+    this.status = this.board.getCurrentPlayer().toString();
+  }
+
+  draw(renderer: unknown): void {
+    this.font.draw(
+      renderer,
+      this.status,
+      this.pos.x + this.width / 2,
+      this.pos.y + this.height / 2
+    );
+  }
+}
+
+export default HUD;
+</code></pre>
+        </article>
+    </section>
 
 
 
