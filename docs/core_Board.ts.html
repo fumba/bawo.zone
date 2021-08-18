@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Button.html">Button</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -176,7 +176,6 @@ class Board {
    */
   constructor(me?: typeof Me, rules?: Rules) {
     this.me = me;
-    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       this.ui = new BoardUI();
     }
@@ -205,7 +204,6 @@ class Board {
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
 
-    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       //render holes on board
       [this.topPlayer, this.bottomPlayer].forEach((player) => {
@@ -573,7 +571,6 @@ class Board {
    * 1. There should always be 64 seeds in play (before move and after move)
    */
   public validateUiState(): void {
-    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       const seedUiCount = this.me.game.world.getChildByType(SeedUI).length;
       if (seedUiCount != AppConstants.MAX_SEED_COUNT) {
@@ -582,7 +579,6 @@ class Board {
         );
       }
       const playerUiCount = this.me.game.world.getChildByType(PlayerUI).length;
-      /* istanbul ignore next */
       if (playerUiCount != 2) {
         throw new Error(
           `UI State has ${playerUiCount} players on board. There should always be 2.`
@@ -620,7 +616,6 @@ class Board {
       case MoveDirection.Clockwise:
         return hole.player.boardHoles.stepClockwise(hole, numberOfSteps);
       default:
-        /* istanbul ignore next */
         throw new Error(
           `Only Clockwise and Anticlockwise moves are allowed. Received : ${direction}`
         );
@@ -670,7 +665,6 @@ class Board {
     return buffer.replace(/\n$/, ""); //remove newline at the end
   }
 
-  /* istanbul ignore next */
   public runSimulation(randomize: boolean): void {
     const moves: Array&lt;Move> = this.getAllAvailableValidMoves(
       this.currentPlayer
@@ -736,8 +730,9 @@ class Board {
 
   /**
    * Re-renders the state of the hole, HUD, and other UI components on the board
+   *
+   * @param state
    */
-  /* istanbul ignore next */
   public draw(state: BoardUiState): void {
     switch (state) {
       case BoardUiState.RESTING: {
