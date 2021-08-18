@@ -29,8 +29,6 @@
     "start": "node build/start.js",
     "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder",
     "lint": "eslint src/**/*.ts --max-warnings=0; stylelint src/**/*.css",
-    "simulate": "RANDOM_MOVES=false yarn ts-node src/js/Simulation.ts",
-    "simulate:random": "RANDOM_MOVES=true yarn ts-node src/js/Simulation.ts",
     "docs": "yarn jsdoc -c jsdoc.config.json",
     "website": "ts-node build/website.ts"
   },
