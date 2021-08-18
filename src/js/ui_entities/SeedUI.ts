@@ -29,7 +29,6 @@ import { isEmpty } from "lodash";
 /**
  * Bawo board seed
  */
-/* istanbul ignore next */
 class SeedUI extends me.Entity {
   /**
    * the group to which this seed belongs to

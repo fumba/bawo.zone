@@ -24,8 +24,6 @@ import SeedUI from "./SeedUI";
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/* istanbul ignore next */
 class UiHelper {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   public static forEachUiHole(callback: CallableFunction, me: any): void {

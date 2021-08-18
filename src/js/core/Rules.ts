@@ -54,7 +54,6 @@ abstract class Rules {
    */
   abstract nextContinuingMoveAfterCapture(move: Move): Move;
 
-  /* istanbul ignore next */
   public validate(): boolean {
     const gamePlayers = Array.from(this.initialSeedForPlayerRows().keys());
     if (this.initialSeedForPlayerRows() == null) {

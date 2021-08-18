@@ -85,7 +85,6 @@ class Board {
    */
   constructor(me?: typeof Me, rules?: Rules) {
     this.me = me;
-    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       this.ui = new BoardUI();
     }
@@ -114,7 +113,6 @@ class Board {
     this.currentPlayer = this.topPlayer;
     this.updateMovesStatus();
 
-    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       //render holes on board
       [this.topPlayer, this.bottomPlayer].forEach((player) => {
@@ -482,7 +480,6 @@ class Board {
    * 1. There should always be 64 seeds in play (before move and after move)
    */
   public validateUiState(): void {
-    /* istanbul ignore next */
     if (this.isInGraphicsMode()) {
       const seedUiCount = this.me.game.world.getChildByType(SeedUI).length;
       if (seedUiCount != AppConstants.MAX_SEED_COUNT) {
@@ -491,7 +488,6 @@ class Board {
         );
       }
       const playerUiCount = this.me.game.world.getChildByType(PlayerUI).length;
-      /* istanbul ignore next */
       if (playerUiCount != 2) {
         throw new Error(
           `UI State has ${playerUiCount} players on board. There should always be 2.`
@@ -529,7 +525,6 @@ class Board {
       case MoveDirection.Clockwise:
         return hole.player.boardHoles.stepClockwise(hole, numberOfSteps);
       default:
-        /* istanbul ignore next */
         throw new Error(
           `Only Clockwise and Anticlockwise moves are allowed. Received : ${direction}`
         );
@@ -579,7 +574,6 @@ class Board {
     return buffer.replace(/\n$/, ""); //remove newline at the end
   }
 
-  /* istanbul ignore next */
   public runSimulation(randomize: boolean): void {
     const moves: Array<Move> = this.getAllAvailableValidMoves(
       this.currentPlayer
@@ -645,8 +639,9 @@ class Board {
 
   /**
    * Re-renders the state of the hole, HUD, and other UI components on the board
+   *
+   * @param state
    */
-  /* istanbul ignore next */
   public draw(state: BoardUiState): void {
     switch (state) {
       case BoardUiState.RESTING: {

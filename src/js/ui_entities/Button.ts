@@ -23,7 +23,6 @@ import me from "../me";
 /**
  * Bawo board seed
  */
-/* istanbul ignore next */
 class Button extends me.GUI_Object {
   constructor(
     x: number,
