@@ -70,7 +70,6 @@ class YokhomaModeRules extends Rules {
    */
   public nextContinuingMoveAfterCapture(move: Move): Move {
     //TODO : remove this after implementation
-    /* istanbul ignore next */
     return move && null;
   }
 }

@@ -24,7 +24,6 @@ import SeedUI from "./SeedUI";
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* istanbul ignore next */
 class PlayerUI extends me.Entity {
   /**
    * Seeds that the player has in their hand

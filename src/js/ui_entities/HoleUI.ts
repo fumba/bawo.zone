@@ -28,7 +28,6 @@ import UiHelper from "./UiHelper";
 /**
  * Bawo board hole
  */
-/* istanbul ignore next */
 class HoleUI extends me.DroptargetEntity {
   public readonly hole: Hole;
 

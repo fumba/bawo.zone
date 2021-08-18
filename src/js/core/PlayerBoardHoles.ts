@@ -156,7 +156,6 @@ class PlayerBoardHoles implements Iterable<Hole> {
         return hole;
       }
     }
-    /* istanbul ignore next */
     throw new Error("Hole ID : " + holeId + " cannot be found. ");
   }
 
