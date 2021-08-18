@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Button.html">Button</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -218,7 +218,6 @@ class Hole {
     const numSeedsTemp = this.numSeeds;
     this.numSeeds = 0;
 
-    /* istanbul ignore next */
     if (this.board.isInGraphicsMode()) {
       const task = {
         name: UiTaskActions.GRAB_ALL_SEEDS_FROM_HOLE,
@@ -245,7 +244,6 @@ class Hole {
     this.board.getCurrentPlayer().numSeedsInHand -= numSeeds;
 
     this.numSeeds += numSeeds;
-    /* istanbul ignore next */
     if (this.board.isInGraphicsMode()) {
       //add seeds to hole ui
       for (let i = 0; i &lt; numSeeds; i++) {
@@ -344,7 +342,6 @@ class Hole {
   /**
    * Renders the hole and its contents (seeds)
    */
-  /* istanbul ignore next */
   public renderUI(): void {
     //render hole
     const holeUI = this.board.me.pool.pull(AppConstants.HOLE_UI, this);
