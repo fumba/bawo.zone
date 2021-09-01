@@ -91,25 +91,7 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>Board<span class="signature">(me, rules)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">The <tt>GameBoard</tt> class represents the bawo/bao  game board.
- <p>
-
- The board is represented using 2 circular doubly linked lists each assigned to a player. Each list represents 2 rows with
- hole Ids assigned as shown below;
-
-
-   TOP PLAYER sitting position (facing down)
-   00	01	02	03	04	05	06	07
-   15	14	13	12	11	10	09	08
-
-   00	01	02	03	04	05	06	07
-   15	14	13	12	11	10	09	08
-   BOTTOM PLAYER sitting position (facing up)
-
-   32 (optional hole - depends of game version)
-
- Rules for Placement of seeds are specified in classes implementing  the interface <tt>GameRules</tt>.
- <p></div>
+            <div class="class-description">The <tt>GameBoard</tt> class represents the bawo/bao  game board. <p> The board is represented using 2 circular doubly linked lists each assigned to a player. Each list represents 2 rows with hole Ids assigned as shown below;   TOP PLAYER sitting position (facing down)   00	01	02	03	04	05	06	07   15	14	13	12	11	10	09	08   00	01	02	03	04	05	06	07   15	14	13	12	11	10	09	08   BOTTOM PLAYER sitting position (facing up)   32 (optional hole - depends of game version) Rules for Placement of seeds are specified in classes implementing  the interface <tt>GameRules</tt>. <p></div>
         
     
 </header>
@@ -338,9 +320,7 @@
 
 
 <div class="description">
-    The game play is in a continuous loop if the player continues to play beyond a
-threshold amount of moves.
-The game will end and the player who got themselves into an infinite loop will lose.
+    The game play is in a continuous loop if the player continues to play beyond athreshold amount of moves.The game will end and the player who got themselves into an infinite loop will lose.
 </div>
 
 
@@ -421,8 +401,7 @@ The game will end and the player who got themselves into an infinite loop will l
     
     
     <div class="description">
-        Extract the opposing enemy hole from the players front row.
-This is hole from which the current player will be capturing seeds from.
+        Extract the opposing enemy hole from the players front row.This is hole from which the current player will be capturing seeds from.
     </div>
     
 
@@ -890,8 +869,7 @@ This is hole from which the current player will be capturing seeds from.
     
     
     <div class="description">
-        Finds the hole on which planting the given number of seed tokens one by one-
-will stop when executed.
+        Finds the hole on which planting the given number of seed tokens one by one-will stop when executed.
     </div>
     
 
@@ -1257,10 +1235,7 @@ will stop when executed.
     
     
     <div class="description">
-        Execute a move:
-
-The rules on how the move is to be performed are specified in the
-implementation of the GameRules interface.
+        Execute a move:The rules on how the move is to be performed are specified in theimplementation of the GameRules interface.
     </div>
     
 
@@ -2074,9 +2049,7 @@ implementation of the GameRules interface.
     
     
     <div class="description">
-        Calculates the current game score. The score is calculated as the number
-seeds on the player side. If a player gets themselves into an infinite loop
-move, they have lost the game.
+        Calculates the current game score. The score is calculated as the numberseeds on the player side. If a player gets themselves into an infinite loopmove, they have lost the game.
     </div>
     
 
@@ -2158,8 +2131,7 @@ move, they have lost the game.
 
 <div class="columns">
     
-    <div class='param-desc column is-7'>A Hash with the PlayerSide as the key and the number of seeds on that
-        side as the value.</div>
+    <div class='param-desc column is-7'>A Hash with the PlayerSide as the key and the number of seeds on that        side as the value.</div>
     
     
     <div class='column is-5 has-text-left'>
@@ -2199,9 +2171,7 @@ move, they have lost the game.
     
     
     <div class="description">
-        Gets the player who won the game. This only happens if the game is over.
-opposing player is determined as the winning player since the current player
-cannot make any moves in this case.
+        Gets the player who won the game. This only happens if the game is over.opposing player is determined as the winning player since the current playercannot make any moves in this case.
     </div>
     
 
@@ -2323,12 +2293,7 @@ cannot make any moves in this case.
     
     
     <div class="description">
-        Checks if the game is over. The game is over if the current player is left
-with no valid moves (ie. all the moves are locked).
-
-When the game play gets in an infinite loop, the game is also considered be
-over. The player who gets themselves into the loop is considered to have lost
-the game in this case.
+        Checks if the game is over. The game is over if the current player is leftwith no valid moves (ie. all the moves are locked).When the game play gets in an infinite loop, the game is also considered beover. The player who gets themselves into the loop is considered to have lostthe game in this case.
     </div>
     
 
@@ -2572,8 +2537,7 @@ the game in this case.
     
     
     <div class="description">
-        Check if a move valid. GameRules implementation is used to make this
-decision.
+        Check if a move valid. GameRules implementation is used to make thisdecision.
     </div>
     
 
@@ -2860,19 +2824,7 @@ decision.
     
     
     <div class="description">
-        Update the move status for all the holes on the board.
-
-Move Status can be one of the following:
-
-CLOCKWISE
-
-ANTI_CLOCKWISE
-
-BOTH - Both clockwise and anti-clockwise moves are allowed.
-
-LOCKED - A valid move cannot be made from the hole.
-
-UNAUTHORIZED - The hole does not belong to the current player.
+        Update the move status for all the holes on the board.Move Status can be one of the following:CLOCKWISEANTI_CLOCKWISEBOTH - Both clockwise and anti-clockwise moves are allowed.LOCKED - A valid move cannot be made from the hole.UNAUTHORIZED - The hole does not belong to the current player.
     </div>
     
 
@@ -3117,9 +3069,7 @@ UNAUTHORIZED - The hole does not belong to the current player.
     
     
     <div class="description">
-        Validates the state of UI entities:
-
-1. There should always be 64 seeds in play (before move and after move)
+        Validates the state of UI entities:1. There should always be 64 seeds in play (before move and after move)
     </div>
     
 
