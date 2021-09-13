@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-env": "^7.15.6",
     "@types/jest": "^27.0.1",
     "@types/lodash": "^4.14.172",
     "@types/regenerator-runtime": "^0.13.1",
