@@ -24,7 +24,7 @@ class TitleScreen extends me.Stage {
     this.betaLabel.setText(
       `This game is under development by Fumba Game Labs - this is an unfinished developers build. 
       \nPlease check www.bawo.zone for development updates.
-      \n\n\nfumba.me@gmail.com - August 2021`
+      \n\n\nfumba.me@gmail.com - September 2021`
     );
     me.game.world.addChild(this.betaLabel);
 
