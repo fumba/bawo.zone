@@ -3778,10 +3778,10 @@ duplexer3@^0.1.4:
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"
   integrity sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI=
 
-earcut@2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/earcut/-/earcut-2.2.2.tgz#41b0bc35f63e0fe80da7cddff28511e7e2e80d11"
-  integrity sha512-eZoZPPJcUHnfRZ0PjLvx2qBordSiO8ofC3vt+qACLM95u+4DovnbYNpQtJh0DNsWj8RnxrQytD4WA8gj5cRIaQ==
+earcut@2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/earcut/-/earcut-2.2.3.tgz#d44ced2ff5a18859568e327dd9c7d46b16f55cf4"
+  integrity sha512-iRDI1QeCQIhMCZk48DRDMVgQSSBDmbzzNhnxIo+pwx3swkfjMh6vh0nWLq1NdvGHLKH6wIrAM3vQWeTj6qeoug==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
@@ -4884,10 +4884,10 @@ hosted-git-info@^4.0.1, hosted-git-info@^4.0.2:
   dependencies:
     lru-cache "^6.0.0"
 
-howler@^2.2.0:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/howler/-/howler-2.2.1.tgz#a521a9b495841e8bb9aa12e651bebba0affc179e"
-  integrity sha512-0iIXvuBO/81CcrQ/HSSweYmbT50fT2mIc9XMFb+kxIfk2pW/iKzDbX1n3fZmDXMEIpYvyyfrB+gXwPYSDqUxIQ==
+howler@2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/howler/-/howler-2.2.3.tgz#a2eff9b08b586798e7a2ee17a602a90df28715da"
+  integrity sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==
 
 hpack.js@^2.1.6:
   version "2.1.6"
@@ -6558,13 +6558,13 @@ media-typer@0.3.0:
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=
 
-melonjs@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/melonjs/-/melonjs-8.0.1.tgz#ffb96c2c13e07fbb07e59fae759bbe6ff0f66167"
-  integrity sha512-OGgHS3RwS/pZX57W2LTNxNFaCmZwT+Rgi3CH4afUm0pqRW2WmBi7XKSrjmZd0dFDtVvSEv5WYvBrGOLX3SZtSg==
+melonjs@^9.1.1:
+  version "9.1.1"
+  resolved "https://registry.yarnpkg.com/melonjs/-/melonjs-9.1.1.tgz#c6c46434aa49211ec9f5f7dc447658ade5663f98"
+  integrity sha512-P6nAdXEiC5ln8VJTilqYtSfzsPe6nqk0nXKFR4TyaxZ0QoJbUqocB3WAwfkyiyTQ1m7ZmvtLFzuDh9z1gpUJbA==
   dependencies:
-    earcut "2.2.2"
-    howler "^2.2.0"
+    earcut "2.2.3"
+    howler "2.2.3"
     jay-extend "1.0.1"
     minpubsub "0.0.2"
 
