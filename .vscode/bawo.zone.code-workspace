@@ -7,17 +7,18 @@
 	"settings": {
 		"cSpell.words": [
 			"Authorised",
+			"bawo",
 			"CHECKMETHOD",
 			"Chibaka",
 			"Droptarget",
 			"Fumba",
-			"Mtaji",
-			"UNAUTHORISED",
-			"bawo",
 			"gameplay",
 			"melonjs",
+			"Mtaji",
 			"randomise",
-			"renderable"
+			"renderable",
+			"Spectron",
+			"UNAUTHORISED"
 		]
 	}
 }
