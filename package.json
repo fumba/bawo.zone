@@ -33,7 +33,7 @@
     "website": "ts-node build/website.ts"
   },
   "dependencies": {
-    "@types/node": "^16.11.1",
+    "@types/node": "^17.0.19",
     "better-docs": "^2.3.2",
     "fs-jetpack": "^4.2.0",
     "melonjs": "^8.0.1",
