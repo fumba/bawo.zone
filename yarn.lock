@@ -2470,10 +2470,10 @@ available-typed-arrays@^1.0.2:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.4.tgz#9e0ae84ecff20caae6a94a1c3bc39b955649b7a9"
   integrity sha512-SA5mXJWrId1TaQjfxUYghbqQ/hYioKmLJvPJyDuYRtXXenFNMjj4hSSt1Cf1xsuXSXrtxrVC5Ot4eU6cOtBDdA==
 
-aws-sdk@^2.1073.0:
-  version "2.1073.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1073.0.tgz#96c0c25c89f814c4aa4262e6eeef20eec9fda0da"
-  integrity sha512-TtyHDL4ZEs8Zh/DqWY/hv745DTWrIwOyBAvfjBJ45RE9h0TjpWqCIowEtb6gRPAKyPPyfGH4s+rEYu07vNK1Hg==
+aws-sdk@^2.1077.0:
+  version "2.1077.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1077.0.tgz#d4a391d38ede867fe9a88f31555f09a338dfdf4e"
+  integrity sha512-orJvJROs8hJaQRfHsX7Zl5PxEgrD/uTXyqXz9Yu9Io5VVxzvnOty9oHmvEMSlgTIf1qd01gnev/vpvP1HgzKtw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -3976,10 +3976,10 @@ duplexer3@^0.1.4:
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"
   integrity sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI=
 
-earcut@2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/earcut/-/earcut-2.2.2.tgz#41b0bc35f63e0fe80da7cddff28511e7e2e80d11"
-  integrity sha512-eZoZPPJcUHnfRZ0PjLvx2qBordSiO8ofC3vt+qACLM95u+4DovnbYNpQtJh0DNsWj8RnxrQytD4WA8gj5cRIaQ==
+earcut@2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/earcut/-/earcut-2.2.3.tgz#d44ced2ff5a18859568e327dd9c7d46b16f55cf4"
+  integrity sha512-iRDI1QeCQIhMCZk48DRDMVgQSSBDmbzzNhnxIo+pwx3swkfjMh6vh0nWLq1NdvGHLKH6wIrAM3vQWeTj6qeoug==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
@@ -4388,7 +4388,7 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
-eventemitter3@^4.0.0:
+eventemitter3@^4.0.0, eventemitter3@^4.0.7:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
@@ -5065,10 +5065,10 @@ hosted-git-info@^4.0.1, hosted-git-info@^4.0.2:
   dependencies:
     lru-cache "^6.0.0"
 
-howler@^2.2.0:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/howler/-/howler-2.2.1.tgz#a521a9b495841e8bb9aa12e651bebba0affc179e"
-  integrity sha512-0iIXvuBO/81CcrQ/HSSweYmbT50fT2mIc9XMFb+kxIfk2pW/iKzDbX1n3fZmDXMEIpYvyyfrB+gXwPYSDqUxIQ==
+howler@2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/howler/-/howler-2.2.3.tgz#a2eff9b08b586798e7a2ee17a602a90df28715da"
+  integrity sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==
 
 hpack.js@^2.1.6:
   version "2.1.6"
@@ -5712,11 +5712,6 @@ jake@^10.6.1:
     chalk "^2.4.2"
     filelist "^1.0.1"
     minimatch "^3.0.4"
-
-jay-extend@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/jay-extend/-/jay-extend-1.0.1.tgz#a9c0186e9ce5143489fb998c599eabc11916d190"
-  integrity sha1-qcAYbpzlFDSJ+5mMWZ6rwRkW0ZA=
 
 jest-canvas-mock@^2.3.1:
   version "2.3.1"
@@ -6653,15 +6648,14 @@ media-typer@0.3.0:
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=
 
-melonjs@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/melonjs/-/melonjs-8.0.1.tgz#ffb96c2c13e07fbb07e59fae759bbe6ff0f66167"
-  integrity sha512-OGgHS3RwS/pZX57W2LTNxNFaCmZwT+Rgi3CH4afUm0pqRW2WmBi7XKSrjmZd0dFDtVvSEv5WYvBrGOLX3SZtSg==
+melonjs@^10.3.0:
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/melonjs/-/melonjs-10.3.0.tgz#71bd3bcfd7578cd5cbad3edd34355d7f74926937"
+  integrity sha512-MLP/4Ia1ByPZq+QRFUpi9hQ0dJTg+HK52vV4fNCZ/7CMYedSKdT57ylhd1pT0+Lhq7wzFQ/FmHnu2mIPaBPosw==
   dependencies:
-    earcut "2.2.2"
-    howler "^2.2.0"
-    jay-extend "1.0.1"
-    minpubsub "0.0.2"
+    earcut "2.2.3"
+    eventemitter3 "^4.0.7"
+    howler "2.2.3"
 
 memfs@^3.4.1:
   version "3.4.1"
@@ -6796,11 +6790,6 @@ minimist@^1.2.0, minimist@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
-
-minpubsub@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/minpubsub/-/minpubsub-0.0.2.tgz#9249103447ee203a753c5a497a302ab92ef7abeb"
-  integrity sha1-kkkQNEfuIDp1PFpJejAquS73q+s=
 
 mkdirp@^0.5.4, mkdirp@^0.5.5:
   version "0.5.5"
