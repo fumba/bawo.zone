@@ -53,7 +53,7 @@
                     href="index.html"
                     class="link"
                 >
-                    API Documentation
+                    Documentation
                 </a>
                 
                 
@@ -70,14 +70,14 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Button.html">Button</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Board_Board.html">Board</a></li><li><a href="Button.html">Button</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HoleUI_HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="Player_Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedGroupUI_SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="SeedUI_SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li><li><a href="Vector_Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Title</p>
+                    <p></p>
                     <h1>Global</h1>
                 </header>
                 
@@ -173,7 +173,9 @@
 
 
 <div class="description">
-    <p><a href="global.html#BoardUiState">BoardUiState</a> represent the different ui states that the board can be refreshed to</p>
+    <p>
+<a href="global.html#BoardUiState">BoardUiState</a> represent the different ui states that the board can be refreshed to
+</p>
 </div>
 
 
@@ -242,7 +244,27 @@
 
 
 <div class="description">
-    Move direction: Only clockwise and anti-clockwise moves are allowed when theplayer is executing a move.Each hole has a move status during gameplay. If both Clockwise andanti-clockwise moves can be performed, the status is marked as Both. Holeswith no valid moves are marked as locked. Holes that do not belong to thecurrent player are marked as Unauthorized.<p>The direction in which a move can be made.</p><p>Note: When executing moves, only MoveDirection#Clockwise andMoveDirection#AntiClockwise are valid values. Each Hole has a movestatus during gameplay, if both Clockwise and anti-clockwise moves can beperformed, the status is marked as MoveDirection#Both. Holes with novalid moves are marked as MoveDirection#Locked. Holes that do notbelong to the current player are marked asMoveDirection#Unathorised.</p>
+    Move direction: Only clockwise and anti-clockwise moves are allowed when the
+player is executing a move.
+
+Each hole has a move status during gameplay. If both Clockwise and
+anti-clockwise moves can be performed, the status is marked as Both. Holes
+with no valid moves are marked as locked. Holes that do not belong to the
+current player are marked as Unauthorized.
+
+<p>
+The direction in which a move can be made.
+</p>
+
+<p>
+Note: When executing moves, only MoveDirection#Clockwise and
+MoveDirection#AntiClockwise are valid values. Each Hole has a move
+status during gameplay, if both Clockwise and anti-clockwise moves can be
+performed, the status is marked as MoveDirection#Both. Holes with no
+valid moves are marked as MoveDirection#Locked. Holes that do not
+belong to the current player are marked as
+MoveDirection#Unathorised.
+</p>
 </div>
 
 
@@ -311,7 +333,9 @@
 
 
 <div class="description">
-    <p><a href="global.html#PlayerSide">PlayerSide</a> represent the sides that a player can be on the board</p>
+    <p>
+<a href="global.html#PlayerSide">PlayerSide</a> represent the sides that a player can be on the board
+</p>
 </div>
 
 
@@ -385,9 +409,9 @@
             
             <footer class="footer">
                 <div class="content has-text-centered">
-                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a></p>
                     <p class="sidebar-created-by">
-                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
                         <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
                     </p>
                 </div>
@@ -400,6 +424,7 @@
 <script src="scripts/app.min.js"></script>
 <script>PR.prettyPrint();</script>
 <script src="scripts/linenumber.js"> </script>
+
 
 </body>
 </html>

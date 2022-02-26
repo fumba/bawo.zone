@@ -53,7 +53,7 @@
                     href="index.html"
                     class="link"
                 >
-                    API Documentation
+                    Documentation
                 </a>
                 
                 
@@ -70,7 +70,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Button.html">Button</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="AppConstants.html">AppConstants</a></li><li><a href="Board.html">Board</a></li><li><a href="Board_Board.html">Board</a></li><li><a href="Button.html">Button</a></li><li><a href="Hole.html">Hole</a></li><li><a href="HoleUI.html">HoleUI</a></li><li><a href="HoleUI_HoleUI.html">HoleUI</a></li><li><a href="HUD.html">HUD</a></li><li><a href="Move.html">Move</a></li><li><a href="Player.html">Player</a></li><li><a href="Player_Player.html">Player</a></li><li><a href="PlayerBoardHoles.html">PlayerBoardHoles</a></li><li><a href="SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedGroupUI_SeedGroupUI.html">SeedGroupUI</a></li><li><a href="SeedUI.html">SeedUI</a></li><li><a href="SeedUI_SeedUI.html">SeedUI</a></li><li><a href="Vector.html">Vector</a></li><li><a href="Vector_Vector.html">Vector</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BoardUiState">BoardUiState</a></li><li><a href="global.html#MoveDirection">MoveDirection</a></li><li><a href="global.html#PlayerSide">PlayerSide</a></li></ul></div>
                 
             </nav>
         </div>
@@ -168,7 +168,7 @@
   <td class="type">
   
       
-<span class="param-type"><a href="Hole.html">Hole</a></span>
+<code class="param-type"><a href="Hole.html">Hole</a></code>
 
 
   
@@ -197,7 +197,7 @@
   <td class="type">
   
       
-<span class="param-type"><a href="global.html#MoveDirection">MoveDirection</a></span>
+<code class="param-type"><a href="global.html#MoveDirection">MoveDirection</a></code>
 
 
   
@@ -226,7 +226,7 @@
   <td class="type">
   
       
-<span class="param-type">number</span>
+<code class="param-type">number</code>
 
 
   
@@ -290,7 +290,7 @@
         <p class="tag-source">
             <a href="core_Move.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line30">line 30</a>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line50">line 50</a>
             </span>
         </p>
     
@@ -337,6 +337,91 @@
     
 
     
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+<h4 class="name" id="isMtaji">
+    <a class="href-link" href="#isMtaji">#</a>
+    
+    <span class="code-name">
+        isMtaji
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>
+Mtaji moves result into a capture on the initial move. This switch is set to
+{@code false} for all subsequent continuing moves if the initial move did not
+result into a capture.
+</p>
+<p>
+The default value for this switch is initially set to {@code true} with the
+assumption that every move that a <a href="Player.html">Player</a> initiates has the potential
+to result into a capture.
+</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="core_Move.ts.html" class="button">View Source</a>
+            <span>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line42">line 42</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
 
     
         <div class='vertical-section'>
@@ -361,7 +446,8 @@
     
     
     <div class="description">
-        Gets the hole on which the specified move will be planting the last seed inthe players hand.
+        Gets the hole on which the specified move will be planting the last seed in
+the players hand.
     </div>
     
 
@@ -412,7 +498,7 @@
         <p class="tag-source">
             <a href="core_Move.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line92">line 92</a>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line108">line 108</a>
             </span>
         </p>
     
@@ -449,7 +535,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type"><a href="Hole.html">Hole</a></span>
+<code class="param-type"><a href="Hole.html">Hole</a></code>
 
 
     </div>
@@ -483,7 +569,8 @@
     
     
     <div class="description">
-        Determines if a move is continuing. This happens when previous moves havebeen executed before this move.
+        Determines if a move is continuing. This happens when previous moves have
+been executed before this move.
     </div>
     
 
@@ -534,7 +621,7 @@
         <p class="tag-source">
             <a href="core_Move.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line46">line 46</a>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line62">line 62</a>
             </span>
         </p>
     
@@ -571,7 +658,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">true</span>
+<code class="param-type">true</code>
 
 
     </div>
@@ -605,7 +692,8 @@
     
     
     <div class="description">
-        Checks to see if the move results into seed tokens being put in any front rowhole that is assigned to the player.
+        Checks to see if the move results into seed tokens being put in any front row
+hole that is assigned to the player.
     </div>
     
 
@@ -656,7 +744,7 @@
         <p class="tag-source">
             <a href="core_Move.ts.html" class="button">View Source</a>
             <span>
-                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line66">line 66</a>
+                <a href="core_Move.ts.html">core/Move.ts</a>, <a href="core_Move.ts.html#line82">line 82</a>
             </span>
         </p>
     
@@ -693,7 +781,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">boolean</span>
+<code class="param-type">boolean</code>
 
 
     </div>
@@ -727,9 +815,9 @@
             
             <footer class="footer">
                 <div class="content has-text-centered">
-                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a></p>
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a></p>
                     <p class="sidebar-created-by">
-                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
                         <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
                     </p>
                 </div>
@@ -742,6 +830,7 @@
 <script src="scripts/app.min.js"></script>
 <script>PR.prettyPrint();</script>
 <script src="scripts/linenumber.js"> </script>
+
 
 </body>
 </html>
