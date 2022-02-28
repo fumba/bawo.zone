@@ -49,7 +49,7 @@
     "@types/regenerator-runtime": "^0.13.1",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
-    "aws-sdk": "^2.1079.0",
+    "aws-sdk": "^2.1082.0",
     "babel-loader": "^8.2.3",
     "copy-webpack-plugin": "^10.2.4",
     "coveralls": "^3.1.1",
