@@ -50,7 +50,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "aws-sdk": "^2.1079.0",
-    "babel-loader": "^8.2.3",
+    "babel-loader": "^9.1.0",
     "copy-webpack-plugin": "^10.2.4",
     "coveralls": "^3.1.1",
     "crypto-browserify": "^3.12.0",
