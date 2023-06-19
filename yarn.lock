@@ -5605,10 +5605,10 @@ jay-extend@1.0.1:
   resolved "https://registry.yarnpkg.com/jay-extend/-/jay-extend-1.0.1.tgz#a9c0186e9ce5143489fb998c599eabc11916d190"
   integrity sha1-qcAYbpzlFDSJ+5mMWZ6rwRkW0ZA=
 
-jest-canvas-mock@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/jest-canvas-mock/-/jest-canvas-mock-2.3.1.tgz#9535d14bc18ccf1493be36ac37dd349928387826"
-  integrity sha512-5FnSZPrX3Q2ZfsbYNE3wqKR3+XorN8qFzDzB5o0golWgt6EOX1+emBnpOc9IAQ+NXFj8Nzm3h7ZdE/9H0ylBcg==
+jest-canvas-mock@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/jest-canvas-mock/-/jest-canvas-mock-2.5.1.tgz#81509af658ef485e9a1bf39c64e06761517bdbcb"
+  integrity sha512-IVnRiz+v4EYn3ydM/pBo8GW/J+nU/Hg5gHBQQOUQhdRyNfvHnabB8ReqARLO0p+kvQghqr4V0tA92CF3JcUSRg==
   dependencies:
     cssfontparser "^1.2.1"
     moo-color "^1.0.2"
