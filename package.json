@@ -67,7 +67,7 @@
     "jsdoc": "^3.6.10",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "path-browserify": "^1.0.1",
-    "prettier": "^2.5.1",
+    "prettier": "^3.0.3",
     "source-map-support": "^0.5.21",
     "stream-browserify": "^3.0.0",
     "style-loader": "^3.3.1",
