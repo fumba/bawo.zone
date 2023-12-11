@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@types/node": "^17.0.21",
-    "better-docs": "^2.7.2",
+    "better-docs": "^2.7.3",
     "fs-jetpack": "^4.3.1",
     "melonjs": "^8.0.1",
     "queue-typescript": "^1.0.1",
